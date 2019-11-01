@@ -79,7 +79,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	 */
 	private void execute() {
 		try {
-			while (RunningState.Running.equals(getRunningState())) {
+			while (LiveCycle.Running.equals(getRunningState())) {
 				final EventInformation<TEvent> eventToProcess;
 				synchronized (checkProcessingLock) {
 					eventToProcess = this.getNextEventToProcess();

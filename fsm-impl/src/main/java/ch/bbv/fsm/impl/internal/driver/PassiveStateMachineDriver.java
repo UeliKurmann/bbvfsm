@@ -89,7 +89,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 		if (!processing) {
 			try {
 				processing = true;
-				if (RunningState.Running.equals(getRunningState())) {
+				if (LiveCycle.Running.equals(getRunningState())) {
 					processQueuedEvents();
 				}
 			} finally {

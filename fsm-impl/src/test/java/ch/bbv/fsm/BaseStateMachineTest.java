@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.bbv.fsm.StateMachine.RunningState;
+import ch.bbv.fsm.StateMachine.LiveCycle;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
@@ -255,7 +255,7 @@ public abstract class BaseStateMachineTest {
 
 		this.testee.terminate();
 
-		Assert.assertFalse(RunningState.Running.equals(this.testee
+		Assert.assertFalse(LiveCycle.Running.equals(this.testee
 				.getRunningState()));
 
 		this.testee.fire(Events.B);

@@ -65,7 +65,7 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEv
 	}
 
 	@Override
-	public ch.bbv.fsm.StateMachine.RunningState getRunningState() {
+	public ch.bbv.fsm.StateMachine.LiveCycle getRunningState() {
 		return driver.getRunningState();
 	}
 

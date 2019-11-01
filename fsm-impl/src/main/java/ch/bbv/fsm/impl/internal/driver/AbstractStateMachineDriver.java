@@ -21,7 +21,7 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachine<TState, TEvent> {
 
-	private RunningState runningState = RunningState.Created;
+	private LiveCycle liveCycle = LiveCycle.Created;
 
 	/**
 	 * The internal state machine.
@@ -55,25 +55,25 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 	}
 
 	@Override
-	public RunningState getRunningState() {
-		return runningState;
+	public LiveCycle getRunningState() {
+		return liveCycle;
 	}
 
 	@Override
 	public void start() {
-		if (RunningState.Created != getRunningState()) {
+		if (LiveCycle.Created != getRunningState()) {
 			throw new IllegalStateException(
 					"Starting the statemachine is not allowed in this state. InternalState is "
 							+ getRunningState().name());
 		}
-		runningState = RunningState.Running;
+		liveCycle = LiveCycle.Running;
 		stateMachineInterpreter.initialize();
 	}
 
 	@Override
 	public void terminate() {
 		stateMachineInterpreter.terminate();
-		runningState = RunningState.Terminated;
+		liveCycle = LiveCycle.Terminated;
 	}
 
 	@Override
@@ -105,13 +105,13 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 	public void activate(
 			final StateMachineMemento<TState, TEvent> stateMachineMemento) {
 		stateMachineInterpreter.activate(stateMachineMemento);
-		runningState = RunningState.Running;
+		liveCycle = LiveCycle.Running;
 	}
 
 	@Override
 	public void passivate(
 			final StateMachineMemento<TState, TEvent> stateMachineMemento) {
-		runningState = RunningState.Terminated;
+		liveCycle = LiveCycle.Terminated;
 		stateMachineInterpreter.passivate(stateMachineMemento);
 	}
 

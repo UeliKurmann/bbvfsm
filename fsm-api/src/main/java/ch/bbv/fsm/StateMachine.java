@@ -34,7 +34,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * The state of this state machine.
 	 * 
 	 */
-	enum RunningState {
+	enum LiveCycle {
 		Created, Running, Terminated
 	}
 
@@ -60,9 +60,9 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	void firePriority(TEvent eventId, Object... eventArguments);
 
 	/**
-	 * Returns the running state of this state machine.
+	 * Returns the live cycles state of this state machine.
 	 */
-	RunningState getRunningState();
+	LiveCycle getRunningState();
 
 	/**
 	 * Returns the number of queued events.
