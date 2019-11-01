@@ -32,8 +32,6 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionaryImpl
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResultImpl;
 import ch.bbv.fsm.model.State;
-import ch.bbv.fsm.model.TransitionInfo;
-import ch.bbv.fsm.model.visitor.Visitor;
 
 /**
  * Implementation of the state.
@@ -109,22 +107,6 @@ public class InternalStateImpl<TStateMachine extends StateMachine<TState, TEvent
   public void addSubState(final InternalState<TStateMachine, TState, TEvent> state) {
     this.subStates.add(state);
 
-  }
-
-  @Override
-  public void accept(final Visitor<TStateMachine, TState, TEvent> visitor) {
-
-    visitor.visitOnEntry(this);
-
-    for (final TransitionInfo<TStateMachine, TState, TEvent> transition : this.getTransitions()
-        .getTransitions()) {
-      transition.accept(visitor);
-    }
-    for (final State<TStateMachine, TState, TEvent> subState : this.getSubStates()) {
-      subState.accept(visitor);
-    }
-
-    visitor.visitOnExit(this);
   }
 
   /**

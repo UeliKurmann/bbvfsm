@@ -22,20 +22,15 @@ package ch.bbv.fsm.model;
 import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.model.visitor.Visitable;
 
 /**
  * @author Mario Martinez (bbv Software Services AG)
  * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
+ * @param <TStateMachine> the type of state machine
+ * @param <TState>        the type of the states
+ * @param <TEvent>        the type of the events
  */
-public interface ModelObject<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends Visitable<TStateMachine, TState, TEvent> {
+public interface ModelObject<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * @return True if there is a super-state associated.
@@ -55,7 +50,8 @@ public interface ModelObject<TStateMachine extends StateMachine<TState, TEvent>,
 	boolean hasChildren();
 
 	/**
-	 * Returns a list containing the children ModelObjects. This means, a list of the substates for this state.
+	 * Returns a list containing the children ModelObjects. This means, a list of
+	 * the substates for this state.
 	 * 
 	 * @return the list of sub-states.
 	 */

@@ -22,7 +22,6 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.model.State;
-import ch.bbv.fsm.model.visitor.Visitor;
 
 /**
  * Represents a state of the state machine.
@@ -181,12 +180,5 @@ public interface InternalState<TStateMachine extends StateMachine<TState, TEvent
    */
   void setSuperState(InternalState<TStateMachine, TState, TEvent> superState);
 
-  /**
-   * Accepts a {@link #Visitor}.
-   *
-   * @param visitor the visitor.
-   */
-  @Override
-  void accept(final Visitor<TStateMachine, TState, TEvent> visitor);
 
 }

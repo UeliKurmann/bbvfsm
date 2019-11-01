@@ -21,19 +21,15 @@ package ch.bbv.fsm.impl.internal.statemachine.transition;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.model.TransitionInfo;
-import ch.bbv.fsm.model.visitor.Visitor;
 
 /**
  * Describes a transition.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
+ * @param <TStateMachine> the type of state machine
+ * @param <TState>        the type of the states
+ * @param <TEvent>        the type of the events
  */
 public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements TransitionInfo<TStateMachine, TState, TEvent> {
@@ -47,21 +43,14 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param eventId
-	 *            the event id.
-	 * @param source
-	 *            the source state
-	 * @param target
-	 *            the target state
-	 * @param hasGuard
-	 *            true if a guard exists
-	 * @param actions
-	 *            the number of actions
+	 * @param eventId  the event id.
+	 * @param source   the source state
+	 * @param target   the target state
+	 * @param hasGuard true if a guard exists
+	 * @param actions  the number of actions
 	 */
-	public InternalTransitionInfo(final TEvent eventId,
-			final InternalState<TStateMachine, TState, TEvent> source,
-			final InternalState<TStateMachine, TState, TEvent> target,
-			final boolean hasGuard, final int actions) {
+	public InternalTransitionInfo(final TEvent eventId, final InternalState<TStateMachine, TState, TEvent> source,
+			final InternalState<TStateMachine, TState, TEvent> target, final boolean hasGuard, final int actions) {
 		this.eventId = eventId;
 		this.source = source;
 		this.target = target;
@@ -120,8 +109,7 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Sets the number of actions.
 	 * 
-	 * @param numberOfActions
-	 *            the number of actions.
+	 * @param numberOfActions the number of actions.
 	 */
 	public void setActions(final int numberOfActions) {
 		this.actions = numberOfActions;
@@ -130,8 +118,7 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Sets the event id.
 	 * 
-	 * @param eventId
-	 *            the event id.
+	 * @param eventId the event id.
 	 */
 	public void setEventId(final TEvent eventId) {
 		this.eventId = eventId;
@@ -140,8 +127,7 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Sets the guard flag.
 	 * 
-	 * @param guard
-	 *            true if has a guard
+	 * @param guard true if has a guard
 	 */
 	public void setGuard(final boolean guard) {
 		this.hasGuard = guard;
@@ -150,8 +136,7 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Sets the source state.
 	 * 
-	 * @param source
-	 *            the source state.
+	 * @param source the source state.
 	 */
 	public void setSource(final InternalState<TStateMachine, TState, TEvent> source) {
 		this.source = source;
@@ -160,24 +145,10 @@ public class InternalTransitionInfo<TStateMachine extends StateMachine<TState, T
 	/**
 	 * Sets the target state.
 	 * 
-	 * @param target
-	 *            the target state.
+	 * @param target the target state.
 	 */
 	public void setTarget(final InternalState<TStateMachine, TState, TEvent> target) {
 		this.target = target;
-	}
-
-	/**
-	 * Accepts a {@link #Visitor}.
-	 * 
-	 * @param visitor
-	 *            the visitor.
-	 */
-	@Override
-	public void accept(final Visitor<TStateMachine, TState, TEvent> visitor) {
-
-		visitor.visitOnEntry(this);
-		visitor.visitOnExit(this);
 	}
 
 }

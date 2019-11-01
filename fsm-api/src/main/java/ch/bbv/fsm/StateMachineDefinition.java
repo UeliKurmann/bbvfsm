@@ -21,7 +21,6 @@ package ch.bbv.fsm;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.model.StateMachineModel;
-import ch.bbv.fsm.model.visitor.Visitor;
 
 /**
  * Defines the interface of a state machine.
@@ -134,12 +133,5 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	 */
 	TStateMachine createPassiveStateMachine(String name);
 
-	/**
-	 * Traverses the StateMachine Model.
-	 * 
-	 * @param visitor
-	 *            the Visitor.
-	 */
-	void traverseModel(final Visitor<TStateMachine, TState, TEvent> visitor);
 
 }
