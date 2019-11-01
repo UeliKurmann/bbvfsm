@@ -21,7 +21,7 @@ package ch.bbv.fsm;
 /**
  * Defines the history behavior of a state (on re-entrance of a super state).
  * 
- * @author Ueli Kurmann (bbv Software Services AG)
+ * @author Ueli Kurmann 
  */
 public enum HistoryType {
 

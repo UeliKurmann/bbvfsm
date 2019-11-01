@@ -37,7 +37,7 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionImpl;
 /**
  * InternalState Builder.
  *
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG).
+ * @author Ueli Kurmann  .
  *
  * @param <TStateMachine> the type of internalState machine
  * @param <TState> the type of the states.

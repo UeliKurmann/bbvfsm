@@ -29,7 +29,7 @@ import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 /**
  * Example: Tennis Scorer.
  *
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  *
  */
 public class Tennis {

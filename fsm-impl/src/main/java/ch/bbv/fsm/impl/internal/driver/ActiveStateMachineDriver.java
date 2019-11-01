@@ -29,7 +29,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * An active state machine. This state machine reacts to events on a separate worker thread.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TState>
  *            the enumeration type of the states.

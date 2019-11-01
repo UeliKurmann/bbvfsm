@@ -28,7 +28,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalStateImpl;
 /**
  * Mapping between a internalState and its transitions.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TStateMachine>
  *            the type of internalState machine

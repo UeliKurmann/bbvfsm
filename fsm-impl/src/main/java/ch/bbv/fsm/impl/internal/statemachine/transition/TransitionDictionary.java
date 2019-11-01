@@ -25,7 +25,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Interface for the mapping between states and their transitions.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TStateMachine>
  *            the type of state machine

@@ -28,7 +28,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * The mapping between state id's and the corresponding state instance.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TStateMachine>
  *            the type of state machine

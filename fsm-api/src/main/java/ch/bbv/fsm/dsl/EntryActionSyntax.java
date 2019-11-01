@@ -22,7 +22,7 @@ import ch.bbv.fsm.action.FsmAction1;
 /**
  * Entry Action Syntax.
  * 
- * @author Ueli Kurmann (bbv Software Services AG)
+ * @author Ueli Kurmann 
  * 
  * @param <TStateMachine> the type of the state machine
  * @param <TState> the type of the states.

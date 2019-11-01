@@ -25,7 +25,7 @@ import ch.bbv.fsm.model.TransitionInfo;
 /**
  * Describes a transition.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TStateMachine> the type of state machine
  * @param <TState>        the type of the states

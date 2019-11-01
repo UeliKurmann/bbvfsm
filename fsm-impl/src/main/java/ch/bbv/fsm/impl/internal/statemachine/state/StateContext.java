@@ -28,7 +28,7 @@ import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 /**
  * InternalState Context.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TStateMachine>
  *            the type of state machine

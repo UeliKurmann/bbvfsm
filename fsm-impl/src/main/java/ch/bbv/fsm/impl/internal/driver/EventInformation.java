@@ -21,7 +21,7 @@ package ch.bbv.fsm.impl.internal.driver;
 /**
  * Provides information about an event: event-id and arguments.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * @param <TEvent>
  *            the type of the event.
  */

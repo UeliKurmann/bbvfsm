@@ -25,7 +25,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * A passive state machine. This state machine reacts to events on the current thread.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * 
  * @param <TState>
  *            the enumeration type of the states.

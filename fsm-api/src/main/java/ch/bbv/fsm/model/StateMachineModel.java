@@ -21,7 +21,7 @@ package ch.bbv.fsm.model;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * @author Mario Martinez (bbv Software Services AG)
+ * @author Mario Martinez 
  * 
  * @param <TStateMachine> the type of state machine
  * @param <TState>        the type of the states

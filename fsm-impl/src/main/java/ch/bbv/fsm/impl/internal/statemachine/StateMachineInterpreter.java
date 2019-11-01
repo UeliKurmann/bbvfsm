@@ -43,7 +43,7 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * InternalState Machine Implementation.
  * 
- * @author Ueli Kurmann (bbv Software Services AG)
+ * @author Ueli Kurmann 
  * 
  * @param <TStateMachine>
  *            the type of state machine

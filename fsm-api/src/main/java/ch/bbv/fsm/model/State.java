@@ -24,7 +24,7 @@ import ch.bbv.fsm.StateMachine;
  * Represents a FSM Model Object. This model is a hierarchical(tree) representation of the scopes contained in the FSM.
  * 
  * 
- * @author Mario Martinez (bbv Software Services AG)
+ * @author Mario Martinez 
  * @param <TState>
  *            the enumeration type of the states.
  * @param <TEvent>

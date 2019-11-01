@@ -23,7 +23,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Defines a transition event argument.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>

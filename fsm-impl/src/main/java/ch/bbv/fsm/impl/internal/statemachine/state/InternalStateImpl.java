@@ -36,7 +36,7 @@ import ch.bbv.fsm.model.State;
 /**
  * Implementation of the state.
  *
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @author Ueli Kurmann  
  *
  * @param <TStateMachine> the type of state machine
  * @param <TState> the type of the states

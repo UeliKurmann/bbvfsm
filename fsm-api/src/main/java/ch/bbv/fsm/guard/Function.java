@@ -23,7 +23,7 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Defines a function with one parameter.
  * 
- * @author Ueli Kurmann (bbv Software Services AG)
+ * @author Ueli Kurmann 
  * @param <ParameterType>
  *            parameter type
  * @param <ReturnType>

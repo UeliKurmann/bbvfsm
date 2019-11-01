@@ -25,7 +25,7 @@ import ch.bbv.fsm.model.StateMachineModel;
 /**
  * Defines the interface of a state machine.
  * 
- * @author Ueli Kurmann (bbv Software Services AG)
+ * @author Ueli Kurmann 
  * @param <TState>
  *            the enumeration type of the states.
  * @param <TEvent>
