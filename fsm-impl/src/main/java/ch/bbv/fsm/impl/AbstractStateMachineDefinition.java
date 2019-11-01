@@ -1,5 +1,6 @@
 package ch.bbv.fsm.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,8 +24,6 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.model.StateMachineModel;
 import ch.bbv.fsm.model.visitor.Visitor;
-
-import com.google.common.collect.Lists;
 
 /**
  * Implementation of the definition of the finite state machine.
@@ -77,7 +76,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 		this.simpleStateMachineModel = new SimpleStateMachineModel<>(
 				new StateDictionary<>(),
 				initialState);
-		this.eventHandler = Lists.newArrayList();
+		this.eventHandler = new ArrayList<>();
 	}
 
 	@Override

@@ -18,16 +18,12 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalStateImpl;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
 
 /**
  * Mapping between a internalState and its transitions.
@@ -49,7 +45,7 @@ public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState,
 	 */
 	private final InternalState<TStateMachine, TState, TEvent> internalState;
 
-	private final ListMultimap<TEvent, Transition<TStateMachine, TState, TEvent>> transitions;
+	private final Multimap<TEvent, Transition<TStateMachine, TState, TEvent>> transitions;
 
 	/**
 	 * Creates a new instance.
@@ -59,7 +55,7 @@ public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState,
 	 */
 	public TransitionDictionaryImpl(final InternalStateImpl<TStateMachine, TState, TEvent> state) {
 		this.internalState = state;
-		this.transitions = LinkedListMultimap.create();
+		this.transitions = new Multimap<>();
 	}
 
 	@Override
@@ -70,7 +66,7 @@ public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState,
 
 	@Override
 	public List<InternalTransitionInfo<TStateMachine, TState, TEvent>> getTransitions() {
-		final List<InternalTransitionInfo<TStateMachine, TState, TEvent>> list = Lists.newArrayList();
+		final List<InternalTransitionInfo<TStateMachine, TState, TEvent>> list = new ArrayList<>();
 		for (final TEvent eventId : this.transitions.keySet()) {
 			this.getTransitionsOfEvent(eventId, list);
 		}
@@ -80,7 +76,7 @@ public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState,
 
 	@Override
 	public List<Transition<TStateMachine, TState, TEvent>> getTransitions(final TEvent eventId) {
-		return ImmutableList.copyOf(this.transitions.get(eventId));
+		return new ArrayList<>(this.transitions.get(eventId));
 	}
 
 	/**

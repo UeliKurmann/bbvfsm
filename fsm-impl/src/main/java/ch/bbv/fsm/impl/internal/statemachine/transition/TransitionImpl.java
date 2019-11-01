@@ -15,6 +15,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,8 +26,6 @@ import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.internal.action.FsmCall;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
-
-import com.google.common.collect.Lists;
 
 /**
  * The implementation of a transition.
@@ -57,7 +56,7 @@ public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, 
    * @param notifier
    */
   public TransitionImpl() {
-    this.actions = Lists.newArrayList();
+    this.actions = new ArrayList<>();
   }
 
   /**

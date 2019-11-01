@@ -20,6 +20,7 @@ opyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
  *******************************************************************************/
 package ch.bbv.fsm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -36,8 +37,6 @@ import ch.bbv.fsm.impl.SimpleStateMachine;
 import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-
-import com.google.common.collect.Lists;
 
 /**
  * Base for state machine test fixtures.
@@ -272,10 +271,10 @@ public abstract class BaseStateMachineTest {
 	 */
 	@Before
 	public void setup() {
-		this.exceptions = Lists.newArrayList();
-		this.transitionBeginMessages = Lists.newArrayList();
-		this.transitionCompletedMessages = Lists.newArrayList();
-		this.transitionDeclinedMessages = Lists.newArrayList();
+		this.exceptions = new ArrayList<>();
+		this.transitionBeginMessages = new ArrayList<>();
+		this.transitionCompletedMessages = new ArrayList<>();
+		this.transitionDeclinedMessages = new ArrayList<>();
 	}
 
 	/**

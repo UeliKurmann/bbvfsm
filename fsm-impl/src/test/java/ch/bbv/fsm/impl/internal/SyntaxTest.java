@@ -19,11 +19,12 @@
 package ch.bbv.fsm.impl.internal;
 
 
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Sample showing usage of state machine.

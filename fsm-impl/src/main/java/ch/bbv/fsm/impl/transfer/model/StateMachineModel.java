@@ -1,14 +1,13 @@
 package ch.bbv.fsm.impl.transfer.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import ch.bbv.fsm.impl.transfer.GeneratorException;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 public class StateMachineModel {
 
@@ -16,9 +15,9 @@ public class StateMachineModel {
 
   private final String name;
 
-  private final List<RegionModel> regions = Lists.newLinkedList();
+  private final List<RegionModel> regions = new ArrayList<>();
 
-  private final Map<String, TriggerModel> triggers = Maps.newHashMap();
+  private final Map<String, TriggerModel> triggers = new HashMap<>();
 
   /**
    * Initialize the object.
@@ -65,7 +64,7 @@ public class StateMachineModel {
   }
 
   public Set<String> getSortedTriggerNames() {
-    final Set<String> result = Sets.newTreeSet();
+    final Set<String> result = new TreeSet<>();
     for (final TriggerModel tm : triggers.values()) {
       result.add(tm.getName());
     }

@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +39,6 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.memento.StateMachineMemento;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * InternalState Machine Implementation.
@@ -71,8 +70,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 */
 	private InternalState<TStateMachine, TState, TEvent> currentState;
 
-	private final Map<InternalState<TStateMachine, TState, TEvent>, InternalState<TStateMachine, TState, TEvent>> superToSubState = Maps
-			.newHashMap();
+	private final Map<InternalState<TStateMachine, TState, TEvent>, InternalState<TStateMachine, TState, TEvent>> superToSubState = new HashMap<>();
 
 	private final TState initialStateId;
 
@@ -103,7 +101,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 		this.states = states;
 		this.stateMachine = stateMachine;
 		this.initialStateId = initialState;
-		this.eventHandler = Lists.newArrayList();
+		this.eventHandler = new ArrayList<>();
 	}
 
 	/**

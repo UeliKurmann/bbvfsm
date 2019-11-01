@@ -15,6 +15,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,9 +34,6 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResultImpl;
 import ch.bbv.fsm.model.State;
 import ch.bbv.fsm.model.TransitionInfo;
 import ch.bbv.fsm.model.visitor.Visitor;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 /**
  * Implementation of the state.
@@ -103,7 +101,7 @@ public class InternalStateImpl<TStateMachine extends StateMachine<TState, TEvent
     this.id = id;
     this.level = 1;
 
-    this.subStates = Lists.newArrayList();
+    this.subStates = new ArrayList<>();
     this.transitions = new TransitionDictionaryImpl<>(this);
   }
 
@@ -340,7 +338,7 @@ public class InternalStateImpl<TStateMachine extends StateMachine<TState, TEvent
 
   @Override
   public List<State<TStateMachine, TState, TEvent>> getSubStates() {
-    return ImmutableList.copyOf(this.subStates);
+    return new ArrayList<>(this.subStates);
   }
 
   @Override

@@ -1,11 +1,10 @@
 package ch.bbv.fsm.impl.transfer.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import ch.bbv.fsm.impl.transfer.GeneratorException;
-
-import com.google.common.collect.Lists;
 
 public class RegionModel {
 
@@ -13,9 +12,9 @@ public class RegionModel {
 
   private final String name;
 
-  private final List<StateModel> states = Lists.newLinkedList();
+  private final List<StateModel> states = new ArrayList<>();
 
-  private final List<TransitionModel> transitions = Lists.newLinkedList();
+  private final List<TransitionModel> transitions = new ArrayList<>();
 
   public RegionModel(final String guid, final String name) {
     this.guid = guid;
@@ -53,7 +52,7 @@ public class RegionModel {
   }
 
   public List<StateModel> getOrderedStates() {
-    final List<StateModel> orderedList = Lists.newArrayList(states);
+    final List<StateModel> orderedList = new ArrayList<>(states);
     Collections.sort(orderedList);
     return orderedList;
   }
@@ -73,7 +72,7 @@ public class RegionModel {
   }
 
   public List<TransitionModel> getTransitionsForSource(final String guid) throws GeneratorException {
-    final List<TransitionModel> result = Lists.newLinkedList();
+    final List<TransitionModel> result = new ArrayList<>();
     for (final TransitionModel tm : transitions) {
       if (guid.equals(tm.getSource())) {
         result.add(tm);

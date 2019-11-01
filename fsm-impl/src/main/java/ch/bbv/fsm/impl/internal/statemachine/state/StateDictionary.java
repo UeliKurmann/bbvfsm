@@ -18,13 +18,12 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import ch.bbv.fsm.StateMachine;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
 
 /**
  * The mapping between state id's and the corresponding state instance.
@@ -46,7 +45,7 @@ public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>,
 	 * Creates a new instance of the state dictionary.
 	 */
 	public StateDictionary() {
-		this.dictionary = new MapMaker().makeMap();
+		this.dictionary = new ConcurrentHashMap<>();
 	}
 
 	/**
@@ -71,7 +70,7 @@ public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>,
 	 * @return a list of all defined states.
 	 */
 	public List<InternalState<TStateMachine, TState, TEvent>> getStates() {
-		return Lists.newArrayList(this.dictionary.values());
+		return new ArrayList<>(this.dictionary.values());
 	}
 
 }

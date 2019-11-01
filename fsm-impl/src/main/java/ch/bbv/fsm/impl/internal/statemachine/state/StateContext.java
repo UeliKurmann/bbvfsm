@@ -18,13 +18,12 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
-
-import com.google.common.collect.Lists;
 
 /**
  * InternalState Context.
@@ -157,8 +156,8 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 		this.stateMachineInterpreter = stateMachineImpl;
 		this.notifier = notifier;
 		this.stateMachine = stateMachine;
-		this.exceptions = Lists.newArrayList();
-		this.records = Lists.newArrayList();
+		this.exceptions = new ArrayList<>();
+		this.records = new ArrayList<>();
 	}
 
 	/**

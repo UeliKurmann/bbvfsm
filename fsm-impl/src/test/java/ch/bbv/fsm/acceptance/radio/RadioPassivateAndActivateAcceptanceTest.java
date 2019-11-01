@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -11,8 +12,6 @@ import org.junit.Test;
 import ch.bbv.fsm.acceptance.radio.RadioStateMachineDefinion.Event;
 import ch.bbv.fsm.acceptance.radio.RadioStateMachineDefinion.State;
 import ch.bbv.fsm.memento.StateMachineMemento;
-
-import com.google.common.collect.Maps;
 
 public class RadioPassivateAndActivateAcceptanceTest {
 
@@ -38,7 +37,7 @@ public class RadioPassivateAndActivateAcceptanceTest {
 		final StateMachineMemento<State, Event> memento = new RadioStateMachineMemento();
 		radioStateMachine.passivate(memento);
 
-		final Map<State, State> expectedHistory = Maps.newHashMap();
+		final Map<State, State> expectedHistory = new HashMap<>();
 		expectedHistory.put(State.On, State.AM);
 		assertThat(memento.getCurrentState(), is(equalTo(State.Off)));
 		assertThat(memento.getSavedHistoryStates(),
