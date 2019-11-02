@@ -27,9 +27,9 @@ import ch.bbv.fsm.events.StateMachineEventHandler;
  * @author Ueli Kurmann
  * @param <S>             the enumeration type of the states.
  * @param <E>             the enumeration type of the events.
- * @param <TStateMachine> the type of state machine
+ * @param <SM> the type of state machine
  */
-public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
+public interface StateMachineDefinition<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends StateMachineFactory<SM, S,E> {
 
 	/**
 	 * Returns the state machine's default initial state. This state will be used as
@@ -44,7 +44,7 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>
 	 * 
 	 * @param state the state
 	 */
-	EntryActionSyntax<TStateMachine, S, E> in(S state);
+	EntryActionSyntax<SM, S, E> in(S state);
 
 	/**
 	 * Defines a state hierarchy.
@@ -61,39 +61,9 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>
 	 * 
 	 * @param handler the event handler
 	 */
-	void addEventHandler(StateMachineEventHandler<TStateMachine, S, E> handler);
+	void addEventHandler(StateMachineEventHandler<SM, S, E> handler);
 
 
-	/**
-	 * Creates an active state-machine from this definition.
-	 * 
-	 * @param name         the state machine's name
-	 * @param initialState The state to which the state machine is initialized.
-	 */
-	TStateMachine createActiveStateMachine(String name, S initialState);
-
-	/**
-	 * Creates an active state-machine this definition with the default initial
-	 * state.
-	 * 
-	 * @param name the state machine's name
-	 */
-	TStateMachine createActiveStateMachine(String name);
-
-	/**
-	 * Creates a passive state-machine from definition.
-	 * 
-	 * @param name         the state machine's name
-	 * @param initialState The state to which the state machine is initialized.
-	 */
-	TStateMachine createPassiveStateMachine(String name, S initialState);
-
-	/**
-	 * Creates an passive state-machine from this definition with the default
-	 * initial state.
-	 * 
-	 * @param name the state machine's name
-	 */
-	TStateMachine createPassiveStateMachine(String name);
+	
 
 }

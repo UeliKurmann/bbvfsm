@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.bbv.fsm.StateMachineFactory;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEvent;
 import ch.bbv.fsm.impl.SimpleStateMachine;
@@ -31,8 +32,6 @@ import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
  *
  */
 public class Tennis {
-
-	
 
 	private static class Handler extends StateMachineEventHandlerAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
@@ -48,8 +47,6 @@ public class Tennis {
 		}
 	}
 
-	
-
 	public enum Events {
 		A_Scores, B_Scores
 	}
@@ -59,68 +56,68 @@ public class Tennis {
 		_DEUCE, _A_ADV, _B_ADV;
 	}
 
-	private SimpleStateMachineDefinition<States, Events> definition;
+	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> definition;
 	private Handler handler;
 
-	
 	@Before
 	public void setup() {
-		this.definition = new SimpleStateMachineDefinition<States, Events>(States._0_0);
-		this.handler = new Handler();
-		this.definition.addEventHandler(handler);
-		this.definition.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
-		this.definition.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
+		this.definition = SimpleStateMachineDefinition.create(States._0_0, def -> {
+			this.handler = new Handler();
+			def.addEventHandler(handler);
+			def.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
+			def.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
 
-		this.definition.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
-		this.definition.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
+			def.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
+			def.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
 
-		this.definition.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
-		this.definition.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
+			def.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
+			def.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
 
-		this.definition.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
-		this.definition.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
+			def.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
+			def.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.definition.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
-		this.definition.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
+			def.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
+			def.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
 
-		this.definition.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
-		this.definition.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
+			def.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
+			def.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
 
-		this.definition.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
-		this.definition.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
+			def.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
+			def.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
 
-		this.definition.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
-		this.definition.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
+			def.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
+			def.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.definition.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
-		this.definition.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
+			def.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
+			def.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
 
-		this.definition.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
-		this.definition.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
+			def.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
+			def.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
 
-		this.definition.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
-		this.definition.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
+			def.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
+			def.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
 
-		this.definition.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
-		this.definition.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
+			def.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
+			def.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.definition.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
-		this.definition.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
+			def.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
+			def.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
 
-		this.definition.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
-		this.definition.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
+			def.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
+			def.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
 
-		this.definition.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
-		this.definition.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
+			def.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
+			def.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
 
-		this.definition.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
-		this.definition.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
+			def.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
+			def.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
 
-		this.definition.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
-		this.definition.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
+			def.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
+			def.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
 
-		this.definition.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
-		this.definition.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
+			def.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
+			def.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
+		});
 	}
 
 	@Test
@@ -161,7 +158,7 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0AScoresrTimesThenAWins() {
-		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1");
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1");
 		testee.start();
 
 		final States initialState = handler.getCurrentState();
@@ -189,7 +186,7 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0BScoresrTimesThenBWins() {
-		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._0_0);
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._0_0);
 		testee.start();
 
 		final States initialState = handler.getCurrentState();
@@ -215,7 +212,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndAScores2TimesThenAWins() {
-		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
@@ -232,7 +229,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBfollowedByAScoresThenDeuce() {
-		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
@@ -249,7 +246,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBScores2TimesThenBWins() {
-		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.B_Scores);
