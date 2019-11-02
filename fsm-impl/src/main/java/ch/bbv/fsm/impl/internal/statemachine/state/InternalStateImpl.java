@@ -25,10 +25,10 @@ import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.action.FsmCall;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext.RecordType;
-import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionaryImpl;
+import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.model.State;
 
