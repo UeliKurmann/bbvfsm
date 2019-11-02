@@ -1,9 +1,6 @@
 package ch.bbv.fsm.impl;
 
-import java.util.function.Consumer;
-
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineFactory;
 
 /**
  * A simple state machine's definition. This is used if no special type should
@@ -28,12 +25,4 @@ public class SimpleStateMachineDefinition<S extends Enum<?>, E extends Enum<?>>
 	protected SimpleStateMachine<S, E> createStateMachine(final StateMachine<S, E> driver) {
 		return new SimpleStateMachine<>(driver);
 	}
-
-	public static <S extends Enum<?>, E extends Enum<?>> StateMachineFactory<SimpleStateMachine<S, E>, S, E> create(S initialState,
-			Consumer<SimpleStateMachineDefinition<S, E>> definition) {
-		SimpleStateMachineDefinition<S, E> result = new SimpleStateMachineDefinition<S, E>(initialState);
-		definition.accept(result);
-		return result;
-	}
-
 }

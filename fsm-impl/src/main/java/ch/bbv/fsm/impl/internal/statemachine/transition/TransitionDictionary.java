@@ -29,25 +29,25 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
  * 
  * @author Ueli Kurmann
  * 
- * @param <TStateMachine> the type of internalState machine
- * @param <S>        the type of the states
- * @param <E>        the type of the events
+ * @param <SM> the type of internalState machine
+ * @param <S>  the type of the states
+ * @param <E>  the type of the events
  */
-public class TransitionDictionary<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
+public class TransitionDictionary<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * The internalState this transitions belong to.
 	 */
-	private final InternalState<TStateMachine, S, E> internalState;
+	private final InternalState<SM, S, E> internalState;
 
-	private final Multimap<E, Transition<TStateMachine, S, E>> transitions;
+	private final Multimap<E, Transition<SM, S, E>> transitions;
 
 	/**
 	 * Creates a new instance.
 	 * 
 	 * @param state the internalState this transitions belong to.
 	 */
-	public TransitionDictionary(final InternalState<TStateMachine, S, E> state) {
+	public TransitionDictionary(final InternalState<SM, S, E> state) {
 		this.internalState = state;
 		this.transitions = new Multimap<>();
 	}
@@ -58,23 +58,9 @@ public class TransitionDictionary<TStateMachine extends StateMachine<S, E>, S ex
 	 * @param eventId    the event id
 	 * @param transition the transition
 	 */
-	public void add(final E eventId, final Transition<TStateMachine, S, E> transition) {
+	public void add(final E eventId, final Transition<SM, S, E> transition) {
 		transition.setSource(this.internalState);
 		this.transitions.put(eventId, transition);
-	}
-
-	/**
-	 * Returns all transitions.
-	 * 
-	 * @return all transitions.
-	 */
-	public List<InternalTransitionInfo<TStateMachine, S, E>> getTransitions() {
-		final List<InternalTransitionInfo<TStateMachine, S, E>> list = new ArrayList<>();
-		for (final E eventId : this.transitions.keySet()) {
-			this.getTransitionsOfEvent(eventId, list);
-		}
-
-		return list;
 	}
 
 	/**
@@ -83,20 +69,8 @@ public class TransitionDictionary<TStateMachine extends StateMachine<S, E>, S ex
 	 * @param eventId the event id
 	 * @return a list of transitions
 	 */
-	public List<Transition<TStateMachine, S, E>> getTransitions(final E eventId) {
+	public List<Transition<SM, S, E>> getTransitions(final E eventId) {
 		return new ArrayList<>(this.transitions.get(eventId));
 	}
 
-	/**
-	 * Returns all transitions of an event.
-	 * 
-	 * @param eventId the event id
-	 * @param list    the list of transitions
-	 */
-	private void getTransitionsOfEvent(final E eventId, final List<InternalTransitionInfo<TStateMachine, S, E>> list) {
-		for (final Transition<TStateMachine, S, E> transition : this.transitions.get(eventId)) {
-			list.add(new InternalTransitionInfo<>(eventId, transition.getSource(), transition.getTarget(), transition.getGuard() != null,
-					transition.getActions().size()));
-		}
-	}
 }

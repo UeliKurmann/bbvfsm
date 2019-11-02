@@ -22,8 +22,8 @@ import org.junit.Test;
 import ch.bbv.fsm.StateMachineFactory;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEvent;
+import ch.bbv.fsm.impl.Fsm;
 import ch.bbv.fsm.impl.SimpleStateMachine;
-import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Example: Tennis Scorer.
@@ -56,12 +56,12 @@ public class Tennis {
 		_DEUCE, _A_ADV, _B_ADV;
 	}
 
-	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> definition;
+	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> factory;
 	private Handler handler;
 
 	@Before
 	public void setup() {
-		this.definition = SimpleStateMachineDefinition.create(States._0_0, def -> {
+		this.factory = Fsm.create(States._0_0, def -> {
 			this.handler = new Handler();
 			def.addEventHandler(handler);
 			def.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
@@ -122,7 +122,7 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0AandBScores3TimesSwitchingThenDeuce() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-0");
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-0");
 		testee.start();
 
 		final States initialState = handler.getCurrentState();
@@ -158,7 +158,7 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0AScoresrTimesThenAWins() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1");
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1");
 		testee.start();
 
 		final States initialState = handler.getCurrentState();
@@ -186,7 +186,7 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0BScoresrTimesThenBWins() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._0_0);
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1", States._0_0);
 		testee.start();
 
 		final States initialState = handler.getCurrentState();
@@ -212,7 +212,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndAScores2TimesThenAWins() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
@@ -229,7 +229,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBfollowedByAScoresThenDeuce() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
@@ -246,7 +246,7 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBScores2TimesThenBWins() {
-		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.B_Scores);

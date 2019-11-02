@@ -74,6 +74,7 @@ public abstract class AbstractStateMachineDefinition<SM extends StateMachine<S, 
 
 	@Override
 	public void addEventHandler(final StateMachineEventHandler<SM, S, E> handler) {
+		LOG.debug("Add EventHandler: {}", handler.getClass());
 		this.eventHandler.add(Objects.requireNonNull(handler));
 	}
 

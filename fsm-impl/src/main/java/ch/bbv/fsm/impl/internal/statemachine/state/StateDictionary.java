@@ -18,8 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -28,18 +26,15 @@ import ch.bbv.fsm.StateMachine;
 /**
  * The mapping between state id's and the corresponding state instance.
  * 
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
+ * @param <SM> the type of state machine
+ * @param <S>        the type of the states
+ * @param <E>        the type of the events
  */
-public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public class StateDictionary<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
-	private final ConcurrentMap<TState, InternalState<TStateMachine, TState, TEvent>> dictionary;
+	private final ConcurrentMap<S, InternalState<SM, S, E>> dictionary;
 
 	/**
 	 * Creates a new instance of the state dictionary.
@@ -51,26 +46,15 @@ public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>,
 	/**
 	 * Returns the state instance by it's id.
 	 * 
-	 * @param stateId
-	 *            the state id.
+	 * @param stateId the state id.
 	 * @return the state instance.
 	 */
-	public InternalState<TStateMachine, TState, TEvent> getState(final TState stateId) {
+	public InternalState<SM, S, E> getState(final S stateId) {
 		if (!this.dictionary.containsKey(stateId)) {
-			this.dictionary.putIfAbsent(stateId,
-					new InternalState<>(stateId));
+			this.dictionary.putIfAbsent(stateId, new InternalState<>(stateId));
 		}
 
 		return this.dictionary.get(stateId);
-	}
-
-	/**
-	 * Returns a list of all defined states.
-	 * 
-	 * @return a list of all defined states.
-	 */
-	public List<InternalState<TStateMachine, TState, TEvent>> getStates() {
-		return new ArrayList<>(this.dictionary.values());
 	}
 
 }

@@ -127,7 +127,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 
 		this.setCurrentState(result.getNewState());
 
-		LOG.debug("Statemachine {} performed {}.", this, context.getRecords());
+		LOG.debug("Statemachine \"{}\" performed {}.", this, context.getRecords());
 
 		this.onTransitionCompleted(context);
 	}
@@ -184,10 +184,10 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	 * Initializes the state machine.
 	 */
 	public void initialize() {
-		LOG.info("InternalStateImpl machine {} initializes to state {}.", this, initialStateId);
+		LOG.info("Statemachine \"{}\" initializes to state {}.", this, initialStateId);
 		final StateContext<TStateMachine, S, E> stateContext = new StateContext<>(stateMachine, null, this, this);
 		this.initialize(this.states.getState(initialStateId), stateContext);
-		LOG.info("InternalStateImpl machine {} performed {}.", this, stateContext.getRecords());
+		LOG.info("Statemachine \"{}\" performed {}.", this, stateContext.getRecords());
 	}
 
 	/**
@@ -209,15 +209,6 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	 */
 	public void addEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
 		this.eventHandler.add(handler);
-	}
-
-	/**
-	 * Removes an event handler.
-	 * 
-	 * @param handler the event handle to be removed.
-	 */
-	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
-		this.eventHandler.remove(handler);
 	}
 
 	@Override
@@ -282,7 +273,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	 * @param state the current state.
 	 */
 	private void setCurrentState(final InternalState<TStateMachine, S, E> state) {
-		LOG.info("InternalStateImpl machine {} switched to state {}.", this.getName(), state.getId());
+		LOG.info("Statemachine \"{}\" switched to state {}.", this.getName(), state.getId());
 		this.currentState = state;
 	}
 

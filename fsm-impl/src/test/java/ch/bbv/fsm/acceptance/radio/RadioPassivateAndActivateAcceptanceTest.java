@@ -15,9 +15,7 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 
 public class RadioPassivateAndActivateAcceptanceTest {
 
-	public class RadioStateMachineMemento
-			extends
-			StateMachineMemento<RadioStateMachineDefinion.State, RadioStateMachineDefinion.Event> {
+	public class RadioStateMachineMemento extends StateMachineMemento<RadioStateMachineDefinion.State, RadioStateMachineDefinion.Event> {
 
 	}
 
@@ -40,8 +38,7 @@ public class RadioPassivateAndActivateAcceptanceTest {
 		final Map<State, State> expectedHistory = new HashMap<>();
 		expectedHistory.put(State.On, State.AM);
 		assertThat(memento.getCurrentState(), is(equalTo(State.Off)));
-		assertThat(memento.getSavedHistoryStates(),
-				is(equalTo(expectedHistory)));
+		assertThat(memento.getSavedHistoryStates(), is(equalTo(expectedHistory)));
 	}
 
 	@Test
@@ -62,9 +59,7 @@ public class RadioPassivateAndActivateAcceptanceTest {
 
 		radioStateMachine.terminate();
 
-		assertThat(
-				radioStateMachine.consumeLog(),
-				is(equalTo("exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
+		assertThat(radioStateMachine.consumeLog(), is(equalTo("exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
 	}
 
 }

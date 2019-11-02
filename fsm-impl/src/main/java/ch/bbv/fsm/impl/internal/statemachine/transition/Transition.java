@@ -30,24 +30,24 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * The implementation of a transition.
  *
- * @param <TStateMachine> the type of state machine
+ * @param <SM> the type of state machine
  * @param <S>             the type of the states
  * @param <E>             the type of the events
  */
-public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
+public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Transition.class);
 
 	/**
 	 * The actions that are executed when this transition is fired.
 	 */
-	private final List<FsmCall<TStateMachine, S, E>> actions;
+	private final List<FsmCall<SM, S, E>> actions;
 
-	private InternalState<TStateMachine, S, E> source;
+	private InternalState<SM, S, E> source;
 
-	private InternalState<TStateMachine, S, E> target;
+	private InternalState<SM, S, E> target;
 
-	private Function<TStateMachine, S, E, Object[], Boolean> guard;
+	private Function<SM, S, E, Object[], Boolean> guard;
 
 	/**
 	 * Creates a new instance.
@@ -91,8 +91,8 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param eventArguments the event arguments
 	 * @param context        the state context
 	 */
-	private void fire(final InternalState<TStateMachine, S, E> source, final InternalState<TStateMachine, S, E> target,
-			final Object[] eventArguments, final TransitionContext<TStateMachine, S, E> context) {
+	private void fire(final InternalState<SM, S, E> source, final InternalState<SM, S, E> target,
+			final Object[] eventArguments, final TransitionContext<SM, S, E> context) {
 		if (source == this.getTarget()) {
 			// Handles 1.
 			// Handles 3. after traversing from the source to the target.
@@ -137,19 +137,19 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param context the event context.
 	 * @return The result of the transition.
 	 */
-	public TransitionResult<TStateMachine, S, E> fire(final TransitionContext<TStateMachine, S, E> context) {
+	public TransitionResult<SM, S, E> fire(final TransitionContext<SM, S, E> context) {
 		LOG.debug("Start transition1 {}", this);
 		if (!this.shouldFire(context.getEventArguments(), context)) {
 			LOG.debug("Start transition2 {}", this);
 			@SuppressWarnings("unchecked")
-			final TransitionResult<TStateMachine, S, E> result = TransitionResult.getNotFired();
+			final TransitionResult<SM, S, E> result = TransitionResult.getNotFired();
 			return result;
 		}
 		LOG.debug("Start transition3 {}", this);
 
 		context.getNotifier().onTransitionBegin(context);
 
-		InternalState<TStateMachine, S, E> newState = context.getState();
+		InternalState<SM, S, E> newState = context.getState();
 
 		if (!this.isInternalTransition()) {
 			this.unwindSubStates(context.getState(), context);
@@ -169,7 +169,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @return the actions of this transition.
 	 */
-	public List<FsmCall<TStateMachine, S, E>> getActions() {
+	public List<FsmCall<SM, S, E>> getActions() {
 		return this.actions;
 	}
 
@@ -178,7 +178,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @return the guard.
 	 */
-	public Function<TStateMachine, S, E, Object[], Boolean> getGuard() {
+	public Function<SM, S, E, Object[], Boolean> getGuard() {
 		return this.guard;
 	}
 
@@ -187,7 +187,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @return the source state of the transition.
 	 */
-	public InternalState<TStateMachine, S, E> getSource() {
+	public InternalState<SM, S, E> getSource() {
 		return this.source;
 	}
 
@@ -196,7 +196,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @return the target state of the transition.
 	 */
-	public InternalState<TStateMachine, S, E> getTarget() {
+	public InternalState<SM, S, E> getTarget() {
 		return this.target;
 	}
 
@@ -207,7 +207,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param exception the exception
 	 * @param context   the transition context
 	 */
-	private void handleException(final Exception exception, final TransitionContext<TStateMachine, S, E> context) {
+	private void handleException(final Exception exception, final TransitionContext<SM, S, E> context) {
 		context.getExceptions().add(exception);
 		context.getNotifier().onExceptionThrown(context, exception);
 	}
@@ -226,8 +226,8 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param eventArguments the event arguments
 	 * @param context        the transition context
 	 */
-	private void performActions(final Object[] eventArguments, final TransitionContext<TStateMachine, S, E> context) {
-		for (final FsmCall<TStateMachine, S, E> action : this.getActions()) {
+	private void performActions(final Object[] eventArguments, final TransitionContext<SM, S, E> context) {
+		for (final FsmCall<SM, S, E> action : this.getActions()) {
 			try {
 				action.execOn(context.getStateMachine(), eventArguments);
 			} catch (final Exception exception) {
@@ -242,7 +242,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @param guard the guard function.
 	 */
-	public void setGuard(final Function<TStateMachine, S, E, Object[], Boolean> guard) {
+	public void setGuard(final Function<SM, S, E, Object[], Boolean> guard) {
 		this.guard = guard;
 	}
 
@@ -251,7 +251,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @param sourceState the source state of the transition.
 	 */
-	public void setSource(final InternalState<TStateMachine, S, E> source) {
+	public void setSource(final InternalState<SM, S, E> source) {
 		this.source = source;
 	}
 
@@ -260,7 +260,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * 
 	 * @param target the target state.
 	 */
-	public void setTarget(final InternalState<TStateMachine, S, E> target) {
+	public void setTarget(final InternalState<SM, S, E> target) {
 		this.target = target;
 	}
 
@@ -271,7 +271,7 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param context        the context
 	 * @return true if the transition should fire
 	 */
-	private boolean shouldFire(final Object[] eventArguments, final TransitionContext<TStateMachine, S, E> context) {
+	private boolean shouldFire(final Object[] eventArguments, final TransitionContext<SM, S, E> context) {
 		try {
 			boolean result = true;
 			if (this.getGuard() != null) {
@@ -297,8 +297,8 @@ public class Transition<TStateMachine extends StateMachine<S, E>, S extends Enum
 	 * @param origin       the origin state
 	 * @param stateContext the state context
 	 */
-	private void unwindSubStates(final InternalState<TStateMachine, S, E> origin, final StateContext<TStateMachine, S, E> stateContext) {
-		for (InternalState<TStateMachine, S, E> o = origin; o != this.getSource(); o = o.getSuperState()) {
+	private void unwindSubStates(final InternalState<SM, S, E> origin, final StateContext<SM, S, E> stateContext) {
+		for (InternalState<SM, S, E> o = origin; o != this.getSource(); o = o.getSuperState()) {
 			o.exit(stateContext);
 		}
 	}

@@ -228,9 +228,7 @@ public class InternalState<SM extends StateMachine<S, E>, S extends Enum<?>, E e
 
 	public InternalState<SM, S, E> enterShallow(final StateContext<SM, S, E> stateContext) {
 		this.entry(stateContext);
-
 		return this.initialState == null ? this : this.initialState.enterShallow(stateContext);
-
 	}
 
 	/**
@@ -243,6 +241,7 @@ public class InternalState<SM extends StateMachine<S, E>, S extends Enum<?>, E e
 		stateContext.addRecord(this.getId(), RecordType.Enter);
 		if (this.entryAction != null) {
 			try {
+				LOG.debug("Execute EntryAction: {}",this.entryAction);
 				this.entryAction.execOn(stateContext.getStateMachine());
 			} catch (final Exception e) {
 				handleException(e, stateContext);
@@ -261,6 +260,7 @@ public class InternalState<SM extends StateMachine<S, E>, S extends Enum<?>, E e
 		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
 		if (this.exitAction != null) {
 			try {
+				LOG.debug("Execute ExitAction: {}",this.exitAction);
 				this.exitAction.execOn(stateContext.getStateMachine());
 			} catch (final Exception e) {
 				handleException(e, stateContext);
