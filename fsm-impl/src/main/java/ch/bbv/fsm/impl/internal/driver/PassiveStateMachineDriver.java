@@ -27,20 +27,20 @@ import ch.bbv.fsm.StateMachine;
  * 
  * @author Ueli Kurmann  
  * 
- * @param <TState>
+ * @param <S>
  *            the enumeration type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the enumeration type of the events.
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
+public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		extends AbstractStateMachineDriver<TStateMachine, S, E> {
 
 	/**
 	 * List of all queued events.
 	 */
-	private final LinkedList<EventInformation<TEvent>> events;
+	private final LinkedList<EventInformation<E>> events;
 
 	/**
 	 * Do not process event while already processing an event. This happens if an event is fired in an state's or transition's action.
@@ -55,13 +55,13 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	}
 
 	@Override
-	public synchronized void fire(final TEvent eventId, final Object... eventArguments) {
+	public synchronized void fire(final E eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<>(eventId, eventArguments));
 		this.execute();
 	}
 
 	@Override
-	public synchronized void firePriority(final TEvent eventId, final Object... eventArguments) {
+	public synchronized void firePriority(final E eventId, final Object... eventArguments) {
 		this.events.addFirst(new EventInformation<>(eventId, eventArguments));
 		this.execute();
 	}
@@ -103,8 +103,8 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	 * 
 	 * @return The next queued event.
 	 */
-	private EventInformation<TEvent> getNextEventToProcess() {
-		final EventInformation<TEvent> e = this.events.getFirst();
+	private EventInformation<E> getNextEventToProcess() {
+		final EventInformation<E> e = this.events.getFirst();
 		this.events.removeFirst();
 		return e;
 	}
@@ -114,7 +114,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	 */
 	private void processQueuedEvents() {
 		while (this.events.size() > 0) {
-			final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
+			final EventInformation<E> eventToProcess = this.getNextEventToProcess();
 			this.fireEventOnStateMachine(eventToProcess);
 		}
 	}

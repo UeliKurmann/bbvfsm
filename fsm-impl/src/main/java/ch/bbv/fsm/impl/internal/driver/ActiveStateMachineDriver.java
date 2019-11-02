@@ -27,19 +27,17 @@ import java.util.concurrent.TimeUnit;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * An active state machine. This state machine reacts to events on a separate worker thread.
+ * An active state machine. This state machine reacts to events on a separate
+ * worker thread.
  * 
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  * 
- * @param <TState>
- *            the enumeration type of the states.
- * @param <TEvent>
- *            the enumeration type of the events.
- * @param <TStateMachine>
- *            the type of state machine
+ * @param <S>             the enumeration type of the states.
+ * @param <E>             the enumeration type of the events.
+ * @param <TStateMachine> the type of state machine
  */
-public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
+public class ActiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		extends AbstractStateMachineDriver<TStateMachine, S, E> {
 
 	private static final int BLOCKING_TIME_ON_EVENT_MS = 10;
 
@@ -48,7 +46,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	/**
 	 * List of all queued events.
 	 */
-	private final BlockingDeque<EventInformation<TEvent>> events;
+	private final BlockingDeque<EventInformation<E>> events;
 
 	private ExecutorService executorService;
 
@@ -58,13 +56,6 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	 * <code>true</code> while the driver is processing an event.
 	 */
 	private boolean processing;
-
-	private final Runnable worker = new Runnable() {
-		@Override
-		public void run() {
-			ActiveStateMachineDriver.this.execute();
-		}
-	};
 
 	/**
 	 * Create an active state machine.
@@ -80,7 +71,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	private void execute() {
 		try {
 			while (LiveCycle.Running.equals(getRunningState())) {
-				final EventInformation<TEvent> eventToProcess;
+				final EventInformation<E> eventToProcess;
 				synchronized (checkProcessingLock) {
 					eventToProcess = this.getNextEventToProcess();
 					processing = eventToProcess != null;
@@ -107,12 +98,12 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	}
 
 	@Override
-	public void fire(final TEvent eventId, final Object... eventArguments) {
+	public void fire(final E eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<>(eventId, eventArguments));
 	}
 
 	@Override
-	public void firePriority(final TEvent eventId, final Object... eventArguments) {
+	public void firePriority(final E eventId, final Object... eventArguments) {
 		this.events.addFirst(new EventInformation<>(eventId, eventArguments));
 	}
 
@@ -122,7 +113,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	 * @return The next queued event.
 	 * @throws InterruptedException
 	 */
-	private EventInformation<TEvent> getNextEventToProcess() throws InterruptedException {
+	private EventInformation<E> getNextEventToProcess() throws InterruptedException {
 		return this.events.pollFirst(BLOCKING_TIME_ON_EVENT_MS, TimeUnit.MILLISECONDS);
 	}
 
@@ -135,7 +126,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	public synchronized void start() {
 		super.start();
 		this.executorService = Executors.newFixedThreadPool(1);
-		this.executorService.execute(this.worker);
+		this.executorService.execute(this::execute);
 	}
 
 	@Override

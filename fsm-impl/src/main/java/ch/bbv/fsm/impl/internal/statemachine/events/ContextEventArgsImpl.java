@@ -25,28 +25,24 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * See {@link ContextEventArgs}.
  * 
- * @param <TState>
- *            the state enumeration
- * @param <TEvent>
- *            the event enumeration
- * @param <TStateMachine>
- *            the type of the state machine
+ * @param <S>             the state enumeration
+ * @param <E>             the event enumeration
+ * @param <TStateMachine> the type of the state machine
  */
-public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements ContextEventArgs<TStateMachine, TState, TEvent> {
+public class ContextEventArgsImpl<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements ContextEventArgs<TStateMachine, S, E> {
 
 	/**
 	 * The context.
 	 */
-	private final StateContext<TStateMachine, TState, TEvent> stateContext;
+	private final StateContext<TStateMachine, S, E> stateContext;
 
 	/**
 	 * Initializes a new instance.
 	 * 
-	 * @param stateContext
-	 *            the state context.
+	 * @param stateContext the state context.
 	 */
-	public ContextEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> stateContext) {
+	public ContextEventArgsImpl(final StateContext<TStateMachine, S, E> stateContext) {
 		this.stateContext = stateContext;
 	}
 
@@ -55,7 +51,7 @@ public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEv
 	 * 
 	 * @return the state context.
 	 */
-	public StateContext<TStateMachine, TState, TEvent> getStateContext() {
+	public StateContext<TStateMachine, S, E> getStateContext() {
 		return this.stateContext;
 	}
 

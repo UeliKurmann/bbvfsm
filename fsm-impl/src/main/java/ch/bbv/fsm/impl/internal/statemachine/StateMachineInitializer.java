@@ -27,31 +27,25 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * InternalState Machine Initializer.
  * 
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
+ * @param <TStateMachine> the type of state machine
+ * @param <S>             the type of the states
+ * @param <E>             the type of the events
  */
-class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+class StateMachineInitializer<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
-	private final InternalState<TStateMachine, TState, TEvent> initialState;
+	private final InternalState<TStateMachine, S, E> initialState;
 
-	private final StateContext<TStateMachine, TState, TEvent> stateContext;
+	private final StateContext<TStateMachine, S, E> stateContext;
 
 	/**
 	 * Initializes a new instance.
 	 * 
-	 * @param initialState
-	 *            the initial state.
-	 * @param stateContext
-	 *            the state context.
+	 * @param initialState the initial state.
+	 * @param stateContext the state context.
 	 */
-	StateMachineInitializer(final InternalState<TStateMachine, TState, TEvent> initialState,
-							final StateContext<TStateMachine, TState, TEvent> stateContext) {
+	StateMachineInitializer(final InternalState<TStateMachine, S, E> initialState, final StateContext<TStateMachine, S, E> stateContext) {
 		this.initialState = initialState;
 		this.stateContext = stateContext;
 	}
@@ -59,10 +53,11 @@ class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>
 	/**
 	 * Enters the initial state by entering all states further up in the hierarchy.
 	 * 
-	 * @return The entered state. The initial state or a sub state of the initial state.
+	 * @return The entered state. The initial state or a sub state of the initial
+	 *         state.
 	 */
-	InternalState<TStateMachine, TState, TEvent> enterInitialState() {
-		final Stack<InternalState<TStateMachine, TState, TEvent>> stack = this.traverseUpTheStateHierarchy();
+	InternalState<TStateMachine, S, E> enterInitialState() {
+		final Stack<InternalState<TStateMachine, S, E>> stack = this.traverseUpTheStateHierarchy();
 		this.traverseDownTheStateHierarchyAndEnterStates(stack);
 		return this.initialState.enterByHistory(this.stateContext);
 	}
@@ -70,11 +65,10 @@ class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>
 	/**
 	 * Traverses down the state hierarchy and enter all states along.
 	 * 
-	 * @param stack
-	 *            The stack containing the state hierarchy.
+	 * @param stack The stack containing the state hierarchy.
 	 */
-	private void traverseDownTheStateHierarchyAndEnterStates(final Stack<InternalState<TStateMachine, TState, TEvent>> stack) {
-		InternalState<TStateMachine, TState, TEvent> state;
+	private void traverseDownTheStateHierarchyAndEnterStates(final Stack<InternalState<TStateMachine, S, E>> stack) {
+		InternalState<TStateMachine, S, E> state;
 		while (stack.size() > 0) {
 			state = stack.pop();
 			state.entry(this.stateContext);
@@ -86,10 +80,10 @@ class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>
 	 * 
 	 * @return The stack containing all states up the state hierarchy.
 	 */
-	private Stack<InternalState<TStateMachine, TState, TEvent>> traverseUpTheStateHierarchy() {
-		final Stack<InternalState<TStateMachine, TState, TEvent>> stack = new Stack<>();
+	private Stack<InternalState<TStateMachine, S, E>> traverseUpTheStateHierarchy() {
+		final Stack<InternalState<TStateMachine, S, E>> stack = new Stack<>();
 
-		InternalState<TStateMachine, TState, TEvent> state = this.initialState;
+		InternalState<TStateMachine, S, E> state = this.initialState;
 		while (state != null) {
 			stack.push(state);
 			state = state.getSuperState();
