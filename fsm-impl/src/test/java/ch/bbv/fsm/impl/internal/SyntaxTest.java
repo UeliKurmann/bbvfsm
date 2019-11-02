@@ -56,7 +56,7 @@ public class SyntaxTest {
 
     @Before
     public void setup() {
-        this.definition = new SimpleStateMachineDefinition<>("SimpleExample", States.A);
+        this.definition = new SimpleStateMachineDefinition<>(States.A);
 
         this.definition.in(States.A) //
                 .executeOnEntry((fsm, p) -> this.fooEntry(ENTRY_A), null) //

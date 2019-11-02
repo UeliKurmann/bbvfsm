@@ -16,7 +16,7 @@ public interface FsmAction0<TStateMachine extends StateMachine<TState, TEvent>, 
 	 * The functional interface method.
 	 * 
 	 * @param fsm
-	 *            The instance of the FSM on which the method will be called.
+	 *            The instance of the SM on which the method will be called.
 	 */
 	void exec(TStateMachine fsm);
 }

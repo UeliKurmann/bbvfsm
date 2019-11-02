@@ -18,7 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm.acceptance.hierachy;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,8 +43,7 @@ public class HierarchyExample {
 
 	@Before
 	public void setup() {
-		hierarchyExampleStateMachineDefinition = new SimpleStateMachineDefinition<>(
-				"hierarchyExampleStateMachine", States.A);
+		hierarchyExampleStateMachineDefinition = new SimpleStateMachineDefinition<>(States.A);
 
 		hierarchyExampleStateMachineDefinition.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
 		hierarchyExampleStateMachineDefinition.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);
@@ -85,8 +83,8 @@ public class HierarchyExample {
 
 	@Test
 	public void testGoDownAndEventsInSuperState() {
-		final StateMachine<States, Events> testee = hierarchyExampleStateMachineDefinition.createPassiveStateMachine(
-				"testGoDownAndEventsInSuperState", States.A);
+		final StateMachine<States, Events> testee = hierarchyExampleStateMachineDefinition
+				.createPassiveStateMachine("testGoDownAndEventsInSuperState", States.A);
 
 		testee.start();
 		testee.fire(Events.toB, true);

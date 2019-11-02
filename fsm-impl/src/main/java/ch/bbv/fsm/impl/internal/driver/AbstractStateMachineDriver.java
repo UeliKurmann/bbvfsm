@@ -11,11 +11,11 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Base implementation for all state machine drivers.
  * 
- * @param <FSM> the type of state machine
- * @param <S>             the enumeration type of the states.
- * @param <E>             the enumeration type of the events.
+ * @param <SM> the type of state machine
+ * @param <S>  the enumeration type of the states.
+ * @param <E>  the enumeration type of the events.
  */
-abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+abstract class AbstractStateMachineDriver<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachine<S, E> {
 
 	private LiveCycle liveCycle = LiveCycle.Created;
@@ -23,7 +23,7 @@ abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S exte
 	/**
 	 * The internal state machine.
 	 */
-	private StateMachineInterpreter<FSM, S, E> stateMachineInterpreter;
+	private StateMachineInterpreter<SM, S, E> stateMachineInterpreter;
 
 	AbstractStateMachineDriver() {
 	}
@@ -35,12 +35,10 @@ abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S exte
 	 * @param name         the name of the state machine used in the logs.
 	 * @param states       the states
 	 */
-	public void initialize(final FSM stateMachine, final String name, final StateDictionary<FSM, S, E> states,
-			final S initialState, final List<StateMachineEventHandler<FSM, S, E>> eventHandlers) {
+	public void initialize(final SM stateMachine, final String name, final StateDictionary<SM, S, E> states, final S initialState,
+			final List<StateMachineEventHandler<SM, S, E>> eventHandlers) {
 		this.stateMachineInterpreter = new StateMachineInterpreter<>(stateMachine, name, states, initialState);
-		for (final StateMachineEventHandler<FSM, S, E> eventHandler : eventHandlers) {
-			stateMachineInterpreter.addEventHandler(eventHandler);
-		}
+		eventHandlers.forEach(stateMachineInterpreter::addEventHandler);
 	}
 
 	@Override
@@ -51,8 +49,7 @@ abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S exte
 	@Override
 	public void start() {
 		if (LiveCycle.Created != getRunningState()) {
-			throw new IllegalStateException(
-					"Starting the statemachine is not allowed in this state. InternalState is " + getRunningState().name());
+			throw new IllegalStateException("Starting the statemachine is not allowed in this state. State is " + getRunningState().name());
 		}
 		liveCycle = LiveCycle.Running;
 		stateMachineInterpreter.initialize();
@@ -67,14 +64,6 @@ abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S exte
 	@Override
 	public S getCurrentState() {
 		return stateMachineInterpreter.getCurrentStateId();
-	}
-
-	public void addEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
-		stateMachineInterpreter.addEventHandler(handler);
-	}
-
-	public void removeEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
-		stateMachineInterpreter.removeEventHandler(handler);
 	}
 
 	/**

@@ -66,7 +66,7 @@ public class TransitionsTest {
   private class TransitionTestStateMachineDefinition extends AbstractStateMachineDefinition<TransitionTestStateMachine, States, Events> {
 
     TransitionTestStateMachineDefinition() {
-      super("TransitionTestStateMachineDefinition", States.A);
+      super(States.A);
       in(States.A).on(Events.A).execute((fsm) -> {
         fsm.setExecuted(true);
       });
@@ -136,7 +136,7 @@ public class TransitionsTest {
    */
   @Test
   public void missingTransition() {
-    final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<>("missingTransition", States.A);
+    final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<>(States.A);
     stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
     stateMachineDefinition.addEventHandler(new Handler());

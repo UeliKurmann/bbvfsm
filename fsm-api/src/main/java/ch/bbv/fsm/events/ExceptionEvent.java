@@ -26,9 +26,9 @@ import ch.bbv.fsm.StateMachine;
  * @author Ueli Kurmann
  * @param <S>   the type of the states.
  * @param <E>   the type of the events.
- * @param <FSM> the type of the state machine
+ * @param <SM> the type of the state machine
  */
-public interface ExceptionEvent<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends ContextEvent<FSM, S, E> {
+public interface ExceptionEvent<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends ContextEvent<SM, S, E> {
 
 	/**
 	 * Returns the exception.

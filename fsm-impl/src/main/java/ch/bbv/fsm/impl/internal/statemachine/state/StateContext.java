@@ -30,11 +30,11 @@ import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
  * 
  * @author Ueli Kurmann
  * 
- * @param <FSM> the type of state machine
+ * @param <SM> the type of state machine
  * @param <S>   the type of the states
  * @param <E>   the type of the events
  */
-public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
+public class StateContext<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * A record of a state exit or entry. Used to log the way taken by transitions
@@ -113,7 +113,7 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 		Exit
 	}
 
-	private final InternalState<FSM, S, E> sourceState;
+	private final InternalState<SM, S, E> sourceState;
 
 	/**
 	 * The exceptions that occurred during performing an operation.
@@ -125,11 +125,11 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 	 */
 	private final List<Record> records;
 
-	private final StateMachineInterpreter<FSM, S, E> stateMachineInterpreter;
+	private final StateMachineInterpreter<SM, S, E> stateMachineInterpreter;
 
-	private final Notifier<FSM, S, E> notifier;
+	private final Notifier<SM, S, E> notifier;
 
-	private final FSM stateMachine;
+	private final SM stateMachine;
 
 	/**
 	 * Creates a new instance.
@@ -139,8 +139,8 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 	 * @param stateMachineImpl the state machine
 	 * @param notifier         the notifier
 	 */
-	public StateContext(final FSM stateMachine, final InternalState<FSM, S, E> sourceState,
-			final StateMachineInterpreter<FSM, S, E> stateMachineImpl, final Notifier<FSM, S, E> notifier) {
+	public StateContext(final SM stateMachine, final InternalState<SM, S, E> sourceState,
+			final StateMachineInterpreter<SM, S, E> stateMachineImpl, final Notifier<SM, S, E> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachineInterpreter = stateMachineImpl;
 		this.notifier = notifier;
@@ -188,21 +188,21 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 	 * 
 	 * @return the source state of the transition.
 	 */
-	public InternalState<FSM, S, E> getState() {
+	public InternalState<SM, S, E> getState() {
 		return this.sourceState;
 	}
 
 	/**
 	 * Returns the state machine's implementation.
 	 */
-	public StateMachineInterpreter<FSM, S, E> getStateMachineInterpreter() {
+	public StateMachineInterpreter<SM, S, E> getStateMachineInterpreter() {
 		return stateMachineInterpreter;
 	}
 
 	/**
 	 * Returns the notifier.
 	 */
-	public Notifier<FSM, S, E> getNotifier() {
+	public Notifier<SM, S, E> getNotifier() {
 		return notifier;
 	}
 
@@ -211,8 +211,8 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 	 * 
 	 * @param superState the super state
 	 */
-	public InternalState<FSM, S, E> getLastActiveSubState(final InternalState<FSM, S, E> superState) {
-		InternalState<FSM, S, E> result = null;
+	public InternalState<SM, S, E> getLastActiveSubState(final InternalState<SM, S, E> superState) {
+		InternalState<SM, S, E> result = null;
 		if (superState != null) {
 			result = stateMachineInterpreter.getLastActiveSubState(superState);
 			if (result == null) {
@@ -228,14 +228,14 @@ public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E e
 	 * @param superState the super state
 	 * @param subState   the last active sub state
 	 */
-	public void setLastActiveSubState(final InternalState<FSM, S, E> superState, final InternalState<FSM, S, E> subState) {
+	public void setLastActiveSubState(final InternalState<SM, S, E> superState, final InternalState<SM, S, E> subState) {
 		stateMachineInterpreter.setLastActiveSubState(superState, subState);
 	}
 
 	/**
 	 * Returns the custom's state machine.
 	 */
-	public FSM getStateMachine() {
+	public SM getStateMachine() {
 		return stateMachine;
 	}
 

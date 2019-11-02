@@ -26,43 +26,43 @@ import ch.bbv.fsm.StateMachine;
  * @author Ueli Kurmann
  * @param <S>   the type of the states.
  * @param <E>   the type of the events.
- * @param <FSM> the type of the state machine
+ * @param <SM> the type of the state machine
  */
-public interface StateMachineEventHandler<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
+public interface StateMachineEventHandler<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * Occurs when an exception was thrown inside the state machine.
 	 * 
 	 * @param arg the event argument.
 	 */
-	void onExceptionThrown(ExceptionEvent<FSM, S, E> arg);
+	void onExceptionThrown(ExceptionEvent<SM, S, E> arg);
 
 	/**
 	 * Occurs when a transition begins.
 	 * 
 	 * @param args the event argument.
 	 */
-	void onTransitionBegin(TransitionEvent<FSM, S, E> args);
+	void onTransitionBegin(TransitionEvent<SM, S, E> args);
 
 	/**
 	 * Occurs when a transition completed.
 	 * 
 	 * @param arg the completion event
 	 */
-	void onTransitionCompleted(TransitionCompletedEvent<FSM, S, E> arg);
+	void onTransitionCompleted(TransitionCompletedEvent<SM, S, E> arg);
 
 	/**
 	 * Occurs when no transition could be executed.
 	 * 
 	 * @param arg the event argument.
 	 */
-	void onTransitionDeclined(TransitionEvent<FSM, S, E> arg);
+	void onTransitionDeclined(TransitionEvent<SM, S, E> arg);
 
 	/**
 	 * Occurs when an exception was thrown inside a transition of the state machine.
 	 * 
 	 * @param arg the event argument.
 	 */
-	void onTransitionThrowsException(TransitionExceptionEvent<FSM, S, E> arg);
+	void onTransitionThrowsException(TransitionExceptionEvent<SM, S, E> arg);
 
 }

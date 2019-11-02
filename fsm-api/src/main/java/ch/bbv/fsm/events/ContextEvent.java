@@ -28,13 +28,13 @@ import ch.bbv.fsm.StateMachine;
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
- * @param <FSM>
+ * @param <SM>
  *            the type of the state machine
  */
-public interface ContextEvent<FSM extends StateMachine<S, TEvent>, S extends Enum<?>, TEvent extends Enum<?>> {
+public interface ContextEvent<SM extends StateMachine<S, TEvent>, S extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * The source context.
 	 */
-	FSM getSource();
+	SM getSource();
 }

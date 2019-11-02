@@ -21,7 +21,7 @@ package ch.bbv.fsm.model;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * Represents a FSM Model Object. This model is a hierarchical(tree) representation of the scopes contained in the FSM.
+ * Represents a SM Model Object. This model is a hierarchical(tree) representation of the scopes contained in the SM.
  * 
  * 
  * @author Mario Martinez 

@@ -80,7 +80,7 @@ public class StateMachineTest {
   private class StateMachineTestStateMachineDefinition extends AbstractStateMachineDefinition<StateMachineTestStateMachine, States, Events> {
 
     StateMachineTestStateMachineDefinition() {
-      super("StateMachineTestStateMachineDefinition", States.A);
+      super(States.A);
     }
 
     @Override

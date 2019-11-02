@@ -36,12 +36,11 @@ import ch.bbv.fsm.model.State;
  *
  * @author Ueli Kurmann
  *
- * @param <FSM> the type of state machine
- * @param <S>             the type of the states
- * @param <E>             the type of the events
+ * @param <SM> the type of state machine
+ * @param <S>  the type of the states
+ * @param <E>  the type of the events
  */
-public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		implements State<FSM, S, E> {
+public class InternalState<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> implements State<SM, S, E> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(InternalState.class);
 
@@ -50,24 +49,24 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 */
 	private int level;
 
-	private final List<State<FSM, S, E>> subStates;
+	private final List<State<SM, S, E>> subStates;
 
 	/**
 	 * The super-state of this state. Null for states with <code>level</code> equal
 	 * to 1.
 	 */
-	private InternalState<FSM, S, E> superState;
+	private InternalState<SM, S, E> superState;
 
 	/**
 	 * Collection of transitions that start in this .
 	 * (Transition<TState,TEvent>.getSource() is equal to this state)
 	 */
-	private final TransitionDictionary<FSM, S, E> transitions;
+	private final TransitionDictionary<SM, S, E> transitions;
 
 	/**
 	 * The initial sub-state of this state.
 	 */
-	private InternalState<FSM, S, E> initialState;
+	private InternalState<SM, S, E> initialState;
 
 	/**
 	 * The HistoryType of this state.
@@ -82,12 +81,12 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	/**
 	 * The entry action.
 	 */
-	private FsmCall<FSM, S, E> entryAction;
+	private FsmCall<SM, S, E> entryAction;
 
 	/**
 	 * The exit action.
 	 */
-	private FsmCall<FSM, S, E> exitAction;
+	private FsmCall<SM, S, E> exitAction;
 
 	/**
 	 * Initializes a new instance of the state.
@@ -107,7 +106,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 *
 	 * @param state a sub state.
 	 */
-	public void addSubState(final InternalState<FSM, S, E> state) {
+	public void addSubState(final InternalState<SM, S, E> state) {
 		this.subStates.add(state);
 
 	}
@@ -118,7 +117,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 *
 	 * @param value
 	 */
-	private void checkInitialStateIsASubState(final InternalState<FSM, S, E> value) {
+	private void checkInitialStateIsASubState(final InternalState<SM, S, E> value) {
 		if (value.getSuperState() != this) {
 			throw new IllegalArgumentException(String.format(
 					"InternalState {0} cannot be the initial state of super state {1} because it is not a direct sub-state.", value, this));
@@ -130,7 +129,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 *
 	 * @param newInitialState the new initial state.
 	 */
-	private void checkInitialStateIsNotThisInstance(final InternalState<FSM, S, E> newInitialState) {
+	private void checkInitialStateIsNotThisInstance(final InternalState<SM, S, E> newInitialState) {
 		if (this == newInitialState) {
 			throw new IllegalArgumentException(String.format("InternalState {0} cannot be the initial sub-state to itself.", this));
 		}
@@ -141,11 +140,9 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 *
 	 * @param newSuperState the super state.
 	 */
-	private void checkSuperStateIsNotThisInstance(final InternalState<FSM, S, E> newSuperState) {
+	private void checkSuperStateIsNotThisInstance(final InternalState<SM, S, E> newSuperState) {
 		if (this == newSuperState) {
-			throw new IllegalArgumentException(String.format(
-
-					"InternalState {0} cannot be its own super-state.", this));
+			throw new IllegalArgumentException(String.format("State {0} cannot be its own super-state.", this));
 		}
 	}
 
@@ -156,9 +153,9 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext the state context.
 	 * @return the active state. (depends on this states <code>HistoryType</code>)
 	 */
-	public InternalState<FSM, S, E> enterByHistory(final StateContext<FSM, S, E> stateContext) {
+	public InternalState<SM, S, E> enterByHistory(final StateContext<SM, S, E> stateContext) {
 
-		InternalState<FSM, S, E> result = this;
+		InternalState<SM, S, E> result = this;
 
 		switch (this.historyType) {
 		case NONE:
@@ -183,9 +180,9 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext the event context.
 	 * @return the active state.
 	 */
-	public InternalState<FSM, S, E> enterDeep(final StateContext<FSM, S, E> stateContext) {
+	public InternalState<SM, S, E> enterDeep(final StateContext<SM, S, E> stateContext) {
 		this.entry(stateContext);
-		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+		final InternalState<SM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState == null ? this : lastActiveState.enterDeep(stateContext);
 	}
 
@@ -195,8 +192,8 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext the state context.
 	 * @return the state
 	 */
-	private InternalState<FSM, S, E> enterHistoryDeep(final StateContext<FSM, S, E> stateContext) {
-		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+	private InternalState<SM, S, E> enterHistoryDeep(final StateContext<SM, S, E> stateContext) {
+		final InternalState<SM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState != null ? lastActiveState.enterDeep(stateContext) : this;
 	}
 
@@ -206,7 +203,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext state context
 	 * @return the entered state.
 	 */
-	private InternalState<FSM, S, E> enterHistoryNone(final StateContext<FSM, S, E> stateContext) {
+	private InternalState<SM, S, E> enterHistoryNone(final StateContext<SM, S, E> stateContext) {
 		return this.initialState != null ? this.getInitialState().enterShallow(stateContext) : this;
 	}
 
@@ -216,8 +213,8 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext state context
 	 * @return the entered state
 	 */
-	private InternalState<FSM, S, E> enterHistoryShallow(final StateContext<FSM, S, E> stateContext) {
-		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+	private InternalState<SM, S, E> enterHistoryShallow(final StateContext<SM, S, E> stateContext) {
+		final InternalState<SM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState != null ? lastActiveState.enterShallow(stateContext) : this;
 	}
 
@@ -229,7 +226,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the active state.
 	 */
 
-	public InternalState<FSM, S, E> enterShallow(final StateContext<FSM, S, E> stateContext) {
+	public InternalState<SM, S, E> enterShallow(final StateContext<SM, S, E> stateContext) {
 		this.entry(stateContext);
 
 		return this.initialState == null ? this : this.initialState.enterShallow(stateContext);
@@ -242,7 +239,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext the state context.
 	 */
 
-	public void entry(final StateContext<FSM, S, E> stateContext) {
+	public void entry(final StateContext<SM, S, E> stateContext) {
 		stateContext.addRecord(this.getId(), RecordType.Enter);
 		if (this.entryAction != null) {
 			try {
@@ -260,7 +257,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param stateContext the state context.
 	 */
 
-	public void exit(final StateContext<FSM, S, E> stateContext) {
+	public void exit(final StateContext<SM, S, E> stateContext) {
 		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
 		if (this.exitAction != null) {
 			try {
@@ -272,7 +269,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 		this.setThisStateAsLastStateOfSuperState(stateContext);
 	}
 
-	private void setThisStateAsLastStateOfSuperState(final StateContext<FSM, S, E> stateContext) {
+	private void setThisStateAsLastStateOfSuperState(final StateContext<SM, S, E> stateContext) {
 		if (superState != null && !HistoryType.NONE.equals(superState.getHistoryType())) {
 			stateContext.setLastActiveSubState(superState, this);
 		}
@@ -285,13 +282,13 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the result of the transition.
 	 */
 
-	public TransitionResult<FSM, S, E> fire(final TransitionContext<FSM, S, E> context) {
+	public TransitionResult<SM, S, E> fire(final TransitionContext<SM, S, E> context) {
 		@SuppressWarnings("unchecked")
-		TransitionResult<FSM, S, E> result = TransitionResult.getNotFired();
+		TransitionResult<SM, S, E> result = TransitionResult.getNotFired();
 
-		final List<Transition<FSM, S, E>> transitionsForEvent = this.transitions.getTransitions(context.getEventId());
+		final List<Transition<SM, S, E>> transitionsForEvent = this.transitions.getTransitions(context.getEventId());
 		if (transitionsForEvent != null) {
-			for (final Transition<FSM, S, E> transition : transitionsForEvent) {
+			for (final Transition<SM, S, E> transition : transitionsForEvent) {
 				result = transition.fire(context);
 				if (result.isFired()) {
 					return result;
@@ -314,7 +311,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the entry action.
 	 */
 
-	public FsmCall<FSM, S, E> getEntryAction() {
+	public FsmCall<SM, S, E> getEntryAction() {
 		return this.entryAction;
 	}
 
@@ -324,7 +321,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the exit action.
 	 */
 
-	public FsmCall<FSM, S, E> getExitAction() {
+	public FsmCall<SM, S, E> getExitAction() {
 		return this.exitAction;
 	}
 
@@ -348,7 +345,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the initial sub-state or Null if this state has no sub-states.
 	 */
 
-	public InternalState<FSM, S, E> getInitialState() {
+	public InternalState<SM, S, E> getInitialState() {
 		return this.initialState;
 	}
 
@@ -362,7 +359,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the sub-states.
 	 */
 
-	public List<State<FSM, S, E>> getSubStates() {
+	public List<State<SM, S, E>> getSubStates() {
 		return new ArrayList<>(this.subStates);
 	}
 
@@ -372,7 +369,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the super-state.
 	 */
 
-	public InternalState<FSM, S, E> getSuperState() {
+	public InternalState<SM, S, E> getSuperState() {
 		return this.superState;
 	}
 
@@ -382,7 +379,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @return the transitions.
 	 */
 
-	public TransitionDictionary<FSM, S, E> getTransitions() {
+	public TransitionDictionary<SM, S, E> getTransitions() {
 		return this.transitions;
 	}
 
@@ -392,7 +389,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param exception    the exception
 	 * @param stateContext the state context.
 	 */
-	private void handleException(final Exception exception, final StateContext<FSM, S, E> stateContext) {
+	private void handleException(final Exception exception, final StateContext<SM, S, E> stateContext) {
 		stateContext.getExceptions().add(exception);
 		stateContext.getNotifier().onExceptionThrown(stateContext, exception);
 	}
@@ -404,7 +401,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param action the entry action.
 	 */
 
-	public void setEntryAction(final FsmCall<FSM, S, E> action) {
+	public void setEntryAction(final FsmCall<SM, S, E> action) {
 		this.entryAction = action;
 
 	}
@@ -415,7 +412,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param action the action
 	 */
 
-	public void setExitAction(final FsmCall<FSM, S, E> action) {
+	public void setExitAction(final FsmCall<SM, S, E> action) {
 		this.exitAction = action;
 
 	}
@@ -445,7 +442,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param initialState the initial sub-state.
 	 */
 
-	public void setInitialState(final InternalState<FSM, S, E> initialState) {
+	public void setInitialState(final InternalState<SM, S, E> initialState) {
 		this.checkInitialStateIsNotThisInstance(initialState);
 		this.checkInitialStateIsASubState(initialState);
 		this.initialState = initialState;
@@ -460,7 +457,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * Sets the level of all sub states.
 	 */
 	private void setLevelOfSubStates() {
-		for (final State<FSM, S, E> state : this.getSubStates()) {
+		for (final State<SM, S, E> state : this.getSubStates()) {
 			state.setLevel(this.level + 1);
 		}
 	}
@@ -471,7 +468,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 	 * @param superState the super-state.
 	 */
 
-	public void setSuperState(final InternalState<FSM, S, E> superState) {
+	public void setSuperState(final InternalState<SM, S, E> superState) {
 		this.checkSuperStateIsNotThisInstance(superState);
 		this.superState = superState;
 		this.setInitialLevel();
@@ -486,7 +483,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 		return this.superState != null;
 	}
 
-	public State<FSM, S, E> getParent() {
+	public State<SM, S, E> getParent() {
 		return this.superState;
 	}
 
@@ -494,7 +491,7 @@ public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E 
 		return this.subStates != null && !this.subStates.isEmpty();
 	}
 
-	public List<State<FSM, S, E>> getChildren() {
+	public List<State<SM, S, E>> getChildren() {
 		return this.getSubStates();
 	}
 }

@@ -10,7 +10,7 @@ public class TypeHolderTest {
 		
 	}
 	
-	<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> void create() {
+	<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> void create() {
 		
 	}
 	

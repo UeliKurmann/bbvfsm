@@ -75,8 +75,7 @@ public class ExceptionCasesTest {
   private class ExceptionCasesTestStateMachineDefinition extends AbstractStateMachineDefinition<ExceptionCasesTestStateMachine, States, Events> {
 
     ExceptionCasesTestStateMachineDefinition(final String name, final States initialState) {
-
-      super("ExceptionCasesTestStateMachine", States.A);
+      super(States.A);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class FunctionDefinitionTest {
 
     FunctionDefinitionTestStateMachineDefinition(final String name, final States initialState) {
 
-      super("FunctionDefinitionTestStateMachine", States.A);
+      super(States.A);
     }
 
     @Override
@@ -99,8 +99,8 @@ public class FunctionDefinitionTest {
   public void functionWhenFunctionToExceuteThenExecuteOK() {
 
     final FunctionDefinitionTestStateMachineDefinition stateMachineDefinition =
-        new FunctionDefinitionTestStateMachineDefinition("simpleFSM", States.A);
-    final FunctionDefinitionTestStateMachine stateMachine = stateMachineDefinition.createPassiveStateMachine("simpleFSM", States.A);
+        new FunctionDefinitionTestStateMachineDefinition("simpleSM", States.A);
+    final FunctionDefinitionTestStateMachine stateMachine = stateMachineDefinition.createPassiveStateMachine("simpleSM", States.A);
 
     stateMachineDefinition.in(States.A).on(Events.A).goTo(States.B).execute(new FunctionDefinitionTest.DoNothing())
         .onlyIf(new FunctionDefinitionTest.WriteLogFunction());

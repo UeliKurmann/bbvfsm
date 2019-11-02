@@ -111,7 +111,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	 */
 	public void fire(final E eventId, final Object[] eventArguments) {
 		if (LOG.isDebugEnabled()) {
-			LOG.info("Fire event {} on state machine {} with current state {} and event arguments {}.",
+			LOG.debug("Fire event {} on state machine {} with current state {} and event arguments {}.",
 					new Object[] { eventId, this.getName(), this.getCurrentStateId(), eventArguments });
 		}
 
@@ -127,7 +127,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 
 		this.setCurrentState(result.getNewState());
 
-		LOG.debug("InternalStateImpl machine {} performed {}.", this, context.getRecords());
+		LOG.debug("Statemachine {} performed {}.", this, context.getRecords());
 
 		this.onTransitionCompleted(context);
 	}

@@ -57,7 +57,7 @@ public class StateActionTest {
   private class StateActionTestStateMachineDefinition extends AbstractStateMachineDefinition<StateActionTestStateMachine, States, Events> {
 
     StateActionTestStateMachineDefinition() {
-      super("StateActionTestStateMachineDefinition", States.A);
+      super(States.A);
     }
 
     @Override

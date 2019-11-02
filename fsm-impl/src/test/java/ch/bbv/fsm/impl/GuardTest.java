@@ -51,7 +51,7 @@ public class GuardTest {
 	private class GuardTestStateMachineDefinition extends AbstractStateMachineDefinition<GuardTestStateMachine, States, Events> {
 
 		GuardTestStateMachineDefinition(final String name, final States initialState) {
-			super("GuardTestStateMachine", States.A);
+			super(States.A);
 		}
 
 		@Override

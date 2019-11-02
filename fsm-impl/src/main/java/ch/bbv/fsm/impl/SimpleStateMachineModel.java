@@ -7,11 +7,11 @@ import ch.bbv.fsm.model.StateMachineModel;
 /**
  * Implementation of the definition of the finite state machine.
  * 
- * @param <S>        the type of the states.
- * @param <E>        the type of the events.
+ * @param <S>             the type of the states.
+ * @param <E>             the type of the events.
  * @param <TStateMachine> the type of the state machine
  */
-public class SimpleStateMachineModel<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+class SimpleStateMachineModel<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachineModel<TStateMachine, S, E> {
 
 	/**

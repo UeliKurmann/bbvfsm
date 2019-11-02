@@ -57,11 +57,6 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>
 	void defineHierarchyOn(S superStateId, S initialSubStateId, HistoryType historyType, @SuppressWarnings("unchecked") S... subStateIds);
 
 	/**
-	 * Returns the name of this state machine.
-	 */
-	String getName();
-
-	/**
 	 * Adds an event handler.
 	 * 
 	 * @param handler the event handler

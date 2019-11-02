@@ -19,10 +19,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.action.FsmAction1;
-import ch.bbv.fsm.impl.AbstractStateMachine;
-import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
+import ch.bbv.fsm.events.TransitionCompletedEvent;
+import ch.bbv.fsm.impl.SimpleStateMachine;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Example: Tennis Scorer.
@@ -32,38 +32,23 @@ import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
  */
 public class Tennis {
 
-	private class TennisTestStateMachine extends AbstractStateMachine<TennisTestStateMachine, States, Events> {
-
-		private States state;
-
-		public States getState() {
-			return state;
-		}
-
-		TennisTestStateMachine(final StateMachine<States, Events> driver) {
-			super(driver);
-		}
-
-		public void setState(final States state) {
-			this.state = state;
-		}
-
-	}
-	
 	
 
-	private class TennisTestStateMachineDefinition extends AbstractStateMachineDefinition<TennisTestStateMachine, States, Events> {
+	private static class Handler extends StateMachineEventHandlerAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
-		TennisTestStateMachineDefinition() {
-			super("TennisTestStateMachineDefinition", States._0_0);
-		}
+		States currentState = States._0_0;
 
 		@Override
-		protected TennisTestStateMachine createStateMachine(final StateMachine<States, Events> driver) {
-			return new TennisTestStateMachine(driver);
+		public void onTransitionCompleted(TransitionCompletedEvent<SimpleStateMachine<States, Events>, States, Events> arg) {
+			currentState = arg.getNewStateId();
 		}
 
+		public States getCurrentState() {
+			return currentState;
+		}
 	}
+
+	
 
 	public enum Events {
 		A_Scores, B_Scores
@@ -74,114 +59,94 @@ public class Tennis {
 		_DEUCE, _A_ADV, _B_ADV;
 	}
 
-	private TennisTestStateMachineDefinition scorer;
+	private SimpleStateMachineDefinition<States, Events> definition;
+	private Handler handler;
 
-	FsmAction1<TennisTestStateMachine, States, Events, States> setStateAction = (fsm, p1) -> fsm.setState(p1);
-
+	
 	@Before
 	public void setup() {
-		this.scorer = new TennisTestStateMachineDefinition();
-		this.scorer.addEventHandler(null);
-		this.scorer.in(States._0_0).executeOnEntry(setStateAction, States._0_0);
-		this.scorer.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
-		this.scorer.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
+		this.definition = new SimpleStateMachineDefinition<States, Events>(States._0_0);
+		this.handler = new Handler();
+		this.definition.addEventHandler(handler);
+		this.definition.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
+		this.definition.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
 
-		this.scorer.in(States._0_15).executeOnEntry(setStateAction, States._0_15);
-		this.scorer.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
-		this.scorer.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
+		this.definition.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
+		this.definition.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
 
-		this.scorer.in(States._0_30).executeOnEntry(setStateAction, States._0_30);
-		this.scorer.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
-		this.scorer.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
+		this.definition.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
+		this.definition.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
 
-		this.scorer.in(States._0_40).executeOnEntry(setStateAction, States._0_40);
-		this.scorer.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
-		this.scorer.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
+		this.definition.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
+		this.definition.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.scorer.in(States._15_0).executeOnEntry(setStateAction, States._15_0);
-		this.scorer.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
-		this.scorer.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
+		this.definition.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
+		this.definition.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
 
-		this.scorer.in(States._15_15).executeOnEntry(setStateAction, States._15_15);
-		this.scorer.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
-		this.scorer.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
+		this.definition.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
+		this.definition.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
 
-		this.scorer.in(States._15_30).executeOnEntry(setStateAction, States._15_30);
-		this.scorer.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
-		this.scorer.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
+		this.definition.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
+		this.definition.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
 
-		this.scorer.in(States._15_40).executeOnEntry(setStateAction, States._15_40);
-		this.scorer.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
-		this.scorer.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
+		this.definition.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
+		this.definition.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.scorer.in(States._30_0).executeOnEntry(setStateAction, States._30_0);
-		this.scorer.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
-		this.scorer.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
+		this.definition.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
+		this.definition.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
 
-		this.scorer.in(States._30_15).executeOnEntry(setStateAction, States._30_15);
-		this.scorer.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
-		this.scorer.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
+		this.definition.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
+		this.definition.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
 
-		this.scorer.in(States._30_30).executeOnEntry(setStateAction, States._30_30);
-		this.scorer.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
-		this.scorer.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
+		this.definition.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
+		this.definition.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
 
-		this.scorer.in(States._30_40).executeOnEntry(setStateAction, States._30_40);
-		this.scorer.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
-		this.scorer.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
+		this.definition.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
+		this.definition.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-		this.scorer.in(States._40_0).executeOnEntry(setStateAction, States._40_0);
-		this.scorer.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
-		this.scorer.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
+		this.definition.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
+		this.definition.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
 
-		this.scorer.in(States._40_15).executeOnEntry(setStateAction, States._40_15);
-		this.scorer.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
-		this.scorer.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
+		this.definition.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
+		this.definition.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
 
-		this.scorer.in(States._40_30).executeOnEntry(setStateAction, States._40_30);
-		this.scorer.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
-		this.scorer.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
+		this.definition.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
+		this.definition.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
 
-		this.scorer.in(States._DEUCE).executeOnEntry(setStateAction, States._DEUCE);
-		this.scorer.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
-		this.scorer.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
+		this.definition.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
+		this.definition.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
 
-		this.scorer.in(States._A_ADV).executeOnEntry(setStateAction, States._A_ADV);
-		this.scorer.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
-		this.scorer.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
+		this.definition.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
+		this.definition.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
 
-		this.scorer.in(States._B_ADV).executeOnEntry(setStateAction, States._B_ADV);
-		this.scorer.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
-		this.scorer.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
-
-		this.scorer.in(States._A_GAME).executeOnEntry(setStateAction, States._A_GAME);
-		this.scorer.in(States._B_GAME).executeOnEntry(setStateAction, States._B_GAME);
+		this.definition.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
+		this.definition.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
 	}
 
 	@Test
 	public void scoreWhenIn0to0AandBScores3TimesSwitchingThenDeuce() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-0");
+		final SimpleStateMachine<States, Events> testee = definition.createPassiveStateMachine("Tennis-0");
 		testee.start();
 
-		final States initialState = testee.getState();
+		final States initialState = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = testee.getState();
+		final States score2 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score3 = testee.getState();
+		final States score3 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score4 = testee.getState();
+		final States score4 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score5 = testee.getState();
+		final States score5 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score6 = testee.getState();
+		final States score6 = handler.getCurrentState();
 
 		testee.terminate();
 
@@ -196,22 +161,22 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0AScoresrTimesThenAWins() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-1");
+		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1");
 		testee.start();
 
-		final States initialState = testee.getState();
+		final States initialState = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score2 = testee.getState();
+		final States score2 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score3 = testee.getState();
+		final States score3 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score4 = testee.getState();
+		final States score4 = handler.getCurrentState();
 
 		testee.terminate();
 
@@ -224,22 +189,22 @@ public class Tennis {
 
 	@Test
 	public void scoreWhenIn0to0BScoresrTimesThenBWins() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-1", States._0_0);
+		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._0_0);
 		testee.start();
 
-		final States initialState = testee.getState();
+		final States initialState = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = testee.getState();
+		final States score2 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score3 = testee.getState();
+		final States score3 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score4 = testee.getState();
+		final States score4 = handler.getCurrentState();
 
 		Assert.assertEquals(States._0_0, initialState);
 		Assert.assertEquals(States._0_15, score1);
@@ -250,11 +215,11 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndAScores2TimesThenAWins() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.A_Scores);
 		final States score2 = testee.getCurrentState();
@@ -267,14 +232,14 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBfollowedByAScoresThenDeuce() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = testee.getState();
+		final States score2 = handler.getCurrentState();
 
 		testee.terminate();
 
@@ -284,14 +249,14 @@ public class Tennis {
 
 	@Test
 	public void testScorerWhenDeuceAndBScores2TimesThenBWins() {
-		final TennisTestStateMachine testee = scorer.createPassiveStateMachine("Tennis-1", States._DEUCE);
+		final SimpleStateMachine<States, Events>  testee = definition.createPassiveStateMachine("Tennis-1", States._DEUCE);
 		testee.start();
 
 		testee.fire(Events.B_Scores);
-		final States score1 = testee.getState();
+		final States score1 = handler.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = testee.getState();
+		final States score2 = handler.getCurrentState();
 
 		testee.terminate();
 

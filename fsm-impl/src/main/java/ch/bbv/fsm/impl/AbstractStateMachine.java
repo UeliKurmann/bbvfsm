@@ -8,9 +8,9 @@ import ch.bbv.fsm.memento.StateMachineMemento;
  * 
  * @param <S>   the type of the states.
  * @param <E>   the type of the events.
- * @param <FSM> the type of state machine
+ * @param <SM> the type of state machine
  */
-public abstract class AbstractStateMachine<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+public abstract class AbstractStateMachine<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachine<S, E> {
 
 	private final StateMachine<S, E> driver;
