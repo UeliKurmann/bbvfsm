@@ -32,8 +32,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * @param <TStateMachine>
  *            the type of the state machine
  */
-public class ExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements ExceptionEvent<TStateMachine, TState, TEvent> {
+public class ExceptionEventImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventImpl<TStateMachine, TState, TEvent> implements ExceptionEvent<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The exception.
@@ -48,7 +48,7 @@ public class ExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, T
 	 * @param exception
 	 *            the exception.
 	 */
-	public ExceptionEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
+	public ExceptionEventImpl(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
 		super(stateContext);
 		this.exception = exception;
 	}

@@ -19,44 +19,43 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.ContextEvent;
+import ch.bbv.fsm.events.TransitionExceptionEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link ContextEvent}.
+ * See {@link TransitionExceptionEvent}.
  * 
- * @param <S>             the state enumeration
- * @param <E>             the event enumeration
- * @param <TStateMachine> the type of the state machine
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class ContextEventArgsImpl<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		implements ContextEvent<TStateMachine, S, E> {
+public class TransitionExceptionEventImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventImpl<TStateMachine, TState, TEvent> implements
+		TransitionExceptionEvent<TStateMachine, TState, TEvent> {
 
 	/**
-	 * The context.
+	 * The exception.
 	 */
-	private final StateContext<TStateMachine, S, E> stateContext;
+	private final Exception exception;
 
 	/**
-	 * Initializes a new instance.
+	 * Constructor.
 	 * 
-	 * @param stateContext the state context.
+	 * @param context
+	 *            the event context
+	 * @param exception
+	 *            the exception
 	 */
-	public ContextEventArgsImpl(final StateContext<TStateMachine, S, E> stateContext) {
-		this.stateContext = stateContext;
-	}
-
-	/**
-	 * Returns the state context.
-	 * 
-	 * @return the state context.
-	 */
-	public StateContext<TStateMachine, S, E> getStateContext() {
-		return this.stateContext;
+	public TransitionExceptionEventImpl(final StateContext<TStateMachine, TState, TEvent> context, final Exception exception) {
+		super(context);
+		this.exception = exception;
 	}
 
 	@Override
-	public TStateMachine getSource() {
-		return null;
+	public Exception getException() {
+		return this.exception;
 	}
 }

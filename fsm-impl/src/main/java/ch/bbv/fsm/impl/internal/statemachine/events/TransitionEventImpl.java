@@ -24,7 +24,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 /**
- * See {@link ContextEventArgsImpl}.
+ * See {@link ContextEventImpl}.
  * 
  * @param <TState>
  *            the state enumeration
@@ -33,15 +33,15 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
  * @param <TStateMachine>
  *            the type of the state machine
  */
-public class TransitionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements TransitionEvent<TStateMachine, TState, TEvent> {
+public class TransitionEventImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventImpl<TStateMachine, TState, TEvent> implements TransitionEvent<TStateMachine, TState, TEvent> {
 	/**
 	 * Initializes a new instance.
 	 * 
 	 * @param transitionContext
 	 *            the transition context.
 	 */
-	public TransitionEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
+	public TransitionEventImpl(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
 		super(transitionContext);
 	}
 

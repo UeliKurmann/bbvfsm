@@ -26,7 +26,7 @@ import org.mockito.Mockito;
 import ch.bbv.fsm.impl.SimpleStateMachine;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
@@ -40,7 +40,7 @@ public class TransitionEventArgsImplTest {
 		final TransitionContext<SimpleStateMachine<States, Events>, States, Events> contextMock = Mockito.mock(TransitionContext.class);
 		Mockito.when(contextMock.getEventId()).thenReturn(Events.A);
 		Mockito.when(contextMock.getState()).thenReturn(stateMock);
-		final TransitionEventArgsImpl<SimpleStateMachine<States, Events>, States, Events> testee = new TransitionEventArgsImpl<>(
+		final TransitionEventImpl<SimpleStateMachine<States, Events>, States, Events> testee = new TransitionEventImpl<>(
 				contextMock);
 		Assert.assertEquals("Transition from state A on event A.", testee.toString());
 	}

@@ -15,9 +15,9 @@ import ch.bbv.fsm.impl.internal.driver.ActiveStateMachineDriver;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.driver.PassiveStateMachineDriver;
 import ch.bbv.fsm.impl.internal.dsl.StateBuilder;
-import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
@@ -152,7 +152,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	public void onExceptionThrown(final StateContext<TStateMachine, S, E> stateContext, final Exception exception) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onExceptionThrown(new ExceptionEventArgsImpl<>(stateContext, exception));
+				handler.onExceptionThrown(new ExceptionEventImpl<>(stateContext, exception));
 			}
 		} catch (final Exception e) {
 			LOG.error("Exception during event handler.", e);
@@ -164,7 +164,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	public void onExceptionThrown(final TransitionContext<TStateMachine, S, E> transitionContext, final Exception exception) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<>(transitionContext, exception));
+				handler.onTransitionThrowsException(new TransitionExceptionEventImpl<>(transitionContext, exception));
 			}
 		} catch (final Exception e) {
 			LOG.error("Exception during event handler.", e);
@@ -176,7 +176,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	public void onTransitionBegin(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onTransitionBegin(new TransitionEventArgsImpl<>(transitionContext));
+				handler.onTransitionBegin(new TransitionEventImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);

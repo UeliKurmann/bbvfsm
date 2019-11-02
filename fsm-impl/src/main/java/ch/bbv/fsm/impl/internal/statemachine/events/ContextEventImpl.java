@@ -19,44 +19,44 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.TransitionCompletedEvent;
+import ch.bbv.fsm.events.ContextEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link TransitionEventArgsImpl}.
+ * See {@link ContextEvent}.
  * 
- * @param <TState>
- *            the state enumeration
- * @param <TEvent>
- *            the event enumeration
- * @param <TStateMachine>
- *            the type of the state machine
+ * @param <S>             the state enumeration
+ * @param <E>             the event enumeration
+ * @param <TStateMachine> the type of the state machine
  */
-public class TransitionCompletedEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
-		TransitionCompletedEvent<TStateMachine, TState, TEvent> {
+public class ContextEventImpl<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements ContextEvent<TStateMachine, S, E> {
 
 	/**
-	 * The new state the state machine is in after the transition.
+	 * The context.
 	 */
-	private final TState newStateId;
+	private final StateContext<TStateMachine, S, E> stateContext;
 
 	/**
-	 * Constructor.
+	 * Initializes a new instance.
 	 * 
-	 * @param newStateId
-	 *            the new state's id
-	 * @param context
-	 *            the current context
+	 * @param stateContext the state context.
 	 */
-	public TransitionCompletedEventArgsImpl(final TState newStateId, final StateContext<TStateMachine, TState, TEvent> context) {
-		super(context);
-		this.newStateId = newStateId;
+	public ContextEventImpl(final StateContext<TStateMachine, S, E> stateContext) {
+		this.stateContext = stateContext;
+	}
+
+	/**
+	 * Returns the state context.
+	 * 
+	 * @return the state context.
+	 */
+	public StateContext<TStateMachine, S, E> getStateContext() {
+		return this.stateContext;
 	}
 
 	@Override
-	public TState getNewStateId() {
-		return this.newStateId;
+	public TStateMachine getSource() {
+		return null;
 	}
-
 }

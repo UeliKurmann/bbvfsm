@@ -29,10 +29,10 @@ import org.slf4j.LoggerFactory;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
-import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionCompletedEventArgsImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionCompletedEventImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
@@ -223,14 +223,14 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	@Override
 	public void onExceptionThrown(final StateContext<TStateMachine, S, E> stateContext, final Exception exception) {
 		for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-			handler.onExceptionThrown(new ExceptionEventArgsImpl<>(stateContext, exception));
+			handler.onExceptionThrown(new ExceptionEventImpl<>(stateContext, exception));
 		}
 	}
 
 	@Override
 	public void onExceptionThrown(final TransitionContext<TStateMachine, S, E> transitionContext, final Exception exception) {
 		for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-			handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<>(transitionContext, exception));
+			handler.onTransitionThrowsException(new TransitionExceptionEventImpl<>(transitionContext, exception));
 		}
 	}
 
@@ -238,7 +238,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	public void onTransitionBegin(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onTransitionBegin(new TransitionEventArgsImpl<>(transitionContext));
+				handler.onTransitionBegin(new TransitionEventImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);
@@ -253,7 +253,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	protected void onTransitionCompleted(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<>(this.getCurrentStateId(), transitionContext));
+				handler.onTransitionCompleted(new TransitionCompletedEventImpl<>(this.getCurrentStateId(), transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);
@@ -268,7 +268,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 	protected void onTransitionDeclined(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
-				handler.onTransitionDeclined(new TransitionEventArgsImpl<>(transitionContext));
+				handler.onTransitionDeclined(new TransitionEventImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);

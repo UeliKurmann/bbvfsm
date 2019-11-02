@@ -19,11 +19,11 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.TransitionExceptionEvent;
+import ch.bbv.fsm.events.TransitionCompletedEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link TransitionExceptionEvent}.
+ * See {@link TransitionEventImpl}.
  * 
  * @param <TState>
  *            the state enumeration
@@ -32,30 +32,31 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * @param <TStateMachine>
  *            the type of the state machine
  */
-public class TransitionExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
-		TransitionExceptionEvent<TStateMachine, TState, TEvent> {
+public class TransitionCompletedEventImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventImpl<TStateMachine, TState, TEvent> implements
+		TransitionCompletedEvent<TStateMachine, TState, TEvent> {
 
 	/**
-	 * The exception.
+	 * The new state the state machine is in after the transition.
 	 */
-	private final Exception exception;
+	private final TState newStateId;
 
 	/**
 	 * Constructor.
 	 * 
+	 * @param newStateId
+	 *            the new state's id
 	 * @param context
-	 *            the event context
-	 * @param exception
-	 *            the exception
+	 *            the current context
 	 */
-	public TransitionExceptionEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> context, final Exception exception) {
+	public TransitionCompletedEventImpl(final TState newStateId, final StateContext<TStateMachine, TState, TEvent> context) {
 		super(context);
-		this.exception = exception;
+		this.newStateId = newStateId;
 	}
 
 	@Override
-	public Exception getException() {
-		return this.exception;
+	public TState getNewStateId() {
+		return this.newStateId;
 	}
+
 }
