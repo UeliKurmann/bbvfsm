@@ -138,7 +138,7 @@ public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, 
       LOG.debug("Start transition2 {}", this);
       @SuppressWarnings("unchecked")
       final TransitionResult<TStateMachine, TState, TEvent> result =
-          TransitionResultImpl.getNotFired();
+          TransitionResult.getNotFired();
       return result;
     }
     LOG.debug("Start transition3 {}", this);
@@ -157,7 +157,7 @@ public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, 
       this.performActions(context.getEventArguments(), context);
     }
 
-    return new TransitionResultImpl<>(true, newState, context.getExceptions());
+    return new TransitionResult<>(true, newState, context.getExceptions());
   }
 
   @Override

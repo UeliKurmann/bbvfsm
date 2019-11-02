@@ -30,7 +30,6 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionaryImpl;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
-import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResultImpl;
 import ch.bbv.fsm.model.State;
 
 /**
@@ -266,7 +265,7 @@ public class InternalStateImpl<TStateMachine extends StateMachine<TState, TEvent
   public TransitionResult<TStateMachine, TState, TEvent> fire(
       final TransitionContext<TStateMachine, TState, TEvent> context) {
     @SuppressWarnings("unchecked")
-    TransitionResult<TStateMachine, TState, TEvent> result = TransitionResultImpl.getNotFired();
+    TransitionResult<TStateMachine, TState, TEvent> result = TransitionResult.getNotFired();
 
     final List<Transition<TStateMachine, TState, TEvent>> transitionsForEvent =
         this.transitions.getTransitions(context.getEventId());
