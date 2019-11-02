@@ -37,10 +37,11 @@ public class ElevatorStateMachineAcceptanceTest {
 	public void sample() {
 		final ElevatorStateMachine testee = elevatorStateMachineDefinition.createPassiveStateMachine("sample", State.OnFloor);
 
+		testee.start();
+
 		testee.fire(Event.ErrorOccured);
 		testee.fire(Event.Reset);
 
-		testee.start();
 
 		testee.fire(Event.OpenDoor);
 		testee.fire(Event.CloseDoor);

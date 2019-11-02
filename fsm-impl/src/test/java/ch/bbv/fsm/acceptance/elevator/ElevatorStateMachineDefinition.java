@@ -5,6 +5,7 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;
 import ch.bbv.fsm.action.FsmAction0;
+import ch.bbv.fsm.action.FsmAction1;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
@@ -23,7 +24,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 		/** The elevator is moving (either up or down). */
 		Moving,
 
-		/** The elevator is moving down. */
+		/** The elevator is moving up. */
 		MovingUp,
 
 		/** The elevator is moving down. */
@@ -35,7 +36,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 		/** The door is closed while standing still. */
 		DoorClosed,
 
-		/** The dor is open while standing still. */
+		/** The door is open while standing still. */
 		DoorOpen
 	}
 
@@ -68,7 +69,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 	/**
 	 * Announces the floor.
 	 */
-	FsmAction0<ElevatorStateMachine, State, Event> announceFloorAction = fsm -> System.out.println("announceFloor: 1");
+	FsmAction1<ElevatorStateMachine, State, Event, String> announceFloorAction = (fsm, x) -> System.out.println("announceFloor: 1" + x);
 
 	/**
 	 * Announces that the elevator is overloaded.
@@ -92,9 +93,11 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 
 		in(State.Healthy).on(Event.ErrorOccured).goTo(State.Error);
 		in(State.Error).on(Event.Reset).goTo(State.Healthy);
-		in(State.OnFloor).executeOnEntry(announceFloorAction).on(Event.CloseDoor).goTo(State.DoorClosed).on(Event.OpenDoor)
-				.goTo(State.DoorOpen).on(Event.GoUp).goTo(State.MovingUp).onlyIf(overloadFunction).on(Event.GoUp)
-				.execute(announceOverloadAction).on(Event.GoDown).goTo(State.MovingDown).onlyIf(overloadFunction);
+		in(State.OnFloor).executeOnEntry(announceFloorAction, "xxx")//
+				.on(Event.CloseDoor).goTo(State.DoorClosed)//
+				.on(Event.OpenDoor).goTo(State.DoorOpen)//
+				.on(Event.GoUp).goTo(State.MovingUp).onlyIf(overloadFunction)//
+				.on(Event.GoUp).execute(announceOverloadAction).on(Event.GoDown).goTo(State.MovingDown).onlyIf(overloadFunction);
 
 		in(State.Moving).on(Event.Stop).goTo(State.OnFloor);
 	}

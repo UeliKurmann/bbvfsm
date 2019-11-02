@@ -96,6 +96,7 @@ public class StateMachineTest {
     public void exec(final StateMachineTestStateMachine fsm, final States p) {
       final EntryRecord record = new EntryRecord();
       record.setState(p);
+    
       fsm.records.add(record);
     }
   }

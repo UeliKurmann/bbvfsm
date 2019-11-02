@@ -27,136 +27,114 @@ public class RadioStateMachine extends
 		return maintenance;
 	}
 
-	public Void logOffEntry() {
+	public void logOffEntry() {
 		addOptionalDot();
 		log.append("entryOff");
-		return null;
 	}
 
-	public Void logOnEntry() {
+	public void logOnEntry() {
 		addOptionalDot();
 		log.append("entryOn");
-		return null;
 	}
 
-	public Void logFMEntry() {
+	public void logFMEntry() {
 		addOptionalDot();
 		log.append("entryFM");
-		return null;
 	}
 
-	public Void logTransitionFromOffToOn() {
+	public void logTransitionFromOffToOn() {
 		addOptionalDot();
 		log.append("OffToOn");
-		return null;
 	}
 
-	public Void logOffExit() {
+	public void logOffExit() {
 		addOptionalDot();
 		log.append("exitOff");
-		return null;
 	}
 
-	public Void logTransitionFromOnToOff() {
+	public void logTransitionFromOnToOff() {
 		addOptionalDot();
 		log.append("OnToOff");
-		return null;
 	}
 
-	public Void logOnExit() {
+	public void logOnExit() {
 		addOptionalDot();
 		log.append("exitOn");
-		return null;
 	}
 
-	public Void logFMExit() {
+	public void logFMExit() {
 		addOptionalDot();
 		log.append("exitFM");
-		return null;
 	}
 
-	public Void logTransitionFromFMToAM() {
+	public void logTransitionFromFMToAM() {
 		addOptionalDot();
 		log.append("FMtoAM");
-		return null;
 	}
 
-	public Void logTransitionFromAMToFM() {
+	public void logTransitionFromAMToFM() {
 		addOptionalDot();
 		log.append("AMtoFM");
-		return null;
 	}
 
-	public Void logAMEntry() {
+	public void logAMEntry() {
 		addOptionalDot();
 		log.append("entryAM");
-		return null;
 	}
 
-	public Void logAMExit() {
+	public void logAMExit() {
 		addOptionalDot();
 		log.append("exitAM");
-		return null;
 	}
 
-	public Void logTransitionOffToMaintenance() {
+	public void logTransitionOffToMaintenance() {
 		addOptionalDot();
 		log.append("OffToMaintenance");
-		return null;
 	}
 
-	public Void logTransitionFromMaintenanceToOff() {
+	public void logTransitionFromMaintenanceToOff() {
 		addOptionalDot();
 		log.append("MaintenanceToOff");
-		return null;
 	}
 
-	public Void logMaintenanceEntry() {
+	public void logMaintenanceEntry() {
 		addOptionalDot();
 		log.append("entryMaintenance");
-		return null;
 	}
 
-	public Void logMaintenanceExit() {
+	public void logMaintenanceExit() {
 		addOptionalDot();
 		log.append("exitMaintenance");
-		return null;
 	}
 
-	public Void logTransitionFromPlayToAutoTune() {
+	public void logTransitionFromPlayToAutoTune() {
 		addOptionalDot();
 		log.append("PlayToAutoTune");
-		return null;
 	}
 
-	public Void logPlayEntry() {
+	public void logPlayEntry() {
 		addOptionalDot();
 		log.append("entryPlay");
-		return null;
 	}
 
-	public Void logPlayExit() {
+	public void logPlayExit() {
 		addOptionalDot();
 		log.append("exitPlay");
-		return null;
 	}
 
-	public Void logTransitionFromAutoTuneToPlay() {
+	public void logTransitionFromAutoTuneToPlay() {
 		addOptionalDot();
 		log.append("AutoTuneToPlay");
-		return null;
 	}
 
-	public Void logAutoTuneEntry() {
+	public void logAutoTuneEntry() {
 		addOptionalDot();
 		log.append("entryAutoTune");
-		return null;
 	}
 
-	public Void logAutoTuneExit() {
+	public void logAutoTuneExit() {
 		addOptionalDot();
 		log.append("exitAutoTune");
-		return null;
 	}
 
 	public String consumeLog() {
