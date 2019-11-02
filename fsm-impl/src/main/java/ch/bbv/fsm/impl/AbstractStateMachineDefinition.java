@@ -12,17 +12,10 @@ import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.driver.ActiveStateMachineDriver;
-import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.driver.PassiveStateMachineDriver;
 import ch.bbv.fsm.impl.internal.dsl.StateBuilder;
-import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventImpl;
-import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
-import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
-import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
-import ch.bbv.fsm.model.StateMachineModel;
 
 /**
  * Implementation of the definition of the finite state machine.
@@ -32,7 +25,7 @@ import ch.bbv.fsm.model.StateMachineModel;
  * @param <FSM> the type of the state machine
  */
 public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		implements StateMachineDefinition<FSM, S, E>, Notifier<FSM, S, E> {
+		implements StateMachineDefinition<FSM, S, E> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractStateMachineDefinition.class);
 
@@ -43,7 +36,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 
 	private final List<StateMachineEventHandler<FSM, S, E>> eventHandler;
 
-	private final SimpleStateMachineModel<FSM, S, E> simpleStateMachineModel;
+	private final SimpleStateMachineModel<FSM, S, E> model;
 
 	/**
 	 * Initializes the passive state machine.
@@ -61,52 +54,41 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	 * @param initialState the initial state to use
 	 */
 	public AbstractStateMachineDefinition(final String name, final S initialState) {
-
 		this.name = name;
-		this.simpleStateMachineModel = new SimpleStateMachineModel<>(new StateDictionary<>(), initialState);
+		this.model = new SimpleStateMachineModel<>(new StateDictionary<>(), initialState);
 		this.eventHandler = new ArrayList<>();
 	}
 
 	@Override
 	public final S getInitialState() {
-		return this.simpleStateMachineModel.getInitialState();
+		return this.model.getInitialState();
 	}
 
 	@Override
-	public StateMachineModel<FSM, S, E> getModel() {
+	@SuppressWarnings("unchecked")
+	public void defineHierarchyOn(final S superStateId, final S initialSubStateId, final HistoryType historyType, final S... subStateIds) {
 
-		return this.simpleStateMachineModel;
-	}
-
-	@Override
-	public void defineHierarchyOn(final S superStateId, final S initialSubStateId, final HistoryType historyType,
-			@SuppressWarnings("unchecked") final S... subStateIds) {
-		final InternalState<FSM, S, E> superState = this.simpleStateMachineModel.getStates().getState(superStateId);
+		final InternalState<FSM, S, E> superState = this.model.getStates().getState(superStateId);
 		superState.setHistoryType(historyType);
 
 		for (final S subStateId : subStateIds) {
-			final InternalState<FSM, S, E> subState = this.simpleStateMachineModel.getStates().getState(subStateId);
+			final InternalState<FSM, S, E> subState = this.model.getStates().getState(subStateId);
 			subState.setSuperState(superState);
 			superState.addSubState(subState);
 		}
 
-		superState.setInitialState(this.simpleStateMachineModel.getStates().getState(initialSubStateId));
+		superState.setInitialState(this.model.getStates().getState(initialSubStateId));
 	}
 
 	@Override
 	public EntryActionSyntax<FSM, S, E> in(final S state) {
-		final InternalState<FSM, S, E> newState = this.simpleStateMachineModel.getStates().getState(state);
-		return new StateBuilder<>(newState, this.simpleStateMachineModel.getStates());
+		final InternalState<FSM, S, E> newState = this.model.getStates().getState(state);
+		return new StateBuilder<>(newState, this.model.getStates());
 	}
 
 	@Override
 	public void addEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
 		this.eventHandler.add(handler);
-	}
-
-	@Override
-	public void removeEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
-		this.eventHandler.remove(handler);
 	}
 
 	@Override
@@ -118,7 +100,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createActiveStateMachine(final String name, final S initialState) {
 		final ActiveStateMachineDriver<FSM, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(activeStateMachine);
-		activeStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(), initialState, eventHandler);
+		activeStateMachine.initialize(stateMachine, name, this.model.getStates(), initialState, eventHandler);
 		return stateMachine;
 	}
 
@@ -126,8 +108,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createActiveStateMachine(final String name) {
 		final ActiveStateMachineDriver<FSM, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(activeStateMachine);
-		activeStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(),
-				this.simpleStateMachineModel.getInitialState(), eventHandler);
+		activeStateMachine.initialize(stateMachine, name, this.model.getStates(), getInitialState(), eventHandler);
 		return stateMachine;
 	}
 
@@ -135,7 +116,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createPassiveStateMachine(final String name, final S initialState) {
 		final PassiveStateMachineDriver<FSM, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(passiveStateMachine);
-		passiveStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(), initialState, eventHandler);
+		passiveStateMachine.initialize(stateMachine, name, this.model.getStates(), initialState, eventHandler);
 		return stateMachine;
 	}
 
@@ -143,44 +124,8 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createPassiveStateMachine(final String name) {
 		final PassiveStateMachineDriver<FSM, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(passiveStateMachine);
-		passiveStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(),
-				this.simpleStateMachineModel.getInitialState(), eventHandler);
+		passiveStateMachine.initialize(stateMachine, name, this.model.getStates(), getInitialState(), eventHandler);
 		return stateMachine;
-	}
-
-	@Override
-	public void onExceptionThrown(final StateContext<FSM, S, E> stateContext, final Exception exception) {
-		try {
-			for (final StateMachineEventHandler<FSM, S, E> handler : this.eventHandler) {
-				handler.onExceptionThrown(new ExceptionEventImpl<>(stateContext, exception));
-			}
-		} catch (final Exception e) {
-			LOG.error("Exception during event handler.", e);
-		}
-
-	}
-
-	@Override
-	public void onExceptionThrown(final TransitionContext<FSM, S, E> transitionContext, final Exception exception) {
-		try {
-			for (final StateMachineEventHandler<FSM, S, E> handler : this.eventHandler) {
-				handler.onTransitionThrowsException(new TransitionExceptionEventImpl<>(transitionContext, exception));
-			}
-		} catch (final Exception e) {
-			LOG.error("Exception during event handler.", e);
-		}
-
-	}
-
-	@Override
-	public void onTransitionBegin(final StateContext<FSM, S, E> transitionContext) {
-		try {
-			for (final StateMachineEventHandler<FSM, S, E> handler : this.eventHandler) {
-				handler.onTransitionBegin(new TransitionEventImpl<>(transitionContext));
-			}
-		} catch (final Exception e) {
-			onExceptionThrown(transitionContext, e);
-		}
 	}
 
 	protected abstract FSM createStateMachine(StateMachine<S, E> driver);

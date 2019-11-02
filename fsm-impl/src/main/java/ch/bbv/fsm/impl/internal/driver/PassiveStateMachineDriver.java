@@ -23,16 +23,14 @@ import java.util.LinkedList;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * A passive state machine. This state machine reacts to events on the current thread.
+ * A passive state machine. This state machine reacts to events on the current
+ * thread.
  * 
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  * 
- * @param <S>
- *            the enumeration type of the states.
- * @param <E>
- *            the enumeration type of the events.
- * @param <TStateMachine>
- *            the type of state machine
+ * @param <S>             the enumeration type of the states.
+ * @param <E>             the enumeration type of the events.
+ * @param <TStateMachine> the type of state machine
  */
 public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		extends AbstractStateMachineDriver<TStateMachine, S, E> {
@@ -43,7 +41,8 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 	private final LinkedList<EventInformation<E>> events;
 
 	/**
-	 * Do not process event while already processing an event. This happens if an event is fired in an state's or transition's action.
+	 * Do not process event while already processing an event. This happens if an
+	 * event is fired in an state's or transition's action.
 	 */
 	private boolean processing;
 
@@ -89,7 +88,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 		if (!processing) {
 			try {
 				processing = true;
-				if (LiveCycle.Running.equals(getRunningState())) {
+				if (LiveCycle.Running == getRunningState()) {
 					processQueuedEvents();
 				}
 			} finally {
@@ -113,7 +112,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 	 * Processes the queued events.
 	 */
 	private void processQueuedEvents() {
-		while (this.events.size() > 0) {
+		while (!this.events.isEmpty()) {
 			final EventInformation<E> eventToProcess = this.getNextEventToProcess();
 			this.fireEventOnStateMachine(eventToProcess);
 		}

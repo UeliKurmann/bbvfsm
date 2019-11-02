@@ -11,11 +11,11 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Base implementation for all state machine drivers.
  * 
- * @param <TStateMachine> the type of state machine
+ * @param <FSM> the type of state machine
  * @param <S>             the enumeration type of the states.
  * @param <E>             the enumeration type of the events.
  */
-abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+abstract class AbstractStateMachineDriver<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachine<S, E> {
 
 	private LiveCycle liveCycle = LiveCycle.Created;
@@ -23,7 +23,7 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<S, 
 	/**
 	 * The internal state machine.
 	 */
-	private StateMachineInterpreter<TStateMachine, S, E> stateMachineInterpreter;
+	private StateMachineInterpreter<FSM, S, E> stateMachineInterpreter;
 
 	AbstractStateMachineDriver() {
 	}
@@ -35,10 +35,10 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<S, 
 	 * @param name         the name of the state machine used in the logs.
 	 * @param states       the states
 	 */
-	public void initialize(final TStateMachine stateMachine, final String name, final StateDictionary<TStateMachine, S, E> states,
-			final S initialState, final List<StateMachineEventHandler<TStateMachine, S, E>> eventHandlers) {
+	public void initialize(final FSM stateMachine, final String name, final StateDictionary<FSM, S, E> states,
+			final S initialState, final List<StateMachineEventHandler<FSM, S, E>> eventHandlers) {
 		this.stateMachineInterpreter = new StateMachineInterpreter<>(stateMachine, name, states, initialState);
-		for (final StateMachineEventHandler<TStateMachine, S, E> eventHandler : eventHandlers) {
+		for (final StateMachineEventHandler<FSM, S, E> eventHandler : eventHandlers) {
 			stateMachineInterpreter.addEventHandler(eventHandler);
 		}
 	}
@@ -69,11 +69,11 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<S, 
 		return stateMachineInterpreter.getCurrentStateId();
 	}
 
-	public void addEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
+	public void addEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
 		stateMachineInterpreter.addEventHandler(handler);
 	}
 
-	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
 		stateMachineInterpreter.removeEventHandler(handler);
 	}
 

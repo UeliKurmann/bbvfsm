@@ -20,7 +20,6 @@ package ch.bbv.fsm;
 
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.model.StateMachineModel;
 
 /**
  * Defines the interface of a state machine.
@@ -39,11 +38,6 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>
 	 * {@link #createPassiveStateMachine(String)}.
 	 */
 	S getInitialState();
-
-	/**
-	 * Returns the state machine's Data Model.
-	 */
-	StateMachineModel<TStateMachine, S, E> getModel();
 
 	/**
 	 * Defines behavior of a state.
@@ -74,12 +68,6 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>
 	 */
 	void addEventHandler(StateMachineEventHandler<TStateMachine, S, E> handler);
 
-	/**
-	 * Removes the given event handler.
-	 * 
-	 * @param handler the event handler to be removed.
-	 */
-	void removeEventHandler(StateMachineEventHandler<TStateMachine, S, E> handler);
 
 	/**
 	 * Creates an active state-machine from this definition.
