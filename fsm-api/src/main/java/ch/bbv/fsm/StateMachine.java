@@ -23,12 +23,12 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Interface for all finite state machines.
  * 
- * @param <TState>
- *            the state enumeration
- * @param <TEvent>
- *            the event enumeration
+ * @param <S>
+ *            the state enumeration type.
+ * @param <E>
+ *            the event enumeration type.
  */
-public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface StateMachine<S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * The state of this state machine.
@@ -39,14 +39,14 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	}
 
 	/**
-	 * Fires the specified event.
+	 * Fires the specified event. Events are queued if they can not be processed immediately. 
 	 * 
 	 * @param eventId
 	 *            the event
 	 * @param eventArguments
 	 *            the event arguments
 	 */
-	void fire(TEvent eventId, Object... eventArguments);
+	void fire(E eventId, Object... eventArguments);
 
 	/**
 	 * Fires the specified priority event. The event will be handled before any
@@ -57,7 +57,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param eventArguments
 	 *            the event arguments.
 	 */
-	void firePriority(TEvent eventId, Object... eventArguments);
+	void firePriority(E eventId, Object... eventArguments);
 
 	/**
 	 * Returns the live cycles state of this state machine.
@@ -94,7 +94,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	/**
 	 * Returns the current state.
 	 */
-	TState getCurrentState();
+	S getCurrentState();
 
 	/**
 	 * Reactivates the state machine with all its states and its history.
@@ -103,7 +103,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateMachineMemento
 	 *            the memento where the state is stored to
 	 */
-	void activate(StateMachineMemento<TState, TEvent> stateMachineMemento);
+	void activate(StateMachineMemento<S, E> stateMachineMemento);
 
 	/**
 	 * Passivates the state machine and store its current state to the
@@ -113,5 +113,5 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateMachineMemento
 	 *            the memento where the state is restored from
 	 */
-	void passivate(StateMachineMemento<TState, TEvent> stateMachineMemento);
+	void passivate(StateMachineMemento<S, E> stateMachineMemento);
 }

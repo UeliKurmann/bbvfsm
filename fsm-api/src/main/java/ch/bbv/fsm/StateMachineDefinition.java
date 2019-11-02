@@ -25,52 +25,42 @@ import ch.bbv.fsm.model.StateMachineModel;
 /**
  * Defines the interface of a state machine.
  * 
- * @author Ueli Kurmann 
- * @param <TState>
- *            the enumeration type of the states.
- * @param <TEvent>
- *            the enumeration type of the events.
- * @param <TStateMachine>
- *            the type of state machine
+ * @author Ueli Kurmann
+ * @param <S>             the enumeration type of the states.
+ * @param <E>             the enumeration type of the events.
+ * @param <TStateMachine> the type of state machine
  */
-public interface StateMachineDefinition<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface StateMachineDefinition<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
-	 * Returns the state machine's default initial state. This state will be
-	 * used as initial state if the state machine is created using
+	 * Returns the state machine's default initial state. This state will be used as
+	 * initial state if the state machine is created using
 	 * {@link #createActiveStateMachine(String)} or
 	 * {@link #createPassiveStateMachine(String)}.
 	 */
-	TState getInitialState();
+	S getInitialState();
 
 	/**
 	 * Returns the state machine's Data Model.
 	 */
-	StateMachineModel<TStateMachine, TState, TEvent> getModel();
+	StateMachineModel<TStateMachine, S, E> getModel();
 
 	/**
 	 * Defines behavior of a state.
 	 * 
-	 * @param state
-	 *            the state
+	 * @param state the state
 	 */
-	EntryActionSyntax<TStateMachine, TState, TEvent> in(TState state);
+	EntryActionSyntax<TStateMachine, S, E> in(S state);
 
 	/**
 	 * Defines a state hierarchy.
 	 * 
-	 * @param superStateId
-	 *            the super state id.
-	 * @param initialSubStateId
-	 *            the initial sub state id.
-	 * @param historyType
-	 *            type of history.
-	 * @param subStateIds
-	 *            the sub state id's.
+	 * @param superStateId      the super state id.
+	 * @param initialSubStateId the initial sub state id.
+	 * @param historyType       type of history.
+	 * @param subStateIds       the sub state id's.
 	 */
-	void defineHierarchyOn(TState superStateId, TState initialSubStateId,
-			HistoryType historyType,
-			@SuppressWarnings("unchecked") TState... subStateIds);
+	void defineHierarchyOn(S superStateId, S initialSubStateId, HistoryType historyType, @SuppressWarnings("unchecked") S... subStateIds);
 
 	/**
 	 * Returns the name of this state machine.
@@ -80,58 +70,47 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	/**
 	 * Adds an event handler.
 	 * 
-	 * @param handler
-	 *            the event handler
+	 * @param handler the event handler
 	 */
-	void addEventHandler(
-			StateMachineEventHandler<TStateMachine, TState, TEvent> handler);
+	void addEventHandler(StateMachineEventHandler<TStateMachine, S, E> handler);
 
 	/**
 	 * Removes the given event handler.
 	 * 
-	 * @param handler
-	 *            the event handler to be removed.
+	 * @param handler the event handler to be removed.
 	 */
-	void removeEventHandler(
-			StateMachineEventHandler<TStateMachine, TState, TEvent> handler);
+	void removeEventHandler(StateMachineEventHandler<TStateMachine, S, E> handler);
 
 	/**
 	 * Creates an active state-machine from this definition.
 	 * 
-	 * @param name
-	 *            the state machine's name
-	 * @param initialState
-	 *            The state to which the state machine is initialized.
+	 * @param name         the state machine's name
+	 * @param initialState The state to which the state machine is initialized.
 	 */
-	TStateMachine createActiveStateMachine(String name, TState initialState);
+	TStateMachine createActiveStateMachine(String name, S initialState);
 
 	/**
-	 * Creates an active state-machine from this definition with the default
-	 * initial state.
+	 * Creates an active state-machine this definition with the default initial
+	 * state.
 	 * 
-	 * @param name
-	 *            the state machine's name
+	 * @param name the state machine's name
 	 */
 	TStateMachine createActiveStateMachine(String name);
 
 	/**
-	 * Creates an passive state-machine from this definition.
+	 * Creates a passive state-machine from definition.
 	 * 
-	 * @param name
-	 *            the state machine's name
-	 * @param initialState
-	 *            The state to which the state machine is initialized.
+	 * @param name         the state machine's name
+	 * @param initialState The state to which the state machine is initialized.
 	 */
-	TStateMachine createPassiveStateMachine(String name, TState initialState);
+	TStateMachine createPassiveStateMachine(String name, S initialState);
 
 	/**
 	 * Creates an passive state-machine from this definition with the default
 	 * initial state.
 	 * 
-	 * @param name
-	 *            the state machine's name
+	 * @param name the state machine's name
 	 */
 	TStateMachine createPassiveStateMachine(String name);
-
 
 }

@@ -2,12 +2,13 @@ package ch.bbv.fsm.acceptance.elevator;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
+import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;
 import ch.bbv.fsm.action.FsmAction0;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
-public class ElevatorStateMachineDefinition extends
-		AbstractStateMachineDefinition<ElevatorStateMachine, ElevatorStateMachineDefinition.State, ElevatorStateMachineDefinition.Event> {
+public class ElevatorStateMachineDefinition extends AbstractStateMachineDefinition<ElevatorStateMachine, State, Event> {
 
 	/**
 	 * Elevator states.
@@ -67,41 +68,17 @@ public class ElevatorStateMachineDefinition extends
 	/**
 	 * Announces the floor.
 	 */
-	public static class AnnounceFloorAction implements FsmAction0<ElevatorStateMachine, State, Event> {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void exec(final ElevatorStateMachine fsm) {
-			System.out.println("announceFloor: 1");
-
-		}
-	}
+	FsmAction0<ElevatorStateMachine, State, Event> announceFloorAction = fsm -> System.out.println("announceFloor: 1");
 
 	/**
 	 * Announces that the elevator is overloaded.
 	 */
-	public static class AnnounceOverloadAction implements FsmAction0<ElevatorStateMachine, State, Event> {
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void exec(final ElevatorStateMachine fsm) {
-			System.out.println("announceOverload...");
-		}
-	}
+	FsmAction0<ElevatorStateMachine, State, Event> announceOverloadAction = fsm -> System.out.println("announceOverload...");
 
 	/**
 	 * Checks whether the elevator is overloaded.
 	 */
-	public static class CheckOverloadFunction implements Function<ElevatorStateMachine, State, Event, Object[], Boolean> {
-		@Override
-		public Boolean execute(final ElevatorStateMachine stateMachine, final Object[] arguments) {
-			return true;
-		}
-	}
+	Function<ElevatorStateMachine, State, Event, Object[], Boolean> overloadFunction = (fsm, argmuments) -> true;
 
 	public ElevatorStateMachineDefinition() {
 		super(State.Healthy);
@@ -115,11 +92,9 @@ public class ElevatorStateMachineDefinition extends
 
 		in(State.Healthy).on(Event.ErrorOccured).goTo(State.Error);
 		in(State.Error).on(Event.Reset).goTo(State.Healthy);
-		in(State.OnFloor).executeOnEntry(new ElevatorStateMachineDefinition.AnnounceFloorAction()).on(Event.CloseDoor)
-				.goTo(State.DoorClosed).on(Event.OpenDoor).goTo(State.DoorOpen).on(Event.GoUp).goTo(State.MovingUp)
-				.onlyIf(new ElevatorStateMachineDefinition.CheckOverloadFunction()).on(Event.GoUp)
-				.execute(new ElevatorStateMachineDefinition.AnnounceOverloadAction()).on(Event.GoDown).goTo(State.MovingDown)
-				.onlyIf(new ElevatorStateMachineDefinition.CheckOverloadFunction());
+		in(State.OnFloor).executeOnEntry(announceFloorAction).on(Event.CloseDoor).goTo(State.DoorClosed).on(Event.OpenDoor)
+				.goTo(State.DoorOpen).on(Event.GoUp).goTo(State.MovingUp).onlyIf(overloadFunction).on(Event.GoUp)
+				.execute(announceOverloadAction).on(Event.GoDown).goTo(State.MovingDown).onlyIf(overloadFunction);
 
 		in(State.Moving).on(Event.Stop).goTo(State.OnFloor);
 	}

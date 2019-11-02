@@ -66,6 +66,7 @@ public class RadioStateMachineDefinion extends AbstractStateMachineDefinition<Ra
 		in(State.Maintenance).executeOnExit((sm) -> sm.logMaintenanceExit());
 
 		defineOnBla();
+		defineAM();
 	}
 
 	private void defineOnBla() {
@@ -79,7 +80,7 @@ public class RadioStateMachineDefinion extends AbstractStateMachineDefinition<Ra
 		in(State.AM).executeOnEntry((sm) -> sm.logAMEntry());
 		in(State.AM).executeOnExit((sm) -> sm.logAMExit());
 
-		defineAM();
+		
 	}
 
 	private void defineAM() {
