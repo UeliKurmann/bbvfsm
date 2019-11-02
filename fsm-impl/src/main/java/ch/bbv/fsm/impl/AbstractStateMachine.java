@@ -6,11 +6,11 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Base class for finite state machine implementations.
  * 
- * @param <S>             the type of the states.
- * @param <E>             the type of the events.
- * @param <TStateMachine> the type of state machine
+ * @param <S>   the type of the states.
+ * @param <E>   the type of the events.
+ * @param <FSM> the type of state machine
  */
-public abstract class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+public abstract class AbstractStateMachine<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachine<S, E> {
 
 	private final StateMachine<S, E> driver;
@@ -65,12 +65,12 @@ public abstract class AbstractStateMachine<TStateMachine extends StateMachine<S,
 	}
 
 	@Override
-	public void passivate(final StateMachineMemento<S, E> stateMachineMemento) {
-		driver.passivate(stateMachineMemento);
+	public void passivate(final StateMachineMemento<S, E> memento) {
+		driver.passivate(memento);
 	}
 
 	@Override
-	public void activate(final StateMachineMemento<S, E> stateMachineMemento) {
-		driver.activate(stateMachineMemento);
+	public void activate(final StateMachineMemento<S, E> memento) {
+		driver.activate(memento);
 	}
 }

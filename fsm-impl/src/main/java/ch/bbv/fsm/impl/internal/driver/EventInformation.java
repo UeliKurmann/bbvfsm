@@ -21,23 +21,20 @@ package ch.bbv.fsm.impl.internal.driver;
 /**
  * Provides information about an event: event-id and arguments.
  * 
- * @author Ueli Kurmann  
- * @param <TEvent>
- *            the type of the event.
+ * @author Ueli Kurmann
+ * @param <E> the type of the event.
  */
-class EventInformation<TEvent> {
-	private TEvent eventId;
+class EventInformation<E> {
+	private E eventId;
 	private Object[] eventArguments;
 
 	/**
 	 * Initializes a new instance.
 	 * 
-	 * @param eventId
-	 *            the event id.
-	 * @param eventArguments
-	 *            the event arguments.
+	 * @param eventId        the event id.
+	 * @param eventArguments the event arguments.
 	 */
-	EventInformation(final TEvent eventId, final Object[] eventArguments) {
+	EventInformation(final E eventId, final Object[] eventArguments) {
 		this.eventId = eventId;
 		this.eventArguments = eventArguments;
 	}
@@ -56,15 +53,14 @@ class EventInformation<TEvent> {
 	 * 
 	 * @return the event id.
 	 */
-	public TEvent getEventId() {
+	public E getEventId() {
 		return this.eventId;
 	}
 
 	/**
 	 * Sets the event arguments.
 	 * 
-	 * @param eventArguments
-	 *            the event arguments.
+	 * @param eventArguments the event arguments.
 	 */
 	public void setEventArguments(final Object[] eventArguments) {
 		this.eventArguments = eventArguments;
@@ -73,10 +69,9 @@ class EventInformation<TEvent> {
 	/**
 	 * Sets the event id.
 	 * 
-	 * @param eventId
-	 *            the event id.
+	 * @param eventId the event id.
 	 */
-	public void setEventId(final TEvent eventId) {
+	public void setEventId(final E eventId) {
 		this.eventId = eventId;
 	}
 }

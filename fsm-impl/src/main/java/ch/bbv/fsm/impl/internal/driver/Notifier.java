@@ -27,14 +27,14 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
  * 
  * @author Ueli Kurmann  
  * 
- * @param <TStateMachine>
+ * @param <FSM>
  *            the type of state machine
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  */
-public interface Notifier<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface Notifier<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * Called when an exception was thrown.
@@ -44,7 +44,7 @@ public interface Notifier<TStateMachine extends StateMachine<TState, TEvent>, TS
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(StateContext<TStateMachine, TState, TEvent> stateContext, Exception exception);
+	void onExceptionThrown(StateContext<FSM, S, E> stateContext, Exception exception);
 
 	/**
 	 * Called when an exception was thrown in a transition.
@@ -54,7 +54,7 @@ public interface Notifier<TStateMachine extends StateMachine<TState, TEvent>, TS
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(TransitionContext<TStateMachine, TState, TEvent> context, Exception exception);
+	void onExceptionThrown(TransitionContext<FSM, S, E> context, Exception exception);
 
 	/**
 	 * Called before a transition is executed.
@@ -62,5 +62,5 @@ public interface Notifier<TStateMachine extends StateMachine<TState, TEvent>, TS
 	 * @param context
 	 *            the context.
 	 */
-	void onTransitionBegin(StateContext<TStateMachine, TState, TEvent> context);
+	void onTransitionBegin(StateContext<FSM, S, E> context);
 }

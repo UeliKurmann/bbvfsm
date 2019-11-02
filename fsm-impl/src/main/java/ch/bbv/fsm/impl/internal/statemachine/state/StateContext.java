@@ -28,33 +28,29 @@ import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 /**
  * InternalState Context.
  * 
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
+ * @param <FSM> the type of state machine
+ * @param <S>   the type of the states
+ * @param <E>   the type of the events
  */
-public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public class StateContext<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
-	 * A record of a state exit or entry. Used to log the way taken by transitions and initialization.
+	 * A record of a state exit or entry. Used to log the way taken by transitions
+	 * and initialization.
 	 */
 	public class Record {
-		private TState stateId;
+		private S stateId;
 		private RecordType recordType;
 
 		/**
 		 * Creates a new instance.
 		 * 
-		 * @param stateId
-		 *            the state id.
-		 * @param recordType
-		 *            the record type.
+		 * @param stateId    the state id.
+		 * @param recordType the record type.
 		 */
-		public Record(final TState stateId, final RecordType recordType) {
+		public Record(final S stateId, final RecordType recordType) {
 			this.stateId = stateId;
 			this.recordType = recordType;
 		}
@@ -73,15 +69,14 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 		 * 
 		 * @return the state id.
 		 */
-		public TState getStateId() {
+		public S getStateId() {
 			return this.stateId;
 		}
 
 		/**
 		 * Sets the record type.
 		 * 
-		 * @param recordType
-		 *            the record type.
+		 * @param recordType the record type.
 		 */
 		public void setRecordType(final RecordType recordType) {
 			this.recordType = recordType;
@@ -90,10 +85,9 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 		/**
 		 * Sets the state id.
 		 * 
-		 * @param stateId
-		 *            the state id.
+		 * @param stateId the state id.
 		 */
-		public void setStateId(final TState stateId) {
+		public void setStateId(final S stateId) {
 			this.stateId = stateId;
 		}
 
@@ -119,7 +113,7 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 		Exit
 	}
 
-	private final InternalState<TStateMachine, TState, TEvent> sourceState;
+	private final InternalState<FSM, S, E> sourceState;
 
 	/**
 	 * The exceptions that occurred during performing an operation.
@@ -131,27 +125,22 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 	 */
 	private final List<Record> records;
 
-	private final StateMachineInterpreter<TStateMachine, TState, TEvent> stateMachineInterpreter;
+	private final StateMachineInterpreter<FSM, S, E> stateMachineInterpreter;
 
-	private final Notifier<TStateMachine, TState, TEvent> notifier;
+	private final Notifier<FSM, S, E> notifier;
 
-	private final TStateMachine stateMachine;
+	private final FSM stateMachine;
 
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param stateMachine
-	 *            the custom state machine
-	 * @param sourceState
-	 *            the source state of the transition.
-	 * @param stateMachineImpl
-	 *            the state machine
-	 * @param notifier
-	 *            the notifier
+	 * @param stateMachine     the custom state machine
+	 * @param sourceState      the source state of the transition.
+	 * @param stateMachineImpl the state machine
+	 * @param notifier         the notifier
 	 */
-	public StateContext(final TStateMachine stateMachine, final InternalState<TStateMachine, TState, TEvent> sourceState,
-			final StateMachineInterpreter<TStateMachine, TState, TEvent> stateMachineImpl,
-			final Notifier<TStateMachine, TState, TEvent> notifier) {
+	public StateContext(final FSM stateMachine, final InternalState<FSM, S, E> sourceState,
+			final StateMachineInterpreter<FSM, S, E> stateMachineImpl, final Notifier<FSM, S, E> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachineInterpreter = stateMachineImpl;
 		this.notifier = notifier;
@@ -163,12 +152,10 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 	/**
 	 * Adds a record.
 	 * 
-	 * @param stateId
-	 *            the state id.
-	 * @param recordType
-	 *            the record type.
+	 * @param stateId    the state id.
+	 * @param recordType the record type.
 	 */
-	public void addRecord(final TState stateId, final RecordType recordType) {
+	public void addRecord(final S stateId, final RecordType recordType) {
 		this.records.add(new Record(stateId, recordType));
 	}
 
@@ -201,32 +188,31 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 	 * 
 	 * @return the source state of the transition.
 	 */
-	public InternalState<TStateMachine, TState, TEvent> getState() {
+	public InternalState<FSM, S, E> getState() {
 		return this.sourceState;
 	}
 
 	/**
 	 * Returns the state machine's implementation.
 	 */
-	public StateMachineInterpreter<TStateMachine, TState, TEvent> getStateMachineInterpreter() {
+	public StateMachineInterpreter<FSM, S, E> getStateMachineInterpreter() {
 		return stateMachineInterpreter;
 	}
 
 	/**
 	 * Returns the notifier.
 	 */
-	public Notifier<TStateMachine, TState, TEvent> getNotifier() {
+	public Notifier<FSM, S, E> getNotifier() {
 		return notifier;
 	}
 
 	/**
 	 * Returns the last active sub state for the given composite state.
 	 * 
-	 * @param superState
-	 *            the super state
+	 * @param superState the super state
 	 */
-	public InternalState<TStateMachine, TState, TEvent> getLastActiveSubState(final InternalState<TStateMachine, TState, TEvent> superState) {
-		InternalState<TStateMachine, TState, TEvent> result = null;
+	public InternalState<FSM, S, E> getLastActiveSubState(final InternalState<FSM, S, E> superState) {
+		InternalState<FSM, S, E> result = null;
 		if (superState != null) {
 			result = stateMachineInterpreter.getLastActiveSubState(superState);
 			if (result == null) {
@@ -239,20 +225,17 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 	/**
 	 * Sets the last active sub state for the given composite state.
 	 * 
-	 * @param superState
-	 *            the super state
-	 * @param subState
-	 *            the last active sub state
+	 * @param superState the super state
+	 * @param subState   the last active sub state
 	 */
-	public void setLastActiveSubState(final InternalState<TStateMachine, TState, TEvent> superState,
-			final InternalState<TStateMachine, TState, TEvent> subState) {
+	public void setLastActiveSubState(final InternalState<FSM, S, E> superState, final InternalState<FSM, S, E> subState) {
 		stateMachineInterpreter.setLastActiveSubState(superState, subState);
 	}
 
 	/**
 	 * Returns the custom's state machine.
 	 */
-	public TStateMachine getStateMachine() {
+	public FSM getStateMachine() {
 		return stateMachine;
 	}
 
