@@ -28,13 +28,13 @@ import ch.bbv.fsm.action.FsmAction2;
  * 
  * @param <TStateMachine>
  *            the type of the state machine
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  */
-public interface ExitActionSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TStateMachine, TState, TEvent> {
+public interface ExitActionSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		extends EventSyntax<TStateMachine, S, E> {
 
 	/**
 	 * Defines an exit action.
@@ -43,8 +43,8 @@ public interface ExitActionSyntax<TStateMachine extends StateMachine<TState, TEv
 	 *            the {@link FsmAction0} Class
 	 * @return the EventSyntax
 	 */
-	EventSyntax<TStateMachine, TState, TEvent> executeOnExit(
-			FsmAction0<TStateMachine, TState, TEvent> actionClass);
+	EventSyntax<TStateMachine, S, E> executeOnExit(
+			FsmAction0<TStateMachine, S, E> actionClass);
 
 	/**
 	 * Defines an entry action.
@@ -57,8 +57,8 @@ public interface ExitActionSyntax<TStateMachine extends StateMachine<TState, TEv
 	 *            (necessary?)
 	 * @return the EventSyntax
 	 */
-	<T> EventSyntax<TStateMachine, TState, TEvent> executeOnExit(
-			FsmAction1<TStateMachine, TState, TEvent, T> actionClass,
+	<T> EventSyntax<TStateMachine, S, E> executeOnExit(
+			FsmAction1<TStateMachine, S, E, T> actionClass,
 			T parameter);
 
 	/**
@@ -70,8 +70,8 @@ public interface ExitActionSyntax<TStateMachine extends StateMachine<TState, TEv
 	 * @param parameter2 the value of the second parameter.
 	 * @return
 	 */
-	<T1, T2> EventSyntax<TStateMachine, TState, TEvent> executeOnExit(
-			FsmAction2<TStateMachine, TState, TEvent, T1, T2> actionClass,
+	<T1, T2> EventSyntax<TStateMachine, S, E> executeOnExit(
+			FsmAction2<TStateMachine, S, E, T1, T2> actionClass,
 			T1 parameter1, T2 parameter2);
 
 }

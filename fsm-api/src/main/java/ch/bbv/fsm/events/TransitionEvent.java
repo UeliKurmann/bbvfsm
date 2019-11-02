@@ -21,7 +21,7 @@ package ch.bbv.fsm.events;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * The exception event argument.
+ * Defines a transition event argument.
  * 
  * @author Ueli Kurmann  
  * @param <TState>
@@ -29,16 +29,30 @@ import ch.bbv.fsm.StateMachine;
  * @param <TEvent>
  *            the type of the events.
  * @param <TStateMachine>
- *            the type of the state machine
+ *            the type of the statemachine
  */
-public interface ExceptionEventArgs<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgs<TStateMachine, TState, TEvent> {
+public interface TransitionEvent<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEvent<TStateMachine, TState, TEvent> {
 
 	/**
-	 * Returns the exception.
+	 * Returns the event arguments.
 	 * 
-	 * @return the exception.
+	 * @return the event arguments.
 	 */
-	Exception getException();
+	Object[] getEventArguments();
+
+	/**
+	 * Returns the event id of the transition.
+	 * 
+	 * @return the event id of the transition.
+	 */
+	TEvent getEventId();
+
+	/**
+	 * Returns the id of the source state of the transition.
+	 * 
+	 * @return the id of the source state of the transition.
+	 */
+	TState getStateId();
 
 }

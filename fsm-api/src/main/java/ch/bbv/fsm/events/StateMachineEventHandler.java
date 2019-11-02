@@ -39,7 +39,7 @@ public interface StateMachineEventHandler<TStateMachine extends StateMachine<TSt
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onExceptionThrown(ExceptionEventArgs<TStateMachine, TState, TEvent> arg);
+	void onExceptionThrown(ExceptionEvent<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when a transition begins.
@@ -47,7 +47,7 @@ public interface StateMachineEventHandler<TStateMachine extends StateMachine<TSt
 	 * @param args
 	 *            the event argument.
 	 */
-	void onTransitionBegin(TransitionEventArgs<TStateMachine, TState, TEvent> args);
+	void onTransitionBegin(TransitionEvent<TStateMachine, TState, TEvent> args);
 
 	/**
 	 * Occurs when a transition completed.
@@ -55,7 +55,7 @@ public interface StateMachineEventHandler<TStateMachine extends StateMachine<TSt
 	 * @param arg
 	 *            the completion event
 	 */
-	void onTransitionCompleted(TransitionCompletedEventArgs<TStateMachine, TState, TEvent> arg);
+	void onTransitionCompleted(TransitionCompletedEvent<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when no transition could be executed.
@@ -63,7 +63,7 @@ public interface StateMachineEventHandler<TStateMachine extends StateMachine<TSt
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onTransitionDeclined(TransitionEventArgs<TStateMachine, TState, TEvent> arg);
+	void onTransitionDeclined(TransitionEvent<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when an exception was thrown inside a transition of the state machine.
@@ -71,6 +71,6 @@ public interface StateMachineEventHandler<TStateMachine extends StateMachine<TSt
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onTransitionThrowsException(TransitionExceptionEventArgs<TStateMachine, TState, TEvent> arg);
+	void onTransitionThrowsException(TransitionExceptionEvent<TStateMachine, TState, TEvent> arg);
 
 }

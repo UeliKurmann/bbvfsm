@@ -19,11 +19,11 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.TransitionExceptionEventArgs;
+import ch.bbv.fsm.events.TransitionExceptionEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link TransitionExceptionEventArgs}.
+ * See {@link TransitionExceptionEvent}.
  * 
  * @param <TState>
  *            the state enumeration
@@ -34,7 +34,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  */
 public class TransitionExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
-		TransitionExceptionEventArgs<TStateMachine, TState, TEvent> {
+		TransitionExceptionEvent<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The exception.

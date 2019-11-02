@@ -25,12 +25,12 @@ import ch.bbv.fsm.action.FsmAction1;
  * @author Ueli Kurmann 
  * 
  * @param <TStateMachine> the type of the state machine
- * @param <TState> the type of the states.
- * @param <TEvent> the type of the events.
+ * @param <S> the type of the states.
+ * @param <E> the type of the events.
  */
-public interface EntryActionSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-    extends ExitActionSyntax<TStateMachine, TState, TEvent>,
-    EventSyntax<TStateMachine, TState, TEvent> {
+public interface EntryActionSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+    extends ExitActionSyntax<TStateMachine, S, E>,
+    EventSyntax<TStateMachine, S, E> {
 
   /**
    * Defines an entry action.
@@ -38,8 +38,8 @@ public interface EntryActionSyntax<TStateMachine extends StateMachine<TState, TE
    * @param action the {@link FsmAction0} to be executed.
    * @return the ExitActionSyntax
    */
-  ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(
-      FsmAction0<TStateMachine, TState, TEvent> action);
+  ExitActionSyntax<TStateMachine, S, E> executeOnEntry(
+      FsmAction0<TStateMachine, S, E> action);
 
   /**
    * Defines an entry action.
@@ -49,7 +49,7 @@ public interface EntryActionSyntax<TStateMachine extends StateMachine<TState, TE
    * @param parameter (necessary?)
    * @return the ExitActionSyntax
    */
-  <T> ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(
-		  FsmAction1<TStateMachine, TState, TEvent, T> action, T parameter);
+  <T> ExitActionSyntax<TStateMachine, S, E> executeOnEntry(
+		  FsmAction1<TStateMachine, S, E, T> action, T parameter);
 
 }

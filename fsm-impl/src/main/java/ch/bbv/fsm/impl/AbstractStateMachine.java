@@ -6,14 +6,11 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Base class for finite state machine implementations.
  * 
- * @param <S>
- *            the type of the states.
- * @param <E>
- *            the type of the events.
- * @param <TStateMachine>
- *            the type of state machine
+ * @param <S>             the type of the states.
+ * @param <E>             the type of the events.
+ * @param <TStateMachine> the type of state machine
  */
-public class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+public abstract class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
 		implements StateMachine<S, E> {
 
 	private final StateMachine<S, E> driver;
@@ -21,8 +18,7 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S ex
 	/**
 	 * Create a state machine.
 	 * 
-	 * @param driver
-	 *            the executor of the state event machine.
+	 * @param driver the executor of the state event machine.
 	 */
 	protected AbstractStateMachine(final StateMachine<S, E> driver) {
 		this.driver = driver;
@@ -34,8 +30,7 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S ex
 	}
 
 	@Override
-	public final void firePriority(final E eventId,
-			final Object... eventArguments) {
+	public final void firePriority(final E eventId, final Object... eventArguments) {
 		driver.firePriority(eventId, eventArguments);
 	}
 
@@ -70,14 +65,12 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S ex
 	}
 
 	@Override
-	public void passivate(
-			final StateMachineMemento<S, E> stateMachineMemento) {
+	public void passivate(final StateMachineMemento<S, E> stateMachineMemento) {
 		driver.passivate(stateMachineMemento);
 	}
 
 	@Override
-	public void activate(
-			final StateMachineMemento<S, E> stateMachineMemento) {
+	public void activate(final StateMachineMemento<S, E> stateMachineMemento) {
 		driver.activate(stateMachineMemento);
 	}
 }

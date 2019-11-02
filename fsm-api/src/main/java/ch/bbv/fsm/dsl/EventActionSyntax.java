@@ -26,13 +26,13 @@ import ch.bbv.fsm.action.FsmAction0;
  * 
  * @param <TStateMachine>
  *            the type of the state machine
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  */
-public interface EventActionSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TStateMachine, TState, TEvent> {
+public interface EventActionSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		extends EventSyntax<TStateMachine, S, E> {
 
 	/**
 	 * Defines where to go in response to an event.
@@ -41,7 +41,7 @@ public interface EventActionSyntax<TStateMachine extends StateMachine<TState, TE
 	 *            the target.
 	 * @return Execute syntax.
 	 */
-	ExecuteSyntax<TStateMachine, TState, TEvent> goTo(TState target);
+	ExecuteSyntax<TStateMachine, S, E> goTo(S target);
 
 	/**
 	 * Defines the actions to execute on a transition.
@@ -49,6 +49,6 @@ public interface EventActionSyntax<TStateMachine extends StateMachine<TState, TE
 	 * @param action
 	 *            The actions to be executed.
 	 */
-	GuardSyntax<TStateMachine, TState, TEvent> execute(FsmAction0<TStateMachine, TState, TEvent> action);
+	GuardSyntax<TStateMachine, S, E> execute(FsmAction0<TStateMachine, S, E> action);
 
 }

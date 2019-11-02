@@ -27,12 +27,12 @@ import ch.bbv.fsm.model.StateMachineModel;
 /**
  * Implementation of the definition of the finite state machine.
  * 
- * @param <TState>        the type of the states.
- * @param <TEvent>        the type of the events.
+ * @param <S>             the type of the states.
+ * @param <E>             the type of the events.
  * @param <TStateMachine> the type of the state machine
  */
-public abstract class AbstractStateMachineDefinition<TStateMachine extends AbstractStateMachine<TStateMachine, TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachineDefinition<TStateMachine, TState, TEvent>, Notifier<TStateMachine, TState, TEvent> {
+public abstract class AbstractStateMachineDefinition<TStateMachine extends AbstractStateMachine<TStateMachine, S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements StateMachineDefinition<TStateMachine, S, E>, Notifier<TStateMachine, S, E> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractStateMachineDefinition.class);
 
@@ -41,16 +41,16 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	 */
 	private String name;
 
-	private final List<StateMachineEventHandler<TStateMachine, TState, TEvent>> eventHandler;
+	private final List<StateMachineEventHandler<TStateMachine, S, E>> eventHandler;
 
-	private final SimpleStateMachineModel<TStateMachine, TState, TEvent> simpleStateMachineModel;
+	private final SimpleStateMachineModel<TStateMachine, S, E> simpleStateMachineModel;
 
 	/**
 	 * Initializes the passive state machine.
 	 * 
 	 * @param initialState the initial state to use
 	 */
-	public AbstractStateMachineDefinition(final TState initialState) {
+	public AbstractStateMachineDefinition(final S initialState) {
 		this(AbstractStateMachineDefinition.class.getSimpleName(), initialState);
 	}
 
@@ -60,7 +60,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	 * @param name         the name of the state machine used in the logs.
 	 * @param initialState the initial state to use
 	 */
-	public AbstractStateMachineDefinition(final String name, final TState initialState) {
+	public AbstractStateMachineDefinition(final String name, final S initialState) {
 
 		this.name = name;
 		this.simpleStateMachineModel = new SimpleStateMachineModel<>(new StateDictionary<>(), initialState);
@@ -68,24 +68,24 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public final TState getInitialState() {
+	public final S getInitialState() {
 		return this.simpleStateMachineModel.getInitialState();
 	}
 
 	@Override
-	public StateMachineModel<TStateMachine, TState, TEvent> getModel() {
+	public StateMachineModel<TStateMachine, S, E> getModel() {
 
 		return this.simpleStateMachineModel;
 	}
 
 	@Override
-	public void defineHierarchyOn(final TState superStateId, final TState initialSubStateId, final HistoryType historyType,
-			@SuppressWarnings("unchecked") final TState... subStateIds) {
-		final InternalState<TStateMachine, TState, TEvent> superState = this.simpleStateMachineModel.getStates().getState(superStateId);
+	public void defineHierarchyOn(final S superStateId, final S initialSubStateId, final HistoryType historyType,
+			@SuppressWarnings("unchecked") final S... subStateIds) {
+		final InternalState<TStateMachine, S, E> superState = this.simpleStateMachineModel.getStates().getState(superStateId);
 		superState.setHistoryType(historyType);
 
-		for (final TState subStateId : subStateIds) {
-			final InternalState<TStateMachine, TState, TEvent> subState = this.simpleStateMachineModel.getStates().getState(subStateId);
+		for (final S subStateId : subStateIds) {
+			final InternalState<TStateMachine, S, E> subState = this.simpleStateMachineModel.getStates().getState(subStateId);
 			subState.setSuperState(superState);
 			superState.addSubState(subState);
 		}
@@ -94,18 +94,18 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public EntryActionSyntax<TStateMachine, TState, TEvent> in(final TState state) {
-		final InternalState<TStateMachine, TState, TEvent> newState = this.simpleStateMachineModel.getStates().getState(state);
+	public EntryActionSyntax<TStateMachine, S, E> in(final S state) {
+		final InternalState<TStateMachine, S, E> newState = this.simpleStateMachineModel.getStates().getState(state);
 		return new StateBuilder<>(newState, this.simpleStateMachineModel.getStates());
 	}
 
 	@Override
-	public void addEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+	public void addEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
 		this.eventHandler.add(handler);
 	}
 
 	@Override
-	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
 		this.eventHandler.remove(handler);
 	}
 
@@ -115,8 +115,8 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public TStateMachine createActiveStateMachine(final String name, final TState initialState) {
-		final ActiveStateMachineDriver<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachineDriver<>();
+	public TStateMachine createActiveStateMachine(final String name, final S initialState) {
+		final ActiveStateMachineDriver<TStateMachine, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final TStateMachine stateMachine = createStateMachine(activeStateMachine);
 		activeStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(), initialState, eventHandler);
 		return stateMachine;
@@ -124,7 +124,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createActiveStateMachine(final String name) {
-		final ActiveStateMachineDriver<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachineDriver<>();
+		final ActiveStateMachineDriver<TStateMachine, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final TStateMachine stateMachine = createStateMachine(activeStateMachine);
 		activeStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(),
 				this.simpleStateMachineModel.getInitialState(), eventHandler);
@@ -132,8 +132,8 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public TStateMachine createPassiveStateMachine(final String name, final TState initialState) {
-		final PassiveStateMachineDriver<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachineDriver<>();
+	public TStateMachine createPassiveStateMachine(final String name, final S initialState) {
+		final PassiveStateMachineDriver<TStateMachine, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final TStateMachine stateMachine = createStateMachine(passiveStateMachine);
 		passiveStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(), initialState, eventHandler);
 		return stateMachine;
@@ -141,7 +141,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createPassiveStateMachine(final String name) {
-		final PassiveStateMachineDriver<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachineDriver<>();
+		final PassiveStateMachineDriver<TStateMachine, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final TStateMachine stateMachine = createStateMachine(passiveStateMachine);
 		passiveStateMachine.initialize(stateMachine, name, this.simpleStateMachineModel.getStates(),
 				this.simpleStateMachineModel.getInitialState(), eventHandler);
@@ -149,9 +149,9 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public void onExceptionThrown(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
+	public void onExceptionThrown(final StateContext<TStateMachine, S, E> stateContext, final Exception exception) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onExceptionThrown(new ExceptionEventArgsImpl<>(stateContext, exception));
 			}
 		} catch (final Exception e) {
@@ -161,9 +161,9 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public void onExceptionThrown(final TransitionContext<TStateMachine, TState, TEvent> transitionContext, final Exception exception) {
+	public void onExceptionThrown(final TransitionContext<TStateMachine, S, E> transitionContext, final Exception exception) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<>(transitionContext, exception));
 			}
 		} catch (final Exception e) {
@@ -173,9 +173,9 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public void onTransitionBegin(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
+	public void onTransitionBegin(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onTransitionBegin(new TransitionEventArgsImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
@@ -183,5 +183,5 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 		}
 	}
 
-	protected abstract TStateMachine createStateMachine(StateMachine<TState, TEvent> driver);
+	protected abstract TStateMachine createStateMachine(StateMachine<S, E> driver);
 }

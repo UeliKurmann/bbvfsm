@@ -19,11 +19,11 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.ExceptionEventArgs;
+import ch.bbv.fsm.events.ExceptionEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link ExceptionEventArgs}.
+ * See {@link ExceptionEvent}.
  * 
  * @param <TState>
  *            the state enumeration
@@ -33,7 +33,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  *            the type of the state machine
  */
 public class ExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements ExceptionEventArgs<TStateMachine, TState, TEvent> {
+		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements ExceptionEvent<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The exception.

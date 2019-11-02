@@ -25,12 +25,12 @@ import ch.bbv.fsm.StateMachine;
  * 
  * @param <TStateMachine>
  *            the type of the state machine
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  */
-public interface EventSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface EventSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * Defines an event that is accepted.
@@ -39,5 +39,5 @@ public interface EventSyntax<TStateMachine extends StateMachine<TState, TEvent>,
 	 *            the event id.
 	 * @return >Event action syntax.
 	 */
-	EventActionSyntax<TStateMachine, TState, TEvent> on(TEvent eventId);
+	EventActionSyntax<TStateMachine, S, E> on(E eventId);
 }

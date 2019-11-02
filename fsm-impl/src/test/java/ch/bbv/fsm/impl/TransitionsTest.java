@@ -19,8 +19,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.StateMachineEventAdapter;
-import ch.bbv.fsm.events.TransitionEventArgs;
+import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
+import ch.bbv.fsm.events.TransitionEvent;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -82,10 +82,10 @@ public class TransitionsTest {
 
 
 
-  private class Handler extends StateMachineEventAdapter<SimpleStateMachine<States, Events>, States, Events> {
+  private class Handler extends StateMachineEventHandlerAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
     @Override
-    public void onTransitionDeclined(final TransitionEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
+    public void onTransitionDeclined(final TransitionEvent<SimpleStateMachine<States, Events>, States, Events> arg) {
       TransitionsTest.this.declined = true;
 
     }

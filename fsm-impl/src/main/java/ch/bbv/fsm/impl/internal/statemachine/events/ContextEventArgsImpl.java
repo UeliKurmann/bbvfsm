@@ -19,18 +19,18 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.ContextEventArgs;
+import ch.bbv.fsm.events.ContextEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link ContextEventArgs}.
+ * See {@link ContextEvent}.
  * 
  * @param <S>             the state enumeration
  * @param <E>             the event enumeration
  * @param <TStateMachine> the type of the state machine
  */
 public class ContextEventArgsImpl<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		implements ContextEventArgs<TStateMachine, S, E> {
+		implements ContextEvent<TStateMachine, S, E> {
 
 	/**
 	 * The context.

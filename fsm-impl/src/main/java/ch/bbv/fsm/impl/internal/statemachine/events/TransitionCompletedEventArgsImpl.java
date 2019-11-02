@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.TransitionCompletedEventArgs;
+import ch.bbv.fsm.events.TransitionCompletedEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
@@ -34,7 +34,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  */
 public class TransitionCompletedEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
-		TransitionCompletedEventArgs<TStateMachine, TState, TEvent> {
+		TransitionCompletedEvent<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The new state the state machine is in after the transition.

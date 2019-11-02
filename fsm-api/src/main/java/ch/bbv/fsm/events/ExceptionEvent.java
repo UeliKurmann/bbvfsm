@@ -21,7 +21,7 @@ package ch.bbv.fsm.events;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * Abstract implementation of a StateMachineEventHandler. All methods have an empty body.
+ * The exception event argument.
  * 
  * @author Ueli Kurmann  
  * @param <TState>
@@ -31,31 +31,14 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of the state machine
  */
-public abstract class StateMachineEventAdapter<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachineEventHandler<TStateMachine, TState, TEvent> {
+public interface ExceptionEvent<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEvent<TStateMachine, TState, TEvent> {
 
-	@Override
-	public void onExceptionThrown(final ExceptionEventArgs<TStateMachine, TState, TEvent> arg) {
-		// empty method body
-	}
+	/**
+	 * Returns the exception.
+	 * 
+	 * @return the exception.
+	 */
+	Exception getException();
 
-	@Override
-	public void onTransitionBegin(final TransitionEventArgs<TStateMachine, TState, TEvent> args) {
-		// empty method body
-	}
-
-	@Override
-	public void onTransitionCompleted(final TransitionCompletedEventArgs<TStateMachine, TState, TEvent> arg) {
-		// empty method body
-	}
-
-	@Override
-	public void onTransitionDeclined(final TransitionEventArgs<TStateMachine, TState, TEvent> arg) {
-		// empty method body
-	}
-
-	@Override
-	public void onTransitionThrowsException(final TransitionExceptionEventArgs<TStateMachine, TState, TEvent> arg) {
-		// empty method body
-	}
 }

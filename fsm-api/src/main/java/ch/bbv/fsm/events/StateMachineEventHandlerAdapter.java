@@ -21,24 +21,41 @@ package ch.bbv.fsm.events;
 import ch.bbv.fsm.StateMachine;
 
 /**
- * Defines the transition completed event argument.
+ * Abstract implementation of a StateMachineEventHandler. All methods have an empty body.
  * 
  * @author Ueli Kurmann  
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
- * @param <TStateMachine>
+ * @param <FSM>
  *            the type of the state machine
  */
-public interface TransitionCompletedEventArgs<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgs<TStateMachine, TState, TEvent> {
+public abstract class StateMachineEventHandlerAdapter<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements StateMachineEventHandler<FSM, S, E> {
 
-	/**
-	 * Gets the new state id the state machine is in after the transition.
-	 * 
-	 * @return The new state id the state machine is in after the transition.
-	 */
-	TState getNewStateId();
+	@Override
+	public void onExceptionThrown(final ExceptionEvent<FSM, S, E> arg) {
+		// empty method body
+	}
 
+	@Override
+	public void onTransitionBegin(final TransitionEvent<FSM, S, E> args) {
+		// empty method body
+	}
+
+	@Override
+	public void onTransitionCompleted(final TransitionCompletedEvent<FSM, S, E> arg) {
+		// empty method body
+	}
+
+	@Override
+	public void onTransitionDeclined(final TransitionEvent<FSM, S, E> arg) {
+		// empty method body
+	}
+
+	@Override
+	public void onTransitionThrowsException(final TransitionExceptionEvent<FSM, S, E> arg) {
+		// empty method body
+	}
 }

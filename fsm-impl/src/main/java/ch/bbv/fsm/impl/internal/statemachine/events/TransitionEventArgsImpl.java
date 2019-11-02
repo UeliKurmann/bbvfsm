@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.TransitionEventArgs;
+import ch.bbv.fsm.events.TransitionEvent;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
@@ -34,7 +34,7 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
  *            the type of the state machine
  */
 public class TransitionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements TransitionEventArgs<TStateMachine, TState, TEvent> {
+		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements TransitionEvent<TStateMachine, TState, TEvent> {
 	/**
 	 * Initializes a new instance.
 	 * 

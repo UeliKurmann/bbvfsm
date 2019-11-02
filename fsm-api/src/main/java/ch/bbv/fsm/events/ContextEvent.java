@@ -31,7 +31,7 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of the state machine
  */
-public interface ContextEventArgs<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface ContextEvent<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * The source context.

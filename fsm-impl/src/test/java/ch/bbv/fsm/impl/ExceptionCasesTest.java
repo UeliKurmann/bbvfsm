@@ -20,20 +20,20 @@ import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.FsmAction0;
-import ch.bbv.fsm.events.ExceptionEventArgs;
-import ch.bbv.fsm.events.StateMachineEventAdapter;
-import ch.bbv.fsm.events.TransitionEventArgs;
-import ch.bbv.fsm.events.TransitionExceptionEventArgs;
+import ch.bbv.fsm.events.ExceptionEvent;
+import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
+import ch.bbv.fsm.events.TransitionEvent;
+import ch.bbv.fsm.events.TransitionExceptionEvent;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class ExceptionCasesTest {
 
-  private class Handler extends StateMachineEventAdapter<ExceptionCasesTestStateMachine, States, Events> {
+  private class Handler extends StateMachineEventHandlerAdapter<ExceptionCasesTestStateMachine, States, Events> {
 
     @Override
-    public void onExceptionThrown(final ExceptionEventArgs<ExceptionCasesTestStateMachine, States, Events> eventArgs) {
+    public void onExceptionThrown(final ExceptionEvent<ExceptionCasesTestStateMachine, States, Events> eventArgs) {
       if (eventArgs != null) {
         ExceptionCasesTest.this.recordedException = eventArgs.getException();
       }
@@ -41,13 +41,13 @@ public class ExceptionCasesTest {
     }
 
     @Override
-    public void onTransitionDeclined(final TransitionEventArgs<ExceptionCasesTestStateMachine, States, Events> arg) {
+    public void onTransitionDeclined(final TransitionEvent<ExceptionCasesTestStateMachine, States, Events> arg) {
       ExceptionCasesTest.this.transitionDeclined = true;
 
     }
 
     @Override
-    public void onTransitionThrowsException(final TransitionExceptionEventArgs<ExceptionCasesTestStateMachine, States, Events> eventArgs) {
+    public void onTransitionThrowsException(final TransitionExceptionEvent<ExceptionCasesTestStateMachine, States, Events> eventArgs) {
 
       ExceptionCasesTest.this.recordedStateId = eventArgs.getStateId();
       ExceptionCasesTest.this.recordedEventId = eventArgs.getEventId();
@@ -107,25 +107,25 @@ public class ExceptionCasesTest {
 
   /**
    * The state that was provided in the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event.
    */
   private States recordedStateId;
 
   /**
    * The event that was provided in the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event.
    */
   private Events recordedEventId;
 
   /**
    * The event arguments that was provided in the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event.
    */
   private Object[] recordedEventArguments;
 
   /**
    * The exception that was provided in the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event.
    */
   private Exception recordedException;
 
@@ -155,7 +155,7 @@ public class ExceptionCasesTest {
 
   /**
    * When a transition throws an exception then the exception is catched and the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event
    * is fired. The transition is executed and the state machine is in the target state.
    */
   @Test
@@ -221,7 +221,7 @@ public class ExceptionCasesTest {
 
   /**
    * When a guard throws an exception then it is catched and the
-   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event
+   * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEvent)} event
    * is fired. The transition is not executed and if there is no other transition then the state
    * machine remains in the same state.
    */

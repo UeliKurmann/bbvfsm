@@ -23,15 +23,15 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Define a target state.
  * 
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  * @param <TStateMachine>
  *            the type of state machine
  */
-public interface GotoSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
-		EventSyntax<TStateMachine, TState, TEvent> {
+public interface GotoSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends
+		EventSyntax<TStateMachine, S, E> {
 
 	/**
 	 * Defines where to go in response to an event.
@@ -40,6 +40,6 @@ public interface GotoSyntax<TStateMachine extends StateMachine<TState, TEvent>, 
 	 *            the target.
 	 * @return Execute syntax.
 	 */
-	ExecuteSyntax<TStateMachine, TState, TEvent> goTo(TState target);
+	ExecuteSyntax<TStateMachine, S, E> goTo(S target);
 
 }
