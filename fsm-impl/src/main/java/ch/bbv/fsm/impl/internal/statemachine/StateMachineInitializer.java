@@ -25,7 +25,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * InternalState Machine Initializer.
+ * InternalStateImpl Machine Initializer.
  * 
  * @author Ueli Kurmann
  * 

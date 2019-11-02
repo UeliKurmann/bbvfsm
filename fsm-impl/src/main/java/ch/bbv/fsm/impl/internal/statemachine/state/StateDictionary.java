@@ -58,7 +58,7 @@ public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>,
 	public InternalState<TStateMachine, TState, TEvent> getState(final TState stateId) {
 		if (!this.dictionary.containsKey(stateId)) {
 			this.dictionary.putIfAbsent(stateId,
-					new InternalStateImpl<>(stateId));
+					new InternalState<>(stateId));
 		}
 
 		return this.dictionary.get(stateId);

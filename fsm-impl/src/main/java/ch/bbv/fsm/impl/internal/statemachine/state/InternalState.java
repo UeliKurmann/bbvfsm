@@ -15,170 +15,486 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.action.FsmCall;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext.RecordType;
+import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.model.State;
 
 /**
- * Represents a state of the state machine.
+ * Implementation of the state.
  *
- * @author Ueli Kurmann  
+ * @author Ueli Kurmann
  *
- * @param <TStateMachine> the type of state machine
- * @param <TState> the type of the states
- * @param <TEvent> the type of the events
+ * @param <FSM> the type of state machine
+ * @param <S>             the type of the states
+ * @param <E>             the type of the events
  */
-public interface InternalState<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-    extends State<TStateMachine, TState, TEvent> {
+public class InternalState<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements State<FSM, S, E> {
 
-  /**
-   * Adds a sub state.
-   *
-   * @param state a sub state.
-   */
-  void addSubState(InternalState<TStateMachine, TState, TEvent> state);
+	private static final Logger LOG = LoggerFactory.getLogger(InternalState.class);
 
-  /**
-   * Enters this state by its history depending on its <code>HistoryType</code>. The
-   * <code>Entry</code> method has to be called already.
-   *
-   * @param stateContext the state context.
-   * @return the active state. (depends on this states <code>HistoryType</code>)
-   */
-  InternalState<TStateMachine, TState, TEvent> enterByHistory(
-      StateContext<TStateMachine, TState, TEvent> stateContext);
+	/**
+	 * The level of this state within the state hierarchy [1..maxLevel].
+	 */
+	private int level;
 
-  /**
-   * Enters this state is deep mode: mode if there is one.
-   *
-   * @param stateContext the event context.
-   * @return the active state.
-   */
-  InternalState<TStateMachine, TState, TEvent> enterDeep(
-      StateContext<TStateMachine, TState, TEvent> stateContext);
+	private final List<State<FSM, S, E>> subStates;
 
-  /**
-   * Enters this state is shallow mode: The entry action is executed and the initial state is
-   * entered in shallow mode if there is one.
-   *
-   * @param stateContext the event context.
-   * @return the active state.
-   */
-  InternalState<TStateMachine, TState, TEvent> enterShallow(
-      StateContext<TStateMachine, TState, TEvent> stateContext);
+	/**
+	 * The super-state of this state. Null for states with <code>level</code> equal
+	 * to 1.
+	 */
+	private InternalState<FSM, S, E> superState;
 
-  /**
-   * Enters this state.
-   *
-   * @param stateContext the state context.
-   */
-  void entry(StateContext<TStateMachine, TState, TEvent> stateContext);
+	/**
+	 * Collection of transitions that start in this .
+	 * (Transition<TState,TEvent>.getSource() is equal to this state)
+	 */
+	private final TransitionDictionary<FSM, S, E> transitions;
 
-  /**
-   * Exits this state.
-   *
-   * @param stateContext the state context.
-   */
-  void exit(StateContext<TStateMachine, TState, TEvent> stateContext);
+	/**
+	 * The initial sub-state of this state.
+	 */
+	private InternalState<FSM, S, E> initialState;
 
-  /**
-   * Fires the specified event id on this state.
-   *
-   * @param context the event context.
-   * @return the result of the transition.
-   */
-  TransitionResult<TStateMachine, TState, TEvent> fire(
-      TransitionContext<TStateMachine, TState, TEvent> context);
+	/**
+	 * The HistoryType of this state.
+	 */
+	private HistoryType historyType = HistoryType.NONE;
 
-  /**
-   * Returns the entry action.
-   *
-   * @return the entry action.
-   */
-  FsmCall<TStateMachine, TState, TEvent> getEntryAction();
+	/**
+	 * The unique state id.
+	 */
+	private final S id;
 
-  /**
-   * Gets the exit action.
-   *
-   * @return the exit action.
-   */
-  FsmCall<TStateMachine, TState, TEvent> getExitAction();
+	/**
+	 * The entry action.
+	 */
+	private FsmCall<FSM, S, E> entryAction;
 
-  /**
-   * Returns the history type of this state.
-   *
-   * @return the history type of this state.
-   */
-  HistoryType getHistoryType();
+	/**
+	 * The exit action.
+	 */
+	private FsmCall<FSM, S, E> exitAction;
 
-  /**
-   * Returns the initial sub-state.
-   *
-   * @return the initial sub-state or Null if this state has no sub-states.
-   */
-  InternalState<TStateMachine, TState, TEvent> getInitialState();
+	/**
+	 * Initializes a new instance of the state.
+	 *
+	 * @param id the unique id of the state.
+	 */
+	public InternalState(final S id) {
+		this.id = id;
+		this.level = 1;
 
-  /**
-   * Returns the sub-states.
-   *
-   * @return the sub-states.
-   */
-  Iterable<State<TStateMachine, TState, TEvent>> getSubStates();
+		this.subStates = new ArrayList<>();
+		this.transitions = new TransitionDictionary<>(this);
+	}
 
-  /**
-   * Returns the super-state. Null if this is a root state.
-   *
-   * @return the super-state.
-   */
-  InternalState<TStateMachine, TState, TEvent> getSuperState();
+	/**
+	 * Adds a sub state.
+	 *
+	 * @param state a sub state.
+	 */
+	public void addSubState(final InternalState<FSM, S, E> state) {
+		this.subStates.add(state);
 
-  /**
-   * Returns the transitions.
-   *
-   * @return the transitions.
-   */
-  TransitionDictionary<TStateMachine, TState, TEvent> getTransitions();
+	}
 
-  /**
-   * Sets the entry action.
-   *
-   * @param <T>
-   * @param action the entry action.
-   */
-  void setEntryAction(FsmCall<TStateMachine, TState, TEvent> action);
+	/**
+	 * Throws an exception if the new initial state is not a sub-state of this
+	 * instance.
+	 *
+	 * @param value
+	 */
+	private void checkInitialStateIsASubState(final InternalState<FSM, S, E> value) {
+		if (value.getSuperState() != this) {
+			throw new IllegalArgumentException(String.format(
+					"InternalState {0} cannot be the initial state of super state {1} because it is not a direct sub-state.", value, this));
+		}
+	}
 
-  /**
-   * Sets the exit action.
-   *
-   * @param <T>
-   * @param action the exit action.
-   */
-  void setExitAction(FsmCall<TStateMachine, TState, TEvent> action);
+	/**
+	 * Throws an exception if the new initial state is this instance.
+	 *
+	 * @param newInitialState the new initial state.
+	 */
+	private void checkInitialStateIsNotThisInstance(final InternalState<FSM, S, E> newInitialState) {
+		if (this == newInitialState) {
+			throw new IllegalArgumentException(String.format("InternalState {0} cannot be the initial sub-state to itself.", this));
+		}
+	}
 
-  /**
-   * Sets the history type of this state.
-   *
-   * @param historyType the history type of this state.
-   */
-  void setHistoryType(HistoryType historyType);
+	/**
+	 * Throws an exception if the new super state is this instance.
+	 *
+	 * @param newSuperState the super state.
+	 */
+	private void checkSuperStateIsNotThisInstance(final InternalState<FSM, S, E> newSuperState) {
+		if (this == newSuperState) {
+			throw new IllegalArgumentException(String.format(
 
-  /**
-   * Sets the initial sub-state.
-   *
-   * @param initialState the initial sub-state.
-   */
-  void setInitialState(InternalState<TStateMachine, TState, TEvent> initialState);
+					"InternalState {0} cannot be its own super-state.", this));
+		}
+	}
 
-  /**
-   * Sets the super-state.
-   *
-   * @param superState the super-state.
-   */
-  void setSuperState(InternalState<TStateMachine, TState, TEvent> superState);
+	/**
+	 * Enters this state by its history depending on its <code>HistoryType</code>.
+	 * The <code>Entry</code> method has to be called already.
+	 *
+	 * @param stateContext the state context.
+	 * @return the active state. (depends on this states <code>HistoryType</code>)
+	 */
+	public InternalState<FSM, S, E> enterByHistory(final StateContext<FSM, S, E> stateContext) {
 
+		InternalState<FSM, S, E> result = this;
 
+		switch (this.historyType) {
+		case NONE:
+			result = enterHistoryNone(stateContext);
+			break;
+		case SHALLOW:
+			result = enterHistoryShallow(stateContext);
+			break;
+		case DEEP:
+			result = enterHistoryDeep(stateContext);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown HistoryType : " + historyType);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Enters this state is deep mode: mode if there is one.
+	 *
+	 * @param stateContext the event context.
+	 * @return the active state.
+	 */
+	public InternalState<FSM, S, E> enterDeep(final StateContext<FSM, S, E> stateContext) {
+		this.entry(stateContext);
+		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+		return lastActiveState == null ? this : lastActiveState.enterDeep(stateContext);
+	}
+
+	/**
+	 * Enters this instance with history type = deep.
+	 *
+	 * @param stateContext the state context.
+	 * @return the state
+	 */
+	private InternalState<FSM, S, E> enterHistoryDeep(final StateContext<FSM, S, E> stateContext) {
+		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+		return lastActiveState != null ? lastActiveState.enterDeep(stateContext) : this;
+	}
+
+	/**
+	 * Enters with history type = none.
+	 *
+	 * @param stateContext state context
+	 * @return the entered state.
+	 */
+	private InternalState<FSM, S, E> enterHistoryNone(final StateContext<FSM, S, E> stateContext) {
+		return this.initialState != null ? this.getInitialState().enterShallow(stateContext) : this;
+	}
+
+	/**
+	 * Enters this instance with history type = shallow.
+	 *
+	 * @param stateContext state context
+	 * @return the entered state
+	 */
+	private InternalState<FSM, S, E> enterHistoryShallow(final StateContext<FSM, S, E> stateContext) {
+		final InternalState<FSM, S, E> lastActiveState = stateContext.getLastActiveSubState(this);
+		return lastActiveState != null ? lastActiveState.enterShallow(stateContext) : this;
+	}
+
+	/**
+	 * Enters this state is shallow mode: The entry action is executed and the
+	 * initial state is entered in shallow mode if there is one.
+	 *
+	 * @param stateContext the event context.
+	 * @return the active state.
+	 */
+
+	public InternalState<FSM, S, E> enterShallow(final StateContext<FSM, S, E> stateContext) {
+		this.entry(stateContext);
+
+		return this.initialState == null ? this : this.initialState.enterShallow(stateContext);
+
+	}
+
+	/**
+	 * Enters this state.
+	 *
+	 * @param stateContext the state context.
+	 */
+
+	public void entry(final StateContext<FSM, S, E> stateContext) {
+		stateContext.addRecord(this.getId(), RecordType.Enter);
+		if (this.entryAction != null) {
+			try {
+				this.entryAction.execOn(stateContext.getStateMachine());
+			} catch (final Exception e) {
+				handleException(e, stateContext);
+			}
+		}
+
+	}
+
+	/**
+	 * Exits this state.
+	 *
+	 * @param stateContext the state context.
+	 */
+
+	public void exit(final StateContext<FSM, S, E> stateContext) {
+		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
+		if (this.exitAction != null) {
+			try {
+				this.exitAction.execOn(stateContext.getStateMachine());
+			} catch (final Exception e) {
+				handleException(e, stateContext);
+			}
+		}
+		this.setThisStateAsLastStateOfSuperState(stateContext);
+	}
+
+	private void setThisStateAsLastStateOfSuperState(final StateContext<FSM, S, E> stateContext) {
+		if (superState != null && !HistoryType.NONE.equals(superState.getHistoryType())) {
+			stateContext.setLastActiveSubState(superState, this);
+		}
+	}
+
+	/**
+	 * Fires the specified event id on this state.
+	 *
+	 * @param context the event context.
+	 * @return the result of the transition.
+	 */
+
+	public TransitionResult<FSM, S, E> fire(final TransitionContext<FSM, S, E> context) {
+		@SuppressWarnings("unchecked")
+		TransitionResult<FSM, S, E> result = TransitionResult.getNotFired();
+
+		final List<Transition<FSM, S, E>> transitionsForEvent = this.transitions.getTransitions(context.getEventId());
+		if (transitionsForEvent != null) {
+			for (final Transition<FSM, S, E> transition : transitionsForEvent) {
+				result = transition.fire(context);
+				if (result.isFired()) {
+					return result;
+				}
+			}
+		}
+		LOG.info("No transition available in this state ({}).", this.getId());
+
+		if (this.getSuperState() != null) {
+			LOG.info("Fire the same event on the super state.");
+			result = this.getSuperState().fire(context);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Returns the entry action.
+	 *
+	 * @return the entry action.
+	 */
+
+	public FsmCall<FSM, S, E> getEntryAction() {
+		return this.entryAction;
+	}
+
+	/**
+	 * Gets the exit action.
+	 *
+	 * @return the exit action.
+	 */
+
+	public FsmCall<FSM, S, E> getExitAction() {
+		return this.exitAction;
+	}
+
+	/**
+	 * Returns the history type of this state.
+	 *
+	 * @return the history type of this state.
+	 */
+
+	public HistoryType getHistoryType() {
+		return this.historyType;
+	}
+
+	public S getId() {
+		return this.id;
+	}
+
+	/**
+	 * Returns the initial sub-state.
+	 *
+	 * @return the initial sub-state or Null if this state has no sub-states.
+	 */
+
+	public InternalState<FSM, S, E> getInitialState() {
+		return this.initialState;
+	}
+
+	public int getLevel() {
+		return this.level;
+	}
+
+	/**
+	 * Returns the sub-states.
+	 *
+	 * @return the sub-states.
+	 */
+
+	public List<State<FSM, S, E>> getSubStates() {
+		return new ArrayList<>(this.subStates);
+	}
+
+	/**
+	 * Returns the super-state. Null if this is a root state.
+	 *
+	 * @return the super-state.
+	 */
+
+	public InternalState<FSM, S, E> getSuperState() {
+		return this.superState;
+	}
+
+	/**
+	 * Returns the transitions.
+	 *
+	 * @return the transitions.
+	 */
+
+	public TransitionDictionary<FSM, S, E> getTransitions() {
+		return this.transitions;
+	}
+
+	/**
+	 * Handles the specific exception.
+	 *
+	 * @param exception    the exception
+	 * @param stateContext the state context.
+	 */
+	private void handleException(final Exception exception, final StateContext<FSM, S, E> stateContext) {
+		stateContext.getExceptions().add(exception);
+		stateContext.getNotifier().onExceptionThrown(stateContext, exception);
+	}
+
+	/**
+	 * Sets the entry action.
+	 *
+	 * @param <T>
+	 * @param action the entry action.
+	 */
+
+	public void setEntryAction(final FsmCall<FSM, S, E> action) {
+		this.entryAction = action;
+
+	}
+
+	/**
+	 * Set the exit action.
+	 * 
+	 * @param action the action
+	 */
+
+	public void setExitAction(final FsmCall<FSM, S, E> action) {
+		this.exitAction = action;
+
+	}
+
+	/**
+	 * Sets the history type of this state.
+	 *
+	 * @param historyType the history type of this state.
+	 */
+
+	public void setHistoryType(final HistoryType historyType) {
+		this.historyType = historyType;
+
+	}
+
+	/**
+	 * Sets the initial level depending on the level of the super state of this
+	 * instance.
+	 */
+	private void setInitialLevel() {
+		this.setLevel(this.superState != null ? this.superState.getLevel() + 1 : 1);
+	}
+
+	/**
+	 * Sets the initial sub-state.
+	 *
+	 * @param initialState the initial sub-state.
+	 */
+
+	public void setInitialState(final InternalState<FSM, S, E> initialState) {
+		this.checkInitialStateIsNotThisInstance(initialState);
+		this.checkInitialStateIsASubState(initialState);
+		this.initialState = initialState;
+	}
+
+	public void setLevel(final int level) {
+		this.level = level;
+		this.setLevelOfSubStates();
+	}
+
+	/**
+	 * Sets the level of all sub states.
+	 */
+	private void setLevelOfSubStates() {
+		for (final State<FSM, S, E> state : this.getSubStates()) {
+			state.setLevel(this.level + 1);
+		}
+	}
+
+	/**
+	 * Sets the super-state.
+	 *
+	 * @param superState the super-state.
+	 */
+
+	public void setSuperState(final InternalState<FSM, S, E> superState) {
+		this.checkSuperStateIsNotThisInstance(superState);
+		this.superState = superState;
+		this.setInitialLevel();
+
+	}
+
+	public String toString() {
+		return this.id.toString();
+	}
+
+	public boolean hasParent() {
+		return this.superState != null;
+	}
+
+	public State<FSM, S, E> getParent() {
+		return this.superState;
+	}
+
+	public boolean hasChildren() {
+		return this.subStates != null && !this.subStates.isEmpty();
+	}
+
+	public List<State<FSM, S, E>> getChildren() {
+		return this.getSubStates();
+	}
 }

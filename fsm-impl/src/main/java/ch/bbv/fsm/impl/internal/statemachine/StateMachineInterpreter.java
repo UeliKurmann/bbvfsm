@@ -41,16 +41,16 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 import ch.bbv.fsm.memento.StateMachineMemento;
 
 /**
- * InternalState Machine Implementation.
+ * InternalStateImpl Machine Implementation.
  * 
  * @author Ueli Kurmann
  * 
  * @param <TStateMachine> the type of state machine
- * @param <TState>        the type of the states
- * @param <TEvent>        the type of the events
+ * @param <S>        the type of the states
+ * @param <E>        the type of the events
  */
-public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements Notifier<TStateMachine, TState, TEvent> {
+public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements Notifier<TStateMachine, S, E> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(StateMachineInterpreter.class);
 
@@ -64,18 +64,18 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	/**
 	 * The current state.
 	 */
-	private InternalState<TStateMachine, TState, TEvent> currentState;
+	private InternalState<TStateMachine, S, E> currentState;
 
-	private final Map<InternalState<TStateMachine, TState, TEvent>, InternalState<TStateMachine, TState, TEvent>> superToSubState = new HashMap<>();
+	private final Map<InternalState<TStateMachine, S, E>, InternalState<TStateMachine, S, E>> superToSubState = new HashMap<>();
 
-	private final TState initialStateId;
+	private final S initialStateId;
 
 	/**
 	 * The dictionary of all states.
 	 */
-	private final StateDictionary<TStateMachine, TState, TEvent> states;
+	private final StateDictionary<TStateMachine, S, E> states;
 
-	private final List<StateMachineEventHandler<TStateMachine, TState, TEvent>> eventHandler;
+	private final List<StateMachineEventHandler<TStateMachine, S, E>> eventHandler;
 
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
@@ -86,7 +86,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * @param initialState the initial state
 	 */
 	public StateMachineInterpreter(final TStateMachine stateMachine, final String name,
-			final StateDictionary<TStateMachine, TState, TEvent> states, final TState initialState) {
+			final StateDictionary<TStateMachine, S, E> states, final S initialState) {
 		this.name = name;
 		this.states = states;
 		this.stateMachine = stateMachine;
@@ -99,7 +99,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param eventId the event id.
 	 */
-	public void fire(final TEvent eventId) {
+	public void fire(final E eventId) {
 		this.fire(eventId, null);
 	}
 
@@ -109,15 +109,15 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * @param eventId        the event id.
 	 * @param eventArguments the event arguments.
 	 */
-	public void fire(final TEvent eventId, final Object[] eventArguments) {
+	public void fire(final E eventId, final Object[] eventArguments) {
 		if (LOG.isDebugEnabled()) {
 			LOG.info("Fire event {} on state machine {} with current state {} and event arguments {}.",
 					new Object[] { eventId, this.getName(), this.getCurrentStateId(), eventArguments });
 		}
 
-		final TransitionContext<TStateMachine, TState, TEvent> context = new TransitionContext<>(stateMachine, getCurrentState(), eventId,
+		final TransitionContext<TStateMachine, S, E> context = new TransitionContext<>(stateMachine, getCurrentState(), eventId,
 				eventArguments, this, this);
-		final TransitionResult<TStateMachine, TState, TEvent> result = this.currentState.fire(context);
+		final TransitionResult<TStateMachine, S, E> result = this.currentState.fire(context);
 
 		if (!result.isFired()) {
 			LOG.info("No transition possible.");
@@ -127,7 +127,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 
 		this.setCurrentState(result.getNewState());
 
-		LOG.debug("InternalState machine {} performed {}.", this, context.getRecords());
+		LOG.debug("InternalStateImpl machine {} performed {}.", this, context.getRecords());
 
 		this.onTransitionCompleted(context);
 	}
@@ -137,7 +137,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @return the current state.
 	 */
-	private InternalState<TStateMachine, TState, TEvent> getCurrentState() {
+	private InternalState<TStateMachine, S, E> getCurrentState() {
 		return this.currentState;
 	}
 
@@ -146,7 +146,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @return The id of the current state.
 	 */
-	public TState getCurrentStateId() {
+	public S getCurrentStateId() {
 		if (this.getCurrentState() != null) {
 			return this.getCurrentState().getId();
 		} else {
@@ -169,13 +169,13 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * @param initialState the initial state
 	 * @param stateContext the state context
 	 */
-	private void initialize(final InternalState<TStateMachine, TState, TEvent> initialState,
-			final StateContext<TStateMachine, TState, TEvent> stateContext) {
+	private void initialize(final InternalState<TStateMachine, S, E> initialState,
+			final StateContext<TStateMachine, S, E> stateContext) {
 		if (initialState == null) {
 			throw new IllegalArgumentException("initialState; The initial state must not be null.");
 		}
 
-		final StateMachineInitializer<TStateMachine, TState, TEvent> initializer = new StateMachineInitializer<>(initialState,
+		final StateMachineInitializer<TStateMachine, S, E> initializer = new StateMachineInitializer<>(initialState,
 				stateContext);
 		this.setCurrentState(initializer.enterInitialState());
 	}
@@ -184,18 +184,18 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * Initializes the state machine.
 	 */
 	public void initialize() {
-		LOG.info("InternalState machine {} initializes to state {}.", this, initialStateId);
-		final StateContext<TStateMachine, TState, TEvent> stateContext = new StateContext<>(stateMachine, null, this, this);
+		LOG.info("InternalStateImpl machine {} initializes to state {}.", this, initialStateId);
+		final StateContext<TStateMachine, S, E> stateContext = new StateContext<>(stateMachine, null, this, this);
 		this.initialize(this.states.getState(initialStateId), stateContext);
-		LOG.info("InternalState machine {} performed {}.", this, stateContext.getRecords());
+		LOG.info("InternalStateImpl machine {} performed {}.", this, stateContext.getRecords());
 	}
 
 	/**
 	 * Terminates the state machine.
 	 */
 	public void terminate() {
-		final StateContext<TStateMachine, TState, TEvent> stateContext = new StateContext<>(stateMachine, null, this, this);
-		InternalState<TStateMachine, TState, TEvent> o = getCurrentState();
+		final StateContext<TStateMachine, S, E> stateContext = new StateContext<>(stateMachine, null, this, this);
+		InternalState<TStateMachine, S, E> o = getCurrentState();
 		while (o != null) {
 			o.exit(stateContext);
 			o = o.getSuperState();
@@ -207,7 +207,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param handler the event handler.
 	 */
-	public void addEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+	public void addEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
 		this.eventHandler.add(handler);
 	}
 
@@ -216,28 +216,28 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param handler the event handle to be removed.
 	 */
-	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, S, E> handler) {
 		this.eventHandler.remove(handler);
 	}
 
 	@Override
-	public void onExceptionThrown(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
-		for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+	public void onExceptionThrown(final StateContext<TStateMachine, S, E> stateContext, final Exception exception) {
+		for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 			handler.onExceptionThrown(new ExceptionEventArgsImpl<>(stateContext, exception));
 		}
 	}
 
 	@Override
-	public void onExceptionThrown(final TransitionContext<TStateMachine, TState, TEvent> transitionContext, final Exception exception) {
-		for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+	public void onExceptionThrown(final TransitionContext<TStateMachine, S, E> transitionContext, final Exception exception) {
+		for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 			handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<>(transitionContext, exception));
 		}
 	}
 
 	@Override
-	public void onTransitionBegin(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
+	public void onTransitionBegin(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onTransitionBegin(new TransitionEventArgsImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
@@ -250,9 +250,9 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param transitionContext the transition context
 	 */
-	protected void onTransitionCompleted(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
+	protected void onTransitionCompleted(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<>(this.getCurrentStateId(), transitionContext));
 			}
 		} catch (final Exception e) {
@@ -265,9 +265,9 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param transitionContext the transition context.
 	 */
-	protected void onTransitionDeclined(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
+	protected void onTransitionDeclined(final StateContext<TStateMachine, S, E> transitionContext) {
 		try {
-			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {
+			for (final StateMachineEventHandler<TStateMachine, S, E> handler : this.eventHandler) {
 				handler.onTransitionDeclined(new TransitionEventArgsImpl<>(transitionContext));
 			}
 		} catch (final Exception e) {
@@ -281,8 +281,8 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param state the current state.
 	 */
-	private void setCurrentState(final InternalState<TStateMachine, TState, TEvent> state) {
-		LOG.info("InternalState machine {} switched to state {}.", this.getName(), state.getId());
+	private void setCurrentState(final InternalState<TStateMachine, S, E> state) {
+		LOG.info("InternalStateImpl machine {} switched to state {}.", this.getName(), state.getId());
 		this.currentState = state;
 	}
 
@@ -291,8 +291,8 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param superState the super state
 	 */
-	public InternalState<TStateMachine, TState, TEvent> getLastActiveSubState(
-			final InternalState<TStateMachine, TState, TEvent> superState) {
+	public InternalState<TStateMachine, S, E> getLastActiveSubState(
+			final InternalState<TStateMachine, S, E> superState) {
 		return superToSubState.get(superState);
 	}
 
@@ -302,8 +302,8 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * @param superState the super state
 	 * @param subState   the last active sub state
 	 */
-	public void setLastActiveSubState(final InternalState<TStateMachine, TState, TEvent> superState,
-			final InternalState<TStateMachine, TState, TEvent> subState) {
+	public void setLastActiveSubState(final InternalState<TStateMachine, S, E> superState,
+			final InternalState<TStateMachine, S, E> subState) {
 		superToSubState.put(superState, subState);
 	}
 
@@ -317,9 +317,9 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param memento the memento to use
 	 */
-	public void activate(final StateMachineMemento<TState, TEvent> memento) {
+	public void activate(final StateMachineMemento<S, E> memento) {
 		currentState = states.getState(memento.getCurrentState());
-		for (final Map.Entry<TState, TState> e : memento.getSavedHistoryStates().entrySet()) {
+		for (final Map.Entry<S, S> e : memento.getSavedHistoryStates().entrySet()) {
 			superToSubState.put(states.getState(e.getKey()), states.getState(e.getValue()));
 		}
 	}
@@ -329,9 +329,9 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @param memento the memento to use
 	 */
-	public void passivate(final StateMachineMemento<TState, TEvent> memento) {
+	public void passivate(final StateMachineMemento<S, E> memento) {
 		memento.setCurrentState(getCurrentStateId());
-		for (final Map.Entry<InternalState<TStateMachine, TState, TEvent>, InternalState<TStateMachine, TState, TEvent>> e : superToSubState
+		for (final Map.Entry<InternalState<TStateMachine, S, E>, InternalState<TStateMachine, S, E>> e : superToSubState
 				.entrySet()) {
 			memento.putHistoryState(e.getKey().getId(), e.getValue().getId());
 		}

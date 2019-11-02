@@ -23,7 +23,6 @@ import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
-import ch.bbv.fsm.impl.internal.statemachine.state.InternalStateImpl;
 
 /**
  * Mapping between a internalState and its transitions.
@@ -48,7 +47,7 @@ public class TransitionDictionary<TStateMachine extends StateMachine<S, E>, S ex
 	 * 
 	 * @param state the internalState this transitions belong to.
 	 */
-	public TransitionDictionary(final InternalStateImpl<TStateMachine, S, E> state) {
+	public TransitionDictionary(final InternalState<TStateMachine, S, E> state) {
 		this.internalState = state;
 		this.transitions = new Multimap<>();
 	}

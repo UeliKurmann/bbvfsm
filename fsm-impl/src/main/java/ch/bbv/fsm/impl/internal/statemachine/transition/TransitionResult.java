@@ -27,8 +27,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
  * The implementation of {@link TransitionResult}.
  * 
  * @param <TStateMachine> the type of state machine
- * @param <S>        the type of the states
- * @param <E>        the type of the events
+ * @param <S>             the type of the states
+ * @param <E>             the type of the events
  */
 public class TransitionResult<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
