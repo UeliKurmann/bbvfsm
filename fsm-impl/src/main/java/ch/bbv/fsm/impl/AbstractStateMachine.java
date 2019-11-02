@@ -6,17 +6,17 @@ import ch.bbv.fsm.memento.StateMachineMemento;
 /**
  * Base class for finite state machine implementations.
  * 
- * @param <TState>
+ * @param <S>
  *            the type of the states.
- * @param <TEvent>
+ * @param <E>
  *            the type of the events.
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachine<TState, TEvent> {
+public class AbstractStateMachine<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements StateMachine<S, E> {
 
-	private final StateMachine<TState, TEvent> driver;
+	private final StateMachine<S, E> driver;
 
 	/**
 	 * Create a state machine.
@@ -24,17 +24,17 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEv
 	 * @param driver
 	 *            the executor of the state event machine.
 	 */
-	protected AbstractStateMachine(final StateMachine<TState, TEvent> driver) {
+	protected AbstractStateMachine(final StateMachine<S, E> driver) {
 		this.driver = driver;
 	}
 
 	@Override
-	public final void fire(final TEvent eventId, final Object... eventArguments) {
+	public final void fire(final E eventId, final Object... eventArguments) {
 		driver.fire(eventId, eventArguments);
 	}
 
 	@Override
-	public final void firePriority(final TEvent eventId,
+	public final void firePriority(final E eventId,
 			final Object... eventArguments) {
 		driver.firePriority(eventId, eventArguments);
 	}
@@ -60,24 +60,24 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEv
 	}
 
 	@Override
-	public final TState getCurrentState() {
+	public final S getCurrentState() {
 		return driver.getCurrentState();
 	}
 
 	@Override
-	public ch.bbv.fsm.StateMachine.LiveCycle getRunningState() {
+	public LiveCycle getRunningState() {
 		return driver.getRunningState();
 	}
 
 	@Override
 	public void passivate(
-			final StateMachineMemento<TState, TEvent> stateMachineMemento) {
+			final StateMachineMemento<S, E> stateMachineMemento) {
 		driver.passivate(stateMachineMemento);
 	}
 
 	@Override
 	public void activate(
-			final StateMachineMemento<TState, TEvent> stateMachineMemento) {
+			final StateMachineMemento<S, E> stateMachineMemento) {
 		driver.activate(stateMachineMemento);
 	}
 }
