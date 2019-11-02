@@ -23,16 +23,12 @@ import ch.bbv.fsm.StateMachine;
 /**
  * The exception event argument.
  * 
- * @author Ueli Kurmann  
- * @param <TState>
- *            the type of the states.
- * @param <TEvent>
- *            the type of the events.
- * @param <TStateMachine>
- *            the type of the state machine
+ * @author Ueli Kurmann
+ * @param <S>   the type of the states.
+ * @param <E>   the type of the events.
+ * @param <FSM> the type of the state machine
  */
-public interface ExceptionEvent<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEvent<TStateMachine, TState, TEvent> {
+public interface ExceptionEvent<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends ContextEvent<FSM, S, E> {
 
 	/**
 	 * Returns the exception.

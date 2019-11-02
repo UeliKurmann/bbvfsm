@@ -23,54 +23,46 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Event handler of the state machine.
  * 
- * @author Ueli Kurmann  
- * @param <TState>
- *            the type of the states.
- * @param <TEvent>
- *            the type of the events.
- * @param <TStateMachine>
- *            the type of the state machine
+ * @author Ueli Kurmann
+ * @param <S>   the type of the states.
+ * @param <E>   the type of the events.
+ * @param <FSM> the type of the state machine
  */
-public interface StateMachineEventHandler<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface StateMachineEventHandler<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * Occurs when an exception was thrown inside the state machine.
 	 * 
-	 * @param arg
-	 *            the event argument.
+	 * @param arg the event argument.
 	 */
-	void onExceptionThrown(ExceptionEvent<TStateMachine, TState, TEvent> arg);
+	void onExceptionThrown(ExceptionEvent<FSM, S, E> arg);
 
 	/**
 	 * Occurs when a transition begins.
 	 * 
-	 * @param args
-	 *            the event argument.
+	 * @param args the event argument.
 	 */
-	void onTransitionBegin(TransitionEvent<TStateMachine, TState, TEvent> args);
+	void onTransitionBegin(TransitionEvent<FSM, S, E> args);
 
 	/**
 	 * Occurs when a transition completed.
 	 * 
-	 * @param arg
-	 *            the completion event
+	 * @param arg the completion event
 	 */
-	void onTransitionCompleted(TransitionCompletedEvent<TStateMachine, TState, TEvent> arg);
+	void onTransitionCompleted(TransitionCompletedEvent<FSM, S, E> arg);
 
 	/**
 	 * Occurs when no transition could be executed.
 	 * 
-	 * @param arg
-	 *            the event argument.
+	 * @param arg the event argument.
 	 */
-	void onTransitionDeclined(TransitionEvent<TStateMachine, TState, TEvent> arg);
+	void onTransitionDeclined(TransitionEvent<FSM, S, E> arg);
 
 	/**
 	 * Occurs when an exception was thrown inside a transition of the state machine.
 	 * 
-	 * @param arg
-	 *            the event argument.
+	 * @param arg the event argument.
 	 */
-	void onTransitionThrowsException(TransitionExceptionEvent<TStateMachine, TState, TEvent> arg);
+	void onTransitionThrowsException(TransitionExceptionEvent<FSM, S, E> arg);
 
 }

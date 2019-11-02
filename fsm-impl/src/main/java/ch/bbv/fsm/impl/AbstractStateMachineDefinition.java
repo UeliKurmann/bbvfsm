@@ -2,6 +2,7 @@ package ch.bbv.fsm.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 
 	@Override
 	public void addEventHandler(final StateMachineEventHandler<FSM, S, E> handler) {
-		this.eventHandler.add(handler);
+		this.eventHandler.add(Objects.requireNonNull(handler));
 	}
 
 	@Override
@@ -96,11 +97,15 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 		return name;
 	}
 
+	private StateDictionary<FSM, S, E> getStates() {
+		return this.model.getStates();
+	}
+
 	@Override
 	public FSM createActiveStateMachine(final String name, final S initialState) {
 		final ActiveStateMachineDriver<FSM, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(activeStateMachine);
-		activeStateMachine.initialize(stateMachine, name, this.model.getStates(), initialState, eventHandler);
+		activeStateMachine.initialize(stateMachine, name, getStates(), initialState, eventHandler);
 		return stateMachine;
 	}
 
@@ -108,7 +113,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createActiveStateMachine(final String name) {
 		final ActiveStateMachineDriver<FSM, S, E> activeStateMachine = new ActiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(activeStateMachine);
-		activeStateMachine.initialize(stateMachine, name, this.model.getStates(), getInitialState(), eventHandler);
+		activeStateMachine.initialize(stateMachine, name, getStates(), getInitialState(), eventHandler);
 		return stateMachine;
 	}
 
@@ -116,7 +121,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createPassiveStateMachine(final String name, final S initialState) {
 		final PassiveStateMachineDriver<FSM, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(passiveStateMachine);
-		passiveStateMachine.initialize(stateMachine, name, this.model.getStates(), initialState, eventHandler);
+		passiveStateMachine.initialize(stateMachine, name, getStates(), initialState, eventHandler);
 		return stateMachine;
 	}
 
@@ -124,7 +129,7 @@ public abstract class AbstractStateMachineDefinition<FSM extends StateMachine<S,
 	public FSM createPassiveStateMachine(final String name) {
 		final PassiveStateMachineDriver<FSM, S, E> passiveStateMachine = new PassiveStateMachineDriver<>();
 		final FSM stateMachine = createStateMachine(passiveStateMachine);
-		passiveStateMachine.initialize(stateMachine, name, this.model.getStates(), getInitialState(), eventHandler);
+		passiveStateMachine.initialize(stateMachine, name, getStates(), getInitialState(), eventHandler);
 		return stateMachine;
 	}
 

@@ -49,6 +49,8 @@ public class Tennis {
 		}
 
 	}
+	
+	
 
 	private class TennisTestStateMachineDefinition extends AbstractStateMachineDefinition<TennisTestStateMachine, States, Events> {
 
@@ -79,6 +81,7 @@ public class Tennis {
 	@Before
 	public void setup() {
 		this.scorer = new TennisTestStateMachineDefinition();
+		this.scorer.addEventHandler(null);
 		this.scorer.in(States._0_0).executeOnEntry(setStateAction, States._0_0);
 		this.scorer.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
 		this.scorer.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);

@@ -24,17 +24,17 @@ import ch.bbv.fsm.StateMachine;
  * Defines a context event argument.
  * 
  * @author Ueli Kurmann  
- * @param <TState>
+ * @param <S>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
- * @param <TStateMachine>
+ * @param <FSM>
  *            the type of the state machine
  */
-public interface ContextEvent<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface ContextEvent<FSM extends StateMachine<S, TEvent>, S extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * The source context.
 	 */
-	TStateMachine getSource();
+	FSM getSource();
 }

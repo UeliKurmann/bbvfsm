@@ -28,34 +28,34 @@ import ch.bbv.fsm.StateMachine;
  *            the type of the states.
  * @param <E>
  *            the type of the events.
- * @param <FSM>
+ * @param <SM>
  *            the type of the state machine
  */
-public abstract class StateMachineEventHandlerAdapter<FSM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		implements StateMachineEventHandler<FSM, S, E> {
+public abstract class StateMachineEventHandlerAdapter<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
+		implements StateMachineEventHandler<SM, S, E> {
 
 	@Override
-	public void onExceptionThrown(final ExceptionEvent<FSM, S, E> arg) {
+	public void onExceptionThrown(final ExceptionEvent<SM, S, E> arg) {
 		// empty method body
 	}
 
 	@Override
-	public void onTransitionBegin(final TransitionEvent<FSM, S, E> args) {
+	public void onTransitionBegin(final TransitionEvent<SM, S, E> args) {
 		// empty method body
 	}
 
 	@Override
-	public void onTransitionCompleted(final TransitionCompletedEvent<FSM, S, E> arg) {
+	public void onTransitionCompleted(final TransitionCompletedEvent<SM, S, E> arg) {
 		// empty method body
 	}
 
 	@Override
-	public void onTransitionDeclined(final TransitionEvent<FSM, S, E> arg) {
+	public void onTransitionDeclined(final TransitionEvent<SM, S, E> arg) {
 		// empty method body
 	}
 
 	@Override
-	public void onTransitionThrowsException(final TransitionExceptionEvent<FSM, S, E> arg) {
+	public void onTransitionThrowsException(final TransitionExceptionEvent<SM, S, E> arg) {
 		// empty method body
 	}
 }
