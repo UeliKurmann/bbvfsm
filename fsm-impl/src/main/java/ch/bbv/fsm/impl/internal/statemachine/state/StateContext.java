@@ -73,27 +73,9 @@ public class StateContext<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 			return this.stateId;
 		}
 
-		/**
-		 * Sets the record type.
-		 * 
-		 * @param recordType the record type.
-		 */
-		public void setRecordType(final RecordType recordType) {
-			this.recordType = recordType;
-		}
-
-		/**
-		 * Sets the state id.
-		 * 
-		 * @param stateId the state id.
-		 */
-		public void setStateId(final S stateId) {
-			this.stateId = stateId;
-		}
-
 		@Override
 		public String toString() {
-			return this.recordType + " " + this.stateId;
+			return getRecordType() + " " + getStateId();
 		}
 	}
 

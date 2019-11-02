@@ -15,7 +15,7 @@ import ch.bbv.fsm.StateMachine;
 public interface FsmCall<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * The execute method.
+	 * The execute method without parameters.
 	 * 
 	 * @param fsm
 	 *            the state machine.
