@@ -224,7 +224,7 @@ public abstract class BaseStateMachineTest {
 
 		this.testee.terminate();
 
-		Assert.assertFalse(LiveCycle.Running.equals(this.testee.getRunningState()));
+		Assert.assertFalse(LiveCycle.Running.equals(this.testee.getStatus()));
 
 		this.testee.fire(Events.B);
 		this.testee.fire(Events.C);

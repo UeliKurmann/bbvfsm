@@ -42,14 +42,14 @@ abstract class AbstractStateMachineDriver<SM extends StateMachine<S, E>, S exten
 	}
 
 	@Override
-	public LiveCycle getRunningState() {
+	public LiveCycle getStatus() {
 		return liveCycle;
 	}
 
 	@Override
 	public void start() {
-		if (LiveCycle.Created != getRunningState()) {
-			throw new IllegalStateException("Starting the statemachine is not allowed in this state. State is " + getRunningState().name());
+		if (LiveCycle.Created != getStatus()) {
+			throw new IllegalStateException("Starting the statemachine is not allowed in this state. State is " + getStatus().name());
 		}
 		liveCycle = LiveCycle.Running;
 		stateMachineInterpreter.initialize();

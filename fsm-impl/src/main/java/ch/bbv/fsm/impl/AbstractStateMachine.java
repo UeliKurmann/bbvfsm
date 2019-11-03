@@ -60,8 +60,8 @@ public abstract class AbstractStateMachine<SM extends StateMachine<S, E>, S exte
 	}
 
 	@Override
-	public LiveCycle getRunningState() {
-		return driver.getRunningState();
+	public LiveCycle getStatus() {
+		return driver.getStatus();
 	}
 
 	@Override

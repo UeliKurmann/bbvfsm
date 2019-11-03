@@ -62,7 +62,7 @@ public interface StateMachine<S extends Enum<?>, E extends Enum<?>> {
 	/**
 	 * Returns the live cycles state of this state machine.
 	 */
-	LiveCycle getRunningState();
+	LiveCycle getStatus();
 
 	/**
 	 * Returns the number of queued events.
