@@ -23,45 +23,37 @@ import ch.bbv.fsm.action.FsmAction2;
 /**
  * Possibilities to execute an action.
  *
- * @param <TStateMachine>
- *            the type of state machine
- * @param <S>
- *            the type of the states.
- * @param <E>
- *            the type of the events.
+ * @param <SM> the type of state machine
+ * @param <S>  the type of the states.
+ * @param <E>  the type of the events.
  */
-public interface ExecuteSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		extends GuardSyntax<TStateMachine, S, E> {
+public interface ExecuteSyntax<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends GuardSyntax<SM, S, E> {
 
 	/**
 	 * Defines the actions to execute on a transition.
 	 *
-	 * @param action
-	 *            The action class.
+	 * @param action The action class.
 	 */
-	ExecuteSyntax<TStateMachine, S, E> execute(
-			FsmAction0<TStateMachine, S, E> action);
+	ExecuteSyntax<SM, S, E> execute(FsmAction0<SM, S, E> action);
 
 	/**
 	 * Defines the actions to execute on a transition.
 	 * 
 	 * @param action the action.
-	 * @param <T> the type of the one and only parameter.
+	 * @param <T>    the type of the one and only parameter.
 	 * 
 	 * @return
 	 */
-	<T> ExecuteSyntax<TStateMachine, S, E> execute(
-			FsmAction1<TStateMachine, S, E, T> action);
+	<T> ExecuteSyntax<SM, S, E> execute(FsmAction1<SM, S, E, T> action);
 
 	/**
 	 * Defines the actions to execute on a transition.
 	 * 
 	 * @param action the action.
-	 * @param <T1> the type of the first parameter.
-	 * @param <T2> the type of the second parameter.
+	 * @param <T1>   the type of the first parameter.
+	 * @param <T2>   the type of the second parameter.
 	 * @return
 	 */
-	<T1, T2> ExecuteSyntax<TStateMachine, S, E> execute(
-			FsmAction2<TStateMachine, S, E, T1, T2> action);
+	<T1, T2> ExecuteSyntax<SM, S, E> execute(FsmAction2<SM, S, E, T1, T2> action);
 
 }

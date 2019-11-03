@@ -5,7 +5,6 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;
 import ch.bbv.fsm.action.FsmAction0;
-import ch.bbv.fsm.action.FsmAction1;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
@@ -69,7 +68,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 	/**
 	 * Announces the floor.
 	 */
-	FsmAction1<ElevatorStateMachine, State, Event, String> announceFloorAction = (fsm, x) -> System.out.println("announceFloor: 1" + x);
+	FsmAction0<ElevatorStateMachine, State, Event> announceFloorAction = (fsm) -> System.out.println("announceFloor: 1");
 
 	/**
 	 * Announces that the elevator is overloaded.
@@ -93,7 +92,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 
 		in(State.Healthy).on(Event.ErrorOccured).goTo(State.Error);
 		in(State.Error).on(Event.Reset).goTo(State.Healthy);
-		in(State.OnFloor).executeOnEntry(announceFloorAction, "xxx")//
+		in(State.OnFloor).executeOnEntry(announceFloorAction)//
 				.on(Event.CloseDoor).goTo(State.DoorClosed)//
 				.on(Event.OpenDoor).goTo(State.DoorOpen)//
 				.on(Event.GoUp).goTo(State.MovingUp).onlyIf(overloadFunction)//

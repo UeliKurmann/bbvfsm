@@ -24,12 +24,11 @@ import ch.bbv.fsm.guard.Function;
 /**
  * Guard a transition.
  * 
- * @param <S>             the type of the states.
- * @param <E>             the type of the events.
- * @param <TStateMachine> the type of state machine
+ * @param <S>  the type of the states.
+ * @param <E>  the type of the events.
+ * @param <SM> the type of state machine
  */
-public interface GuardSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		extends EventSyntax<TStateMachine, S, E> {
+public interface GuardSyntax<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends EventSyntax<SM, S, E> {
 
 	/**
 	 * Defines a guard for a transition.
@@ -37,5 +36,5 @@ public interface GuardSyntax<TStateMachine extends StateMachine<S, E>, S extends
 	 * @param guard the guard.
 	 * @return Event syntax.
 	 */
-	EventSyntax<TStateMachine, S, E> onlyIf(Function<TStateMachine, S, E, Object[], Boolean> guard);
+	EventSyntax<SM, S, E> onlyIf(Function<SM, S, E, Object[], Boolean> guard);
 }

@@ -23,30 +23,23 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Defines a function with one parameter.
  * 
- * @author Ueli Kurmann 
- * @param <ParameterType>
- *            parameter type
- * @param <ReturnType>
- *            return type
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the state enumeration
- * @param <TEvent>
- *            the event enumeration
+ * @author Ueli Kurmann
+ * @param <ParameterType> parameter type
+ * @param <ReturnType>    return type
+ * @param <SM>            the type of state machine
+ * @param <S>             the state enumeration
+ * @param <E>             the event enumeration
  */
 @FunctionalInterface
-public interface Function<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>, ParameterType, ReturnType> {
+public interface Function<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>, ParameterType, ReturnType> {
 
 	/**
 	 * Executes the function.
 	 * 
-	 * @param stateMachine
-	 *            the calling state machine
-	 * @param parameter
-	 *            the parameter of the function.
+	 * @param stateMachine the calling state machine
+	 * @param parameter    the parameter of the function.
 	 * @return the return value of the function.
 	 */
-	ReturnType execute(TStateMachine stateMachine, ParameterType parameter);
+	ReturnType execute(SM stateMachine, ParameterType parameter);
 
 }

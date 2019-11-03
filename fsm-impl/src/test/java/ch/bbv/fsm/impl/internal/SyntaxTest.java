@@ -44,14 +44,12 @@ public class SyntaxTest {
         return true;
     }
 
-    public Void fooEntry(final String text) {
+    public void fooEntry(final String text) {
         this.fooEntryValue = text;
-        return null;
     }
 
-    public Void fooExit(final String text) {
+    public void fooExit(final String text) {
         this.fooExitValue = text;
-        return null;
     }
 
     @Before
@@ -59,11 +57,11 @@ public class SyntaxTest {
         this.definition = new SimpleStateMachineDefinition<>(States.A);
 
         this.definition.in(States.A) //
-                .executeOnEntry((fsm, p) -> this.fooEntry(ENTRY_A), null) //
-                .executeOnExit((sm, p) -> this.fooExit(EXIT_A), null).on(Events.toB) //
+                .executeOnEntry((fsm) -> this.fooEntry(ENTRY_A)) //
+                .executeOnExit((sm) -> this.fooExit(EXIT_A)).on(Events.toB) //
                 .goTo(States.B).onlyIf((sm, p) -> this.bar((boolean) p[0]));
 
-        this.definition.in(States.B).executeOnEntry((sm, p) -> this.fooEntry(ENTRY_B), null).on(Events.toB).goTo(States.B)
+        this.definition.in(States.B).executeOnEntry((sm) -> this.fooEntry(ENTRY_B)).on(Events.toB).goTo(States.B)
                 .onlyIf((sm, p) -> this.bar((boolean) p[0]));
 
         this.definition.in(States.B).on(Events.toD).goTo(States.D);

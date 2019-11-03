@@ -24,7 +24,7 @@ package ch.bbv.fsm.impl.internal.driver;
  * @author Ueli Kurmann
  * @param <E> the type of the event.
  */
-class EventInformation<E> {
+class EventHolder<E> {
 	private E eventId;
 	private Object[] eventArguments;
 
@@ -34,9 +34,13 @@ class EventInformation<E> {
 	 * @param eventId        the event id.
 	 * @param eventArguments the event arguments.
 	 */
-	EventInformation(final E eventId, final Object[] eventArguments) {
+	private EventHolder(final E eventId, final Object[] eventArguments) {
 		this.eventId = eventId;
 		this.eventArguments = eventArguments;
+	}
+
+	public static <E> EventHolder<E> create(E eventId, Object[] eventArguments) {
+		return new EventHolder<E>(eventId, eventArguments);
 	}
 
 	/**
@@ -57,21 +61,4 @@ class EventInformation<E> {
 		return this.eventId;
 	}
 
-	/**
-	 * Sets the event arguments.
-	 * 
-	 * @param eventArguments the event arguments.
-	 */
-	public void setEventArguments(final Object[] eventArguments) {
-		this.eventArguments = eventArguments;
-	}
-
-	/**
-	 * Sets the event id.
-	 * 
-	 * @param eventId the event id.
-	 */
-	public void setEventId(final E eventId) {
-		this.eventId = eventId;
-	}
 }

@@ -46,7 +46,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, 
 	/**
 	 * List of all queued events.
 	 */
-	private final BlockingDeque<EventInformation<E>> events;
+	private final BlockingDeque<EventHolder<E>> events;
 
 	private ExecutorService executorService;
 
@@ -71,7 +71,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, 
 	private void execute() {
 		try {
 			while (LiveCycle.Running == getRunningState()) {
-				final EventInformation<E> eventToProcess;
+				final EventHolder<E> eventToProcess;
 				synchronized (checkProcessingLock) {
 					eventToProcess = this.getNextEventToProcess();
 					processing = eventToProcess != null;
@@ -99,12 +99,12 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, 
 
 	@Override
 	public void fire(final E eventId, final Object... eventArguments) {
-		this.events.addLast(new EventInformation<>(eventId, eventArguments));
+		this.events.addLast(EventHolder.create(eventId, eventArguments));
 	}
 
 	@Override
 	public void firePriority(final E eventId, final Object... eventArguments) {
-		this.events.addFirst(new EventInformation<>(eventId, eventArguments));
+		this.events.addFirst(EventHolder.create(eventId, eventArguments));
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<S, E>, 
 	 * @return The next queued event.
 	 * @throws InterruptedException
 	 */
-	private EventInformation<E> getNextEventToProcess() throws InterruptedException {
+	private EventHolder<E> getNextEventToProcess() throws InterruptedException {
 		return this.events.pollFirst(BLOCKING_TIME_ON_EVENT_MS, TimeUnit.MILLISECONDS);
 	}
 

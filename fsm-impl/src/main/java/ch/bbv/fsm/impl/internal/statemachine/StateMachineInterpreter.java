@@ -120,7 +120,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<S, E>, S
 		final TransitionResult<TStateMachine, S, E> result = this.currentState.fire(context);
 
 		if (!result.isFired()) {
-			LOG.info("No transition possible.");
+			LOG.warn("No transition possible. Current state: {}, fired event: {}", getCurrentStateId(), eventArguments);
 			this.onTransitionDeclined(context);
 			return;
 		}

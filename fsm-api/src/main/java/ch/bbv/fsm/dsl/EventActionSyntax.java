@@ -24,31 +24,25 @@ import ch.bbv.fsm.action.FsmAction0;
 /**
  * Possibilities to do with a transition.
  * 
- * @param <TStateMachine>
- *            the type of the state machine
- * @param <S>
- *            the type of the states.
- * @param <E>
- *            the type of the events.
+ * @param <SM> the type of the state machine
+ * @param <S>  the type of the states.
+ * @param <E>  the type of the events.
  */
-public interface EventActionSyntax<TStateMachine extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		extends EventSyntax<TStateMachine, S, E> {
+public interface EventActionSyntax<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> extends EventSyntax<SM, S, E> {
 
 	/**
 	 * Defines where to go in response to an event.
 	 * 
-	 * @param target
-	 *            the target.
+	 * @param target the target.
 	 * @return Execute syntax.
 	 */
-	ExecuteSyntax<TStateMachine, S, E> goTo(S target);
+	ExecuteSyntax<SM, S, E> goTo(S target);
 
 	/**
 	 * Defines the actions to execute on a transition.
 	 * 
-	 * @param action
-	 *            The actions to be executed.
+	 * @param action The actions to be executed.
 	 */
-	GuardSyntax<TStateMachine, S, E> execute(FsmAction0<TStateMachine, S, E> action);
+	GuardSyntax<SM, S, E> execute(FsmAction0<SM, S, E> action);
 
 }

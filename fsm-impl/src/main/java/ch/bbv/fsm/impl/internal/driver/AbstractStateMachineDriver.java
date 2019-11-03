@@ -71,7 +71,7 @@ abstract class AbstractStateMachineDriver<SM extends StateMachine<S, E>, S exten
 	 * 
 	 * @param e the event to be fired on the state machine.
 	 */
-	void fireEventOnStateMachine(final EventInformation<E> e) {
+	void fireEventOnStateMachine(final EventHolder<E> e) {
 		stateMachineInterpreter.fire(e.getEventId(), e.getEventArguments());
 	}
 

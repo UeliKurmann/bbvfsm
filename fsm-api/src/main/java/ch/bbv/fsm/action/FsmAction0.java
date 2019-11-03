@@ -5,12 +5,12 @@ import ch.bbv.fsm.StateMachine;
 /**
  * A functional interface that can execute actions without a parameter. 
  *
- * @param <TStateMachine>
- * @param <TState>
- * @param <TEvent>
+ * @param <SM>
+ * @param <S>
+ * @param <E>
  */
 @FunctionalInterface
-public interface FsmAction0<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface FsmAction0<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
 	/**
 	 * The functional interface method.
@@ -18,5 +18,5 @@ public interface FsmAction0<TStateMachine extends StateMachine<TState, TEvent>, 
 	 * @param fsm
 	 *            The instance of the SM on which the method will be called.
 	 */
-	void exec(TStateMachine fsm);
+	void exec(SM fsm);
 }

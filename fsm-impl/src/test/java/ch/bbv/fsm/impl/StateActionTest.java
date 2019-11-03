@@ -20,133 +20,126 @@ import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.FsmAction0;
-import ch.bbv.fsm.action.FsmAction1;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class StateActionTest {
 
-  private class StateActionTestStateMachine extends AbstractStateMachine<StateActionTestStateMachine, States, Events> {
+	private class StateActionTestStateMachine extends AbstractStateMachine<StateActionTestStateMachine, States, Events> {
 
-    private Boolean entered;
+		private Boolean entered;
 
-    private Object[] arguments;
+		private Object[] arguments;
 
-    StateActionTestStateMachine(final StateMachine<States, Events> driver) {
-      super(driver);
-    }
+		StateActionTestStateMachine(final StateMachine<States, Events> driver) {
+			super(driver);
+		}
 
-    Boolean getEntered() {
-      return entered;
-    }
+		Boolean getEntered() {
+			return entered;
+		}
 
-    void setEntered(final Boolean entered) {
-      this.entered = entered;
-    }
+		void setEntered(final Boolean entered) {
+			this.entered = entered;
+		}
 
-    Object[] getArguments() {
-      return arguments;
-    }
+		Object[] getArguments() {
+			return arguments;
+		}
 
-    void setArguments(final Object[] arguments) {
-      this.arguments = arguments;
-    }
+		void setArguments(final Object... arguments) {
+			this.arguments = arguments;
+		}
 
-  }
+	}
 
-  private class StateActionTestStateMachineDefinition extends AbstractStateMachineDefinition<StateActionTestStateMachine, States, Events> {
+	private class StateActionTestStateMachineDefinition
+			extends AbstractStateMachineDefinition<StateActionTestStateMachine, States, Events> {
 
-    StateActionTestStateMachineDefinition() {
-      super(States.A);
-    }
+		StateActionTestStateMachineDefinition() {
+			super(States.A);
+		}
 
-    @Override
-    protected StateActionTestStateMachine createStateMachine(final StateMachine<States, Events> driver) {
-      return new StateActionTestStateMachine(driver);
-    }
+		@Override
+		protected StateActionTestStateMachine createStateMachine(final StateMachine<States, Events> driver) {
+			return new StateActionTestStateMachine(driver);
+		}
 
-  }
+	}
 
-  public static class ActionClass implements FsmAction0<StateActionTestStateMachine, States, Events> {
+	public static class ActionClass implements FsmAction0<StateActionTestStateMachine, States, Events> {
 
-    @Override
-    public void exec(final StateActionTestStateMachine fsm) {
-      fsm.setEntered(true);
-    }
-  }
+		@Override
+		public void exec(final StateActionTestStateMachine fsm) {
+			fsm.setEntered(true);
+		}
+	}
 
-  public static class ActionWithParameterClass<T> implements FsmAction1<StateActionTestStateMachine, States, Events, T> {
 
-    @Override
-    public void exec(final StateActionTestStateMachine fsm, final T p1) {
-      fsm.setArguments(new Object[] {p1});
-    }
-  }
+	/**
+	 * Entry actions are executed when a state is entered.
+	 */
+	@Test
+	public void entryAction() {
 
-  /**
-   * Entry actions are executed when a state is entered.
-   */
-  @Test
-  public void entryAction() {
+		final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
 
-    final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
+		stateMachineDefinition.in(States.A).executeOnEntry(new ActionClass());
 
-    stateMachineDefinition.in(States.A).executeOnEntry(new ActionClass());
+		final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
+		fsm.start();
 
-    final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
-    fsm.start();
+		Assert.assertTrue(fsm.getEntered());
+	}
 
-    Assert.assertTrue(fsm.getEntered());
-  }
+	/**
+	 * Exit actions are executed when a state is left.
+	 */
+	@Test
+	public void exitAction() {
 
-  /**
-   * Exit actions are executed when a state is left.
-   */
-  @Test
-  public void exitAction() {
+		final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
 
-    final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
+		stateMachineDefinition.in(States.A).executeOnExit(new ActionClass()).on(Events.B).goTo(States.B);
 
-    stateMachineDefinition.in(States.A).executeOnExit(new ActionClass()).on(Events.B).goTo(States.B);
+		final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
+		fsm.start();
+		fsm.fire(Events.B);
 
-    final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
-    fsm.start();
-    fsm.fire(Events.B);
+		Assert.assertTrue(fsm.getEntered());
+	}
 
-    Assert.assertTrue(fsm.getEntered());
-  }
+	/**
+	 * Entry actions can be parametrized.
+	 */
+	@Test
+	public void parameterizedEntryAction() {
 
-  /**
-   * Entry actions can be parametrized.
-   */
-  @Test
-  public void parameterizedEntryAction() {
+		final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
 
-    final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
+		stateMachineDefinition.in(States.A).executeOnEntry(sm -> sm.setArguments(Integer.valueOf(3)));
 
-    stateMachineDefinition.in(States.A).executeOnEntry(new ActionWithParameterClass<Integer>(), 3);
+		final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("parameterizedEntryAction", States.A);
 
-    final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("parameterizedEntryAction", States.A);
+		fsm.start();
 
-    fsm.start();
+		Assert.assertEquals(3, fsm.getArguments()[0]);
+	}
 
-    Assert.assertEquals(3, fsm.getArguments()[0]);
-  }
+	/**
+	 * Exit actions can be parametrized.
+	 */
+	@Test
+	public void parametrizedExitAction() {
 
-  /**
-   * Exit actions can be parametrized.
-   */
-  @Test
-  public void parametrizedExitAction() {
+		final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
 
-    final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
+		stateMachineDefinition.in(States.A).executeOnExit(sm -> sm.setArguments(Integer.valueOf(3))).on(Events.B).goTo(States.B);
 
-    stateMachineDefinition.in(States.A).executeOnExit(new ActionWithParameterClass<Integer>(), 3).on(Events.B).goTo(States.B);
+		final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
+		fsm.start();
+		fsm.fire(Events.B);
 
-    final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
-    fsm.start();
-    fsm.fire(Events.B);
-
-    Assert.assertEquals(3, fsm.getArguments()[0]);
-  }
+		Assert.assertEquals(3, fsm.getArguments()[0]);
+	}
 }

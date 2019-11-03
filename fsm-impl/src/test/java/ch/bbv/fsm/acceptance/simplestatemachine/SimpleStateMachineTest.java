@@ -13,29 +13,42 @@
  *
  * Contributors: bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.dsl;
+package ch.bbv.fsm.acceptance.simplestatemachine;
 
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.action.FsmAction0;
+import org.junit.Before;
+import org.junit.Test;
+
+import ch.bbv.fsm.StateMachineFactory;
+import ch.bbv.fsm.impl.Fsm;
+import ch.bbv.fsm.impl.SimpleStateMachine;
 
 /**
- * Entry Action Syntax.
- * 
+ * Example: Tennis Scorer.
+ *
  * @author Ueli Kurmann
- * 
- * @param <SM> the type of the state machine
- * @param <S>  the type of the states.
- * @param <E>  the type of the events.
+ *
  */
-public interface EntryActionSyntax<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>>
-		extends ExitActionSyntax<SM, S, E>, EventSyntax<SM, S, E> {
+public class SimpleStateMachineTest {
 
-	/**
-	 * Defines an entry action.
-	 * 
-	 * @param action the {@link FsmAction0} to be executed.
-	 * @return the ExitActionSyntax
-	 */
-	ExitActionSyntax<SM, S, E> executeOnEntry(FsmAction0<SM, S, E> action);
+	public enum Events {
+		TO_B, TO_C, TO_D, TO_E, TO_F
+	}
+
+	public enum States {
+		A, B, C, D, E, F;
+	}
+
+	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> factory;
+
+	@Before
+	public void setup() {
+		this.factory = Fsm.create(States.A, def -> {
+			//def.in(States.A).executeOnEntry()
+		});
+	}
+
+	@Test
+	public void scoreWhenIn0to0AandBScores3TimesSwitchingThenDeuce() {
+	}
 
 }

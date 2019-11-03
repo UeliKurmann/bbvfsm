@@ -38,7 +38,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 	/**
 	 * List of all queued events.
 	 */
-	private final LinkedList<EventInformation<E>> events;
+	private final LinkedList<EventHolder<E>> events;
 
 	/**
 	 * Do not process event while already processing an event. This happens if an
@@ -55,13 +55,13 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 
 	@Override
 	public synchronized void fire(final E eventId, final Object... eventArguments) {
-		this.events.addLast(new EventInformation<>(eventId, eventArguments));
+		this.events.addLast(EventHolder.create(eventId, eventArguments));
 		this.execute();
 	}
 
 	@Override
 	public synchronized void firePriority(final E eventId, final Object... eventArguments) {
-		this.events.addFirst(new EventInformation<>(eventId, eventArguments));
+		this.events.addFirst(EventHolder.create(eventId, eventArguments));
 		this.execute();
 	}
 
@@ -102,8 +102,8 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 	 * 
 	 * @return The next queued event.
 	 */
-	private EventInformation<E> getNextEventToProcess() {
-		final EventInformation<E> e = this.events.getFirst();
+	private EventHolder<E> getNextEventToProcess() {
+		final EventHolder<E> e = this.events.getFirst();
 		this.events.removeFirst();
 		return e;
 	}
@@ -113,7 +113,7 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<S, E>,
 	 */
 	private void processQueuedEvents() {
 		while (!this.events.isEmpty()) {
-			final EventInformation<E> eventToProcess = this.getNextEventToProcess();
+			final EventHolder<E> eventToProcess = this.getNextEventToProcess();
 			this.fireEventOnStateMachine(eventToProcess);
 		}
 	}

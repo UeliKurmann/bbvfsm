@@ -63,29 +63,32 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 	}
 
 	@Override
+	public ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction0<TStateMachine, TState, TEvent> action) {
+		this.currentTransition.getActions().add(new FsmCall0<TStateMachine, TState, TEvent>(action));
+		return this;
+	}
+
+	@Override
+	public <T> ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction1<TStateMachine, TState, TEvent, T> action) {
+		this.currentTransition.getActions().add(new FsmCall1<TStateMachine, TState, TEvent, T>(action, null));
+		return this;
+	}
+
+	@Override
+	public <T1, T2> ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction2<TStateMachine, TState, TEvent, T1, T2> action) {
+		this.currentTransition.getActions().add(new FsmCall2<TStateMachine, TState, TEvent, T1, T2>(action, null, null));
+		return this;
+	}
+
+	@Override
 	public ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(final FsmAction0<TStateMachine, TState, TEvent> action) {
 		this.InternalStateImpl.setEntryAction(new FsmCall0<TStateMachine, TState, TEvent>(action));
 		return this;
 	}
 
 	@Override
-	public <T> ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(
-			final FsmAction1<TStateMachine, TState, TEvent, T> actionClass, final T parameter) {
-
-		this.InternalStateImpl.setEntryAction(new FsmCall1<TStateMachine, TState, TEvent, T>(actionClass, parameter));
-		return this;
-	}
-
-	@Override
 	public EventSyntax<TStateMachine, TState, TEvent> executeOnExit(final FsmAction0<TStateMachine, TState, TEvent> actionClass) {
 		this.InternalStateImpl.setExitAction(new FsmCall0<TStateMachine, TState, TEvent>(actionClass));
-		return this;
-	}
-
-	@Override
-	public <T> EventSyntax<TStateMachine, TState, TEvent> executeOnExit(final FsmAction1<TStateMachine, TState, TEvent, T> actionClass,
-			final T parameter) {
-		this.InternalStateImpl.setExitAction(new FsmCall1<TStateMachine, TState, TEvent, T>(actionClass, parameter));
 		return this;
 	}
 
@@ -105,31 +108,6 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 	@Override
 	public EventSyntax<TStateMachine, TState, TEvent> onlyIf(final Function<TStateMachine, TState, TEvent, Object[], Boolean> guard) {
 		this.currentTransition.setGuard(guard);
-		return this;
-	}
-
-	@Override
-	public <T1, T2> EventSyntax<TStateMachine, TState, TEvent> executeOnExit(
-			final FsmAction2<TStateMachine, TState, TEvent, T1, T2> actionClass, final T1 parameter1, final T2 parameter2) {
-		this.InternalStateImpl.setExitAction(new FsmCall2<TStateMachine, TState, TEvent, T1, T2>(actionClass, parameter1, parameter2));
-		return this;
-	}
-
-	@Override
-	public ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction0<TStateMachine, TState, TEvent> action) {
-		this.currentTransition.getActions().add(new FsmCall0<TStateMachine, TState, TEvent>(action));
-		return this;
-	}
-
-	@Override
-	public <T> ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction1<TStateMachine, TState, TEvent, T> action) {
-		this.currentTransition.getActions().add(new FsmCall1<TStateMachine, TState, TEvent, T>(action, null));
-		return this;
-	}
-
-	@Override
-	public <T1, T2> ExecuteSyntax<TStateMachine, TState, TEvent> execute(final FsmAction2<TStateMachine, TState, TEvent, T1, T2> action) {
-		this.currentTransition.getActions().add(new FsmCall2<TStateMachine, TState, TEvent, T1, T2>(action, null, null));
 		return this;
 	}
 }
