@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.FsmAction0;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 import ch.bbv.fsm.impl.AbstractStateMachine;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
@@ -40,7 +40,7 @@ public class FunctionDefinitionTest {
 
     private final StringBuffer log = new StringBuffer();
 
-    private final List<Function<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean>> callingActions = new LinkedList<>();
+    private final List<Guard<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean>> callingActions = new LinkedList<>();
 
     String consumeLog() {
       return log.toString();
@@ -50,7 +50,7 @@ public class FunctionDefinitionTest {
       this.log.append(msg);
     }
 
-    void addCallingAction(final Function<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean> callingAction) {
+    void addCallingAction(final Guard<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean> callingAction) {
       callingActions.add(callingAction);
     }
 
@@ -82,10 +82,10 @@ public class FunctionDefinitionTest {
     }
   }
 
-  public static class WriteLogFunction implements Function<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean> {
+  public static class WriteLogFunction implements Guard<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean> {
 
     @Override
-    public Boolean execute(final FunctionDefinitionTestStateMachine stateMachine, final Object[] parameter) {
+    public boolean execute(final FunctionDefinitionTestStateMachine stateMachine, final Object[] parameter) {
 
       stateMachine.addCallingAction(this);
       stateMachine.log("execute(): FunctionDefinitionTest.WriteLogFunction.class");

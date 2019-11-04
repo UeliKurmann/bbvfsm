@@ -19,7 +19,7 @@
 package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 
 /**
  * Guard a transition.
@@ -36,5 +36,5 @@ public interface GuardSyntax<SM extends StateMachine<S, E>, S extends Enum<?>, E
 	 * @param guard the guard.
 	 * @return Event syntax.
 	 */
-	EventSyntax<SM, S, E> onlyIf(Function<SM, S, E, Object[], Boolean> guard);
+	EventSyntax<SM, S, E> onlyIf(Guard<SM, S, E, Object[], Boolean> guard);
 }

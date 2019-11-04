@@ -54,7 +54,7 @@ public class SimpleStateMachineTest {
 	public void test2() {
 		StringBuilder sb = new StringBuilder();
 		SimpleStateMachine<States, Events> sm = Fsm.<States, Events>create(States.A, def -> {
-			def.in(States.A).on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB"));
+			def.in(States.A).on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB")).onlyIf((fsm, param)->true);
 			def.in(States.A).on(Events.TO_B).goTo(States.C).execute(s -> sb.append("inTransitionToC"));
 			
 		}).createPassiveStateMachine("StateMachine-1");

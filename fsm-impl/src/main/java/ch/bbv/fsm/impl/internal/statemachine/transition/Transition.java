@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 import ch.bbv.fsm.impl.internal.action.FsmCall;
 import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
@@ -47,7 +47,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	private InternalState<SM, S, E> target;
 
-	private Function<SM, S, E, Object[], Boolean> guard;
+	private Guard<SM, S, E, Object[], Boolean> guard;
 
 	/**
 	 * Creates a new instance.
@@ -178,7 +178,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 	 * 
 	 * @return the guard.
 	 */
-	public Function<SM, S, E, Object[], Boolean> getGuard() {
+	public Guard<SM, S, E, Object[], Boolean> getGuard() {
 		return this.guard;
 	}
 
@@ -242,7 +242,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 	 * 
 	 * @param guard the guard function.
 	 */
-	public void setGuard(final Function<SM, S, E, Object[], Boolean> guard) {
+	public void setGuard(final Guard<SM, S, E, Object[], Boolean> guard) {
 		this.guard = guard;
 	}
 

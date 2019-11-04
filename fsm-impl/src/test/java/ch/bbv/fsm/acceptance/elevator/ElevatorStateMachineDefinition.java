@@ -5,7 +5,7 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;
 import ch.bbv.fsm.action.FsmAction0;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
 public class ElevatorStateMachineDefinition extends AbstractStateMachineDefinition<ElevatorStateMachine, State, Event> {
@@ -78,7 +78,7 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 	/**
 	 * Checks whether the elevator is overloaded.
 	 */
-	Function<ElevatorStateMachine, State, Event, Object[], Boolean> overloadFunction = (fsm, argmuments) -> true;
+	Guard<ElevatorStateMachine, State, Event, Object[], Boolean> overloadFunction = (fsm, argmuments) -> true;
 
 	public ElevatorStateMachineDefinition() {
 		super(State.Healthy);

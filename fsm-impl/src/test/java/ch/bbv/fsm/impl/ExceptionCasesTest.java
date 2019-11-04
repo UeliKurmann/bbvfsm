@@ -24,7 +24,7 @@ import ch.bbv.fsm.events.ExceptionEvent;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionEvent;
 import ch.bbv.fsm.events.TransitionExceptionEvent;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -132,11 +132,10 @@ public class ExceptionCasesTest {
 
   private final ThrowExceptionAction throwException = new ThrowExceptionAction();
 
-  public static class ThrowExceptionFunction implements Function<ExceptionCasesTestStateMachine, States, Events, Object[], Boolean> {
+  public static class ThrowExceptionFunction implements Guard<ExceptionCasesTestStateMachine, States, Events, Object[], Boolean> {
 
     @Override
-    public Boolean execute(final ExceptionCasesTestStateMachine stateMachine, final Object[] parameter) {
-
+    public boolean execute(final ExceptionCasesTestStateMachine stateMachine, final Object... parameter) {
       throw stateMachine.getException();
     }
   }

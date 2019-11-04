@@ -24,7 +24,7 @@ import org.junit.Test;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionEvent;
-import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.guard.Guard;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -69,26 +69,26 @@ public class GuardTest {
 		}
 	}
 
-	public static class FunctionTrue implements Function<GuardTestStateMachine, States, Events, Object[], Boolean> {
+	public static class FunctionTrue implements Guard<GuardTestStateMachine, States, Events, Object[], Boolean> {
 
 		@Override
-		public Boolean execute(final GuardTestStateMachine stateMachine, final Object[] parameter) {
+		public boolean execute(final GuardTestStateMachine stateMachine, final Object... parameter) {
 			return true;
 		}
 	}
 
-	public static class FunctionFalse implements Function<GuardTestStateMachine, States, Events, Object[], Boolean> {
+	public static class FunctionFalse implements Guard<GuardTestStateMachine, States, Events, Object[], Boolean> {
 
 		@Override
-		public Boolean execute(final GuardTestStateMachine stateMachine, final Object[] parameter) {
+		public boolean execute(final GuardTestStateMachine stateMachine, final Object... parameter) {
 			return false;
 		}
 	}
 
-	public static class FunctionTrueWithArgs implements Function<GuardTestStateMachine, States, Events, Object[], Boolean> {
+	public static class FunctionTrueWithArgs implements Guard<GuardTestStateMachine, States, Events, Object[], Boolean> {
 
 		@Override
-		public Boolean execute(final GuardTestStateMachine stateMachine, final Object[] parameter) {
+		public boolean execute(final GuardTestStateMachine stateMachine, final Object... parameter) {
 
 			stateMachine.setEventArguments(0, parameter);
 			return true;

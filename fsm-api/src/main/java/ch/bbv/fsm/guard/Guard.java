@@ -31,7 +31,7 @@ import ch.bbv.fsm.StateMachine;
  * @param <E>             the event enumeration
  */
 @FunctionalInterface
-public interface Function<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>, ParameterType, ReturnType> {
+public interface Guard<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>, ParameterType, ReturnType> {
 
 	/**
 	 * Executes the function.
@@ -40,6 +40,6 @@ public interface Function<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 	 * @param parameter    the parameter of the function.
 	 * @return the return value of the function.
 	 */
-	ReturnType execute(SM stateMachine, ParameterType parameter);
+	boolean execute(SM stateMachine, Object... params);
 
 }
