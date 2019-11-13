@@ -85,7 +85,7 @@ public class FunctionDefinitionTest {
   public static class WriteLogFunction implements Guard<FunctionDefinitionTestStateMachine, States, Events, Object[], Boolean> {
 
     @Override
-    public boolean execute(final FunctionDefinitionTestStateMachine stateMachine, final Object[] parameter) {
+    public boolean execute(final FunctionDefinitionTestStateMachine stateMachine, final Object... parameter) {
 
       stateMachine.addCallingAction(this);
       stateMachine.log("execute(): FunctionDefinitionTest.WriteLogFunction.class");

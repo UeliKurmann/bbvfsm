@@ -22,7 +22,7 @@ import org.junit.Test;
 import ch.bbv.fsm.StateMachineFactory;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEvent;
-import ch.bbv.fsm.impl.Fsm;
+import ch.bbv.fsm.impl.StatemachineBuilder;
 import ch.bbv.fsm.impl.SimpleStateMachine;
 
 /**
@@ -61,7 +61,7 @@ public class Tennis {
 
 	@Before
 	public void setup() {
-		this.factory = Fsm.create(States._0_0, def -> {
+		this.factory = StatemachineBuilder.create(States._0_0, def -> {
 			this.handler = new Handler();
 			def.addEventHandler(handler);
 			def.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);

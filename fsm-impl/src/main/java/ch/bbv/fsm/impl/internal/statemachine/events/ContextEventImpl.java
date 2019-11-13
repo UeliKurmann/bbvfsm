@@ -57,6 +57,6 @@ public class ContextEventImpl<TStateMachine extends StateMachine<S, E>, S extend
 
 	@Override
 	public TStateMachine getSource() {
-		return null;
+		return this.stateContext.getStateMachine();
 	}
 }
