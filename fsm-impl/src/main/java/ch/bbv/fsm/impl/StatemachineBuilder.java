@@ -3,9 +3,14 @@ package ch.bbv.fsm.impl;
 import java.util.function.Consumer;
 
 import ch.bbv.fsm.StateMachineFactory;
+import ch.bbv.fsm.impl.builder.BuilderFactory;
+import ch.bbv.fsm.impl.builder.BuilderContext;
 import ch.bbv.fsm.impl.internal.events.AnnotationEventHandler;
 
-public final class StatemachineBuilder {
+public final class StatemachineBuilder<C, S extends Enum<?>, E extends Enum<?>> implements BuilderContext<S, E, C>, BuilderFactory<S, E, C> {
+
+	private C c;
+	private SimpleStateMachineDefinitionWithContext<S, E, C> definition;
 
 	private StatemachineBuilder() {
 		// static helper class
@@ -23,12 +28,15 @@ public final class StatemachineBuilder {
 	 *                     state machine.
 	 * @return the {@link StateMachineFactory}
 	 */
-	public static <S extends Enum<?>, E extends Enum<?>, C> StateMachineFactory<SimpleStateMachineWithContext<S, E, C>, S, E> createWithContext(
-			S initialState, Consumer<SimpleStateMachineDefinitionWithContext<S, E, C>> definition) {
+	public static <S extends Enum<?>, E extends Enum<?>, C> BuilderContext<S, E, C> createWithContext(S initialState,
+			Consumer<SimpleStateMachineDefinitionWithContext<S, E, C>> definition) {
 		SimpleStateMachineDefinitionWithContext<S, E, C> result = new SimpleStateMachineDefinitionWithContext<S, E, C>(initialState);
 		definition.accept(result);
 		result.addEventHandler(new AnnotationEventHandler<S, E, C>());
-		return result;
+
+		StatemachineBuilder<C, S, E> builder = new StatemachineBuilder<C, S, E>();
+		builder.definition = result;
+		return builder;
 	}
 
 	public static <S extends Enum<?>, E extends Enum<?>> StateMachineFactory<SimpleStateMachine<S, E>, S, E> create(S initialState,
@@ -36,6 +44,26 @@ public final class StatemachineBuilder {
 		SimpleStateMachineDefinition<S, E> result = new SimpleStateMachineDefinition<S, E>(initialState);
 		definition.accept(result);
 		return result;
+	}
+
+	@Override
+	public BuilderFactory<S, E, C> context(C c) {
+		this.c = c;
+		return this;
+	}
+
+	@Override
+	public SimpleStateMachineWithContext<S, E, C> buildPassive(String name) {
+		SimpleStateMachineWithContext<S, E, C> sm = this.definition.createPassiveStateMachine(name);
+		sm.set(this.c);
+		return sm;
+	}
+
+	@Override
+	public SimpleStateMachineWithContext<S, E, C> buildActive(String name) {
+		SimpleStateMachineWithContext<S, E, C> sm = this.definition.createActiveStateMachine(name);
+		sm.set(this.c);
+		return sm;
 	}
 
 }

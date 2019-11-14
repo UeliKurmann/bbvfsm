@@ -19,7 +19,7 @@ public class SimpleStateMachineWithContext<S extends Enum<?>, E extends Enum<?>,
 		
 	}
 
-	public void set(C context){
+	void set(C context){
 		this.context = context;
 	}
 	
