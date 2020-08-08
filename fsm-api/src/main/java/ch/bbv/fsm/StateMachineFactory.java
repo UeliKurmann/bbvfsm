@@ -1,5 +1,13 @@
 package ch.bbv.fsm;
 
+/**
+ * State Machine Factory.
+ * @author Ueli Kurmann
+ *
+ * @param <SM> the state machine
+ * @param <S> the enum states
+ * @param <E> the enum events
+ */
 public interface StateMachineFactory<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 	
 	/**

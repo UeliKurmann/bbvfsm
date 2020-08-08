@@ -1,13 +1,10 @@
 package ch.bbv.fsm.acceptance.radio;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.acceptance.radio.RadioStateMachineDefinion.Event;
 import ch.bbv.fsm.acceptance.radio.RadioStateMachineDefinion.State;
@@ -37,8 +34,8 @@ public class RadioPassivateAndActivateAcceptanceTest {
 
 		final Map<State, State> expectedHistory = new HashMap<>();
 		expectedHistory.put(State.On, State.AM);
-		assertThat(memento.getCurrentState(), is(equalTo(State.Off)));
-		assertThat(memento.getSavedHistoryStates(), is(equalTo(expectedHistory)));
+		Assertions.assertThat(memento.getCurrentState()).isEqualTo(State.Off);
+		Assertions.assertThat(memento.getSavedHistoryStates()).isEqualTo(expectedHistory);
 	}
 
 	@Test
@@ -59,7 +56,7 @@ public class RadioPassivateAndActivateAcceptanceTest {
 
 		radioStateMachine.terminate();
 
-		assertThat(radioStateMachine.consumeLog(), is(equalTo("exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
+		Assertions.assertThat(radioStateMachine.consumeLog()).isEqualTo("exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff");
 	}
 
 }

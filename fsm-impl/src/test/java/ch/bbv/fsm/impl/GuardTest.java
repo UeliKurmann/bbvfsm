@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
+Ø *  Copyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
@@ -116,9 +116,9 @@ public class GuardTest {
 		fsm.start();
 
 		fsm.fire(Events.A);
-
-		Assert.assertEquals(States.A, fsm.getCurrentState());
-		Assert.assertTrue(this.transitionDeclined);
+		
+		Assertions.assertThat(fsm.getCurrentState()).isEqualTo(States.A);
+		Assertions.assertThat(this.transitionDeclined).isTrue();
 	}
 
 	/**
@@ -138,8 +138,8 @@ public class GuardTest {
 		fsm.start();
 
 		fsm.fire(Events.A, originalEventArguments);
-
-		Assert.assertSame(originalEventArguments, fsm.getEventArguments()[0]);
+		
+		Assertions.assertThat(fsm.getEventArguments()[0]).isSameAs(originalEventArguments);
 	}
 
 	/**
@@ -160,6 +160,6 @@ public class GuardTest {
 
 		fsm.fire(Events.A);
 
-		Assert.assertEquals(States.C, fsm.getCurrentState());
+		Assertions.assertThat(fsm.getCurrentState()).isEqualTo(States.C);
 	}
 }

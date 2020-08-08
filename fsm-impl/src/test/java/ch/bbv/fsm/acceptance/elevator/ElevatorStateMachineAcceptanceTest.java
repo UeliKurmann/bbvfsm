@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.acceptance.elevator;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
 import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;

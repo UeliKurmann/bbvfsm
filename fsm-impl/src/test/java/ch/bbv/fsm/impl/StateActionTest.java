@@ -15,8 +15,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.FsmAction0;
@@ -89,7 +89,7 @@ public class StateActionTest {
 		final StateActionTestStateMachine fsm = stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
 		fsm.start();
 
-		Assert.assertTrue(fsm.getEntered());
+		Assertions.assertThat(fsm.getEntered()).isTrue();
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class StateActionTest {
 		fsm.start();
 		fsm.fire(Events.B);
 
-		Assert.assertTrue(fsm.getEntered());
+		Assertions.assertThat(fsm.getEntered()).isTrue();
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class StateActionTest {
 
 		fsm.start();
 
-		Assert.assertEquals(3, fsm.getArguments()[0]);
+		Assertions.assertThat(fsm.getArguments()[0]).isEqualTo(3);
 	}
 
 	/**
@@ -131,7 +131,6 @@ public class StateActionTest {
 	 */
 	@Test
 	public void parametrizedExitAction() {
-
 		final StateActionTestStateMachineDefinition stateMachineDefinition = new StateActionTestStateMachineDefinition();
 
 		stateMachineDefinition.in(States.A).executeOnExit(sm -> sm.setArguments(Integer.valueOf(3))).on(Events.B).goTo(States.B);
@@ -140,6 +139,6 @@ public class StateActionTest {
 		fsm.start();
 		fsm.fire(Events.B);
 
-		Assert.assertEquals(3, fsm.getArguments()[0]);
+		Assertions.assertThat(fsm.getArguments()[0]).isEqualTo(3);
 	}
 }

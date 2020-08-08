@@ -68,17 +68,17 @@ public class ElevatorStateMachineDefinition extends AbstractStateMachineDefiniti
 	/**
 	 * Announces the floor.
 	 */
-	FsmAction0<ElevatorStateMachine, State, Event> announceFloorAction = (fsm) -> System.out.println("announceFloor: 1");
+	private final FsmAction0<ElevatorStateMachine, State, Event> announceFloorAction = (fsm) -> System.out.println("announceFloor: 1");
 
 	/**
 	 * Announces that the elevator is overloaded.
 	 */
-	FsmAction0<ElevatorStateMachine, State, Event> announceOverloadAction = fsm -> System.out.println("announceOverload...");
+	private final FsmAction0<ElevatorStateMachine, State, Event> announceOverloadAction = fsm -> System.out.println("announceOverload...");
 
 	/**
 	 * Checks whether the elevator is overloaded.
 	 */
-	Guard<ElevatorStateMachine, State, Event, Object[], Boolean> overloadFunction = (fsm, argmuments) -> true;
+	private final Guard<ElevatorStateMachine, State, Event, Object[], Boolean> overloadFunction = (fsm, argmuments) -> true;
 
 	public ElevatorStateMachineDefinition() {
 		super(State.Healthy);

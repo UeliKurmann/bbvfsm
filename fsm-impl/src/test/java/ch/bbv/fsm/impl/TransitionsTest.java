@@ -15,8 +15,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
@@ -107,8 +107,8 @@ public class TransitionsTest {
     final Object[] eventArguments = new Object[] {1, 2, 3, "test"};
     transitionTestStateMachine.fire(Events.B, new Object[] {eventArguments});
 
-    Assert.assertArrayEquals(eventArguments, transitionTestStateMachine.getArguments1());
-    Assert.assertArrayEquals(eventArguments, transitionTestStateMachine.getArguments2());
+    Assertions.assertThat(transitionTestStateMachine.getArguments1()).isEqualTo(eventArguments);
+    Assertions.assertThat(transitionTestStateMachine.getArguments2()).isEqualTo(eventArguments);
   }
 
   /**
@@ -126,8 +126,8 @@ public class TransitionsTest {
     fsm.start();
     fsm.fire(Events.A);
 
-    Assert.assertTrue(fsm.isExecuted());
-    Assert.assertEquals(States.A, fsm.getCurrentState());
+    Assertions.assertThat(fsm.isExecuted()).isTrue();
+    Assertions.assertThat(fsm.getCurrentState()).isEqualTo(States.A);
   }
 
   /**
@@ -144,8 +144,7 @@ public class TransitionsTest {
     fsm.start();
 
     fsm.fire(Events.C);
-
-    Assert.assertTrue(this.declined);
-    Assert.assertEquals(States.A, fsm.getCurrentState());
+    Assertions.assertThat(this.declined).isTrue();
+    Assertions.assertThat(fsm.getCurrentState()).isEqualTo(States.A);
   }
 }

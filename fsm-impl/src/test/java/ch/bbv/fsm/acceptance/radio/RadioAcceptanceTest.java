@@ -1,10 +1,7 @@
 package ch.bbv.fsm.acceptance.radio;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.acceptance.radio.RadioStateMachineDefinion.Event;
@@ -24,7 +21,7 @@ public class RadioAcceptanceTest {
 
 		radioStateMachine.terminate();
 
-		assertThat(radioStateMachine.consumeLog(), is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
+		Assertions.assertThat(radioStateMachine.consumeLog()).isEqualTo("entryOff.exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff");
 	}
 
 	@Test
@@ -50,11 +47,11 @@ public class RadioAcceptanceTest {
 		radioStateMachine.fire(Event.TogglePower);
 		final String turnOnAgainLog = radioStateMachine.consumeLog();
 
-		assertThat(turnOnLog, is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM")));
-		assertThat(toggleMode, is(equalTo("exitFM.FMtoAM.entryAM.entryPlay")));
-		assertThat(autoTuning, is(equalTo("exitPlay.PlayToAutoTune.entryAutoTune")));
-		assertThat(powerOff, is(equalTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff")));
-		assertThat(turnOnAgainLog, is(equalTo("exitOff.OffToOn.entryOn.entryAM.entryPlay")));
+		Assertions.assertThat(turnOnLog).isEqualTo("entryOff.exitOff.OffToOn.entryOn.entryFM");
+		Assertions.assertThat(toggleMode).isEqualTo("exitFM.FMtoAM.entryAM.entryPlay");
+		Assertions.assertThat(autoTuning).isEqualTo("exitPlay.PlayToAutoTune.entryAutoTune");
+		Assertions.assertThat(powerOff).isEqualTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff");
+		Assertions.assertThat(turnOnAgainLog).isEqualTo("exitOff.OffToOn.entryOn.entryAM.entryPlay");
 	}
 
 	@Test
@@ -80,11 +77,11 @@ public class RadioAcceptanceTest {
 		radioStateMachine.fire(Event.TogglePower);
 		final String turnOnAgainLog = radioStateMachine.consumeLog();
 
-		assertThat(turnOnLog, is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM")));
-		assertThat(toggleMode, is(equalTo("exitFM.FMtoAM.entryAM.entryPlay")));
-		assertThat(autoTuning, is(equalTo("exitPlay.PlayToAutoTune.entryAutoTune")));
-		assertThat(powerOff, is(equalTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff")));
-		assertThat(turnOnAgainLog, is(equalTo("exitOff.OffToOn.entryOn.entryAM.entryAutoTune")));
+		Assertions.assertThat(turnOnLog).isEqualTo("entryOff.exitOff.OffToOn.entryOn.entryFM");
+		Assertions.assertThat(toggleMode).isEqualTo("exitFM.FMtoAM.entryAM.entryPlay");
+		Assertions.assertThat(autoTuning).isEqualTo("exitPlay.PlayToAutoTune.entryAutoTune");
+		Assertions.assertThat(powerOff).isEqualTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff");
+		Assertions.assertThat(turnOnAgainLog).isEqualTo("exitOff.OffToOn.entryOn.entryAM.entryAutoTune");
 	}
 
 	@Test
@@ -110,11 +107,11 @@ public class RadioAcceptanceTest {
 		radioStateMachine.fire(Event.TogglePower);
 		final String turnOnAgainLog = radioStateMachine.consumeLog();
 
-		assertThat(turnOnLog, is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM")));
-		assertThat(toggleMode, is(equalTo("exitFM.FMtoAM.entryAM.entryPlay")));
-		assertThat(autoTuning, is(equalTo("exitPlay.PlayToAutoTune.entryAutoTune")));
-		assertThat(powerOff, is(equalTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff")));
-		assertThat(turnOnAgainLog, is(equalTo("exitOff.OffToOn.entryOn.entryAM.entryPlay")));
+		Assertions.assertThat(turnOnLog).isEqualTo("entryOff.exitOff.OffToOn.entryOn.entryFM");
+		Assertions.assertThat(toggleMode).isEqualTo("exitFM.FMtoAM.entryAM.entryPlay");
+		Assertions.assertThat(autoTuning).isEqualTo("exitPlay.PlayToAutoTune.entryAutoTune");
+		Assertions.assertThat(powerOff).isEqualTo("exitAutoTune.exitAM.exitOn.OnToOff.entryOff");
+		Assertions.assertThat(turnOnAgainLog).isEqualTo("exitOff.OffToOn.entryOn.entryAM.entryPlay");
 	}
 
 	@Test
@@ -129,7 +126,7 @@ public class RadioAcceptanceTest {
 		radioStateMachine.fire(Event.TogglePower);
 		final String turnOnLog = radioStateMachine.consumeLog();
 
-		assertThat(turnOnLog, is(equalTo("entryOff.exitOff.OffToMaintenance.entryMaintenance")));
+		Assertions.assertThat(turnOnLog).isEqualTo("entryOff.exitOff.OffToMaintenance.entryMaintenance");
 	}
 
 	@Test
@@ -149,8 +146,8 @@ public class RadioAcceptanceTest {
 		radioStateMachine2.fire(Event.TogglePower);
 		final String turnOnLog2 = radioStateMachine2.consumeLog();
 
-		assertThat(turnOnLog1, is(equalTo("entryOff.exitOff.OffToMaintenance.entryMaintenance")));
-		assertThat(turnOnLog2, is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM")));
+		Assertions.assertThat(turnOnLog1).isEqualTo("entryOff.exitOff.OffToMaintenance.entryMaintenance");
+		Assertions.assertThat(turnOnLog2).isEqualTo("entryOff.exitOff.OffToOn.entryOn.entryFM");
 	}
 
 }

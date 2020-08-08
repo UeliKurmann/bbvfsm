@@ -18,8 +18,9 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
@@ -35,27 +36,29 @@ public class StateMachineBuildHierarchyTest {
 	private SimpleStateMachineDefinition<States, Events> testee;
 
 	/**
-	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is
-	 * thrown.
+	 * If a state is specified as the inital sub state that is not in the list of
+	 * sub states then an {@link IllegalArgumentException} is thrown.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void addHierarchicalStatesInitialStateIsNotASubState() {
-		this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE, States.B1, States.B2);
-
+		Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+				.isThrownBy(() -> this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE, States.B1, States.B2));
 	}
 
 	/**
-	 * If the super-state is specified as the initial state of its sub-states then an {@link IllegalArgumentException} is thrown.
+	 * If the super-state is specified as the initial state of its sub-states then
+	 * an {@link IllegalArgumentException} is thrown.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void addHierarchicalStatesInitialStateIsSuperStateItself() {
-		this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE, States.B1, States.B2);
+		Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
+		.isThrownBy(() -> this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE, States.B1, States.B2));
 	}
 
 	/**
 	 * Initializes a test.
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.testee = new SimpleStateMachineDefinition<>(States.A);
 	}

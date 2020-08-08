@@ -25,7 +25,7 @@ class SimpleStateMachineModel<TStateMachine extends StateMachine<S, E>, S extend
 	 * @param states       the states to use.
 	 * @param initialState the initial InternalState.
 	 */
-	public SimpleStateMachineModel(final StateDictionary<TStateMachine, S, E> states, final S initialState) {
+	SimpleStateMachineModel(final StateDictionary<TStateMachine, S, E> states, final S initialState) {
 
 		this.states = new StateDictionary<>();
 		this.initialState = initialState;

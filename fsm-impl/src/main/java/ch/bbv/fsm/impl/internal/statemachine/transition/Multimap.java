@@ -4,34 +4,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A simple multi map implementation.
+ *
+ * @author Ueli Kurmann
+ *
+ * @param <K> the key
+ * @param <V> the value
+ */
 public class Multimap<K, V> extends HashMap<K, List<V>> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public List<V> get(Object key) {
-		List<V> result = super.get(key);
-		if(result == null) {
+	public List<V> get(final Object key) {
+		final List<V> result = super.get(key);
+		if (result == null) {
 			return new ArrayList<>();
 		}
 		return result;
 	}
 
-	
 	@Override
-	public List<V> put(K key, List<V> value) {
+	public List<V> put(final K key, final List<V> value) {
 		throw new UnsupportedOperationException();
 	}
-	
-	public synchronized List<V> put(K key, V value) {
-		if(containsKey(key)) {
+
+	public synchronized List<V> putOne(final K key, final V value) {
+
+		if (containsKey(key)) {
 			get(key).add(value);
-		}else {
-			List<V> l = new ArrayList<>();
+		} else {
+			final List<V> l = new ArrayList<>();
 			l.add(value);
 			super.put(key, l);
 		}
 		return get(key);
 	}
-	
+
 }

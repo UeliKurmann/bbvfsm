@@ -37,7 +37,7 @@ public interface Guard<SM extends StateMachine<S, E>, S extends Enum<?>, E exten
 	 * Executes the function.
 	 * 
 	 * @param stateMachine the calling state machine
-	 * @param parameter    the parameter of the function.
+	 * @param params    the parameter of the function.
 	 * @return the return value of the function.
 	 */
 	boolean execute(SM stateMachine, Object... params);

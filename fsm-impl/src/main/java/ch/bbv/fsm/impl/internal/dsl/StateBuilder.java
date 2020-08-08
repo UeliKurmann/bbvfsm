@@ -46,7 +46,7 @@ public class StateBuilder<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 		implements EntryActionSyntax<SM, S, E>, EventActionSyntax<SM, S, E>,
 		ExecuteSyntax<SM, S, E>, GotoSyntax<SM, S, E> {
 
-	private final InternalState<SM, S, E> InternalStateImpl;
+	private final InternalState<SM, S, E> internalState;
 	private final StateDictionary<SM, S, E> stateDictionary;
 	private Transition<SM, S, E> currentTransition;
 
@@ -58,7 +58,7 @@ public class StateBuilder<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 	 */
 	public StateBuilder(final InternalState<SM, S, E> state,
 			final StateDictionary<SM, S, E> stateDictionary) {
-		this.InternalStateImpl = state;
+		this.internalState = state;
 		this.stateDictionary = stateDictionary;
 	}
 
@@ -82,13 +82,13 @@ public class StateBuilder<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 
 	@Override
 	public ExitActionSyntax<SM, S, E> executeOnEntry(final FsmAction0<SM, S, E> action) {
-		this.InternalStateImpl.setEntryAction(new FsmCall0<SM, S, E>(action));
+		this.internalState.setEntryAction(new FsmCall0<SM, S, E>(action));
 		return this;
 	}
 
 	@Override
 	public EventSyntax<SM, S, E> executeOnExit(final FsmAction0<SM, S, E> actionClass) {
-		this.InternalStateImpl.setExitAction(new FsmCall0<SM, S, E>(actionClass));
+		this.internalState.setExitAction(new FsmCall0<SM, S, E>(actionClass));
 		return this;
 	}
 
@@ -101,7 +101,7 @@ public class StateBuilder<SM extends StateMachine<S, E>, S extends Enum<?>, E ex
 	@Override
 	public EventActionSyntax<SM, S, E> on(final E eventId) {
 		this.currentTransition = new Transition<>();
-		this.InternalStateImpl.getTransitions().add(eventId, this.currentTransition);
+		this.internalState.getTransitions().add(eventId, this.currentTransition);
 		return this;
 	}
 

@@ -25,7 +25,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 
 /**
  * The implementation of {@link TransitionResult}.
- * 
+ *
  * @param <TStateMachine> the type of state machine
  * @param <S>             the type of the states
  * @param <E>             the type of the events
@@ -41,7 +41,7 @@ public class TransitionResult<TStateMachine extends StateMachine<S, E>, S extend
 
 	/**
 	 * Initializes a new instance of the TransitionResultImpl class.
-	 * 
+	 *
 	 * @param fired      true the transition was fired.
 	 * @param newState   the new state
 	 * @param exceptions the exceptions
@@ -55,13 +55,18 @@ public class TransitionResult<TStateMachine extends StateMachine<S, E>, S extend
 
 	/**
 	 * Returns the list of exceptions.
-	 * 
+	 *
 	 * @return the list of exceptions.
 	 */
 	public List<? extends Throwable> getExceptions() {
 		return this.exceptions;
 	}
 
+	/**
+	 * Returns the new state.
+	 * 
+	 * @return the new state
+	 */
 	public InternalState<TStateMachine, S, E> getNewState() {
 		return this.newState;
 	}

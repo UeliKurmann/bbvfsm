@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
+ *  Copyright 2010).isEqualTo(2011 bbv Software Services AG, Ueli Kurmann
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
  *******************************************************************************/
 package ch.bbv.fsm.acceptance.hierachy;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
@@ -41,7 +41,7 @@ public class HierarchyExample {
 
 	private SimpleStateMachineDefinition<States, Events> hierarchyExampleStateMachineDefinition;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		hierarchyExampleStateMachineDefinition = new SimpleStateMachineDefinition<>(States.A);
 
@@ -76,9 +76,9 @@ public class HierarchyExample {
 
 		testee.terminate();
 
-		Assert.assertEquals(States.D_1, stateD1);
-		Assert.assertEquals(States.D_2, stateD2);
-		Assert.assertEquals(States.D_2, stateD2_2);
+		Assertions.assertThat(States.D_1).isEqualTo(stateD1);
+		Assertions.assertThat(States.D_2).isEqualTo(stateD2);
+		Assertions.assertThat(States.D_2).isEqualTo(stateD2_2);
 	}
 
 	@Test
@@ -94,8 +94,8 @@ public class HierarchyExample {
 
 		testee.terminate();
 
-		Assert.assertEquals(States.B_1, stateB1);
-		Assert.assertEquals(States.C, stateC);
+		Assertions.assertThat(States.B_1).isEqualTo(stateB1);
+		Assertions.assertThat(States.C).isEqualTo(stateC);
 	}
 
 	@Test
@@ -116,9 +116,9 @@ public class HierarchyExample {
 		final States stateB1_2 = testee.getCurrentState();
 		testee.terminate();
 
-		Assert.assertEquals(States.B_1, stateB1);
-		Assert.assertEquals(States.B_2, stateB2);
-		Assert.assertEquals(States.C, stateC);
-		Assert.assertEquals(States.B_1, stateB1_2);
+		Assertions.assertThat(States.B_1).isEqualTo(stateB1);
+		Assertions.assertThat(States.B_2).isEqualTo(stateB2);
+		Assertions.assertThat(States.C).isEqualTo(stateC);
+		Assertions.assertThat(States.B_1).isEqualTo(stateB1_2);
 	}
 }

@@ -18,9 +18,9 @@ package ch.bbv.fsm.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
@@ -51,7 +51,7 @@ public class StateMachineTest {
 				sb.append(record.getClass().getName()).append('-').append(record.getState());
 			}
 
-			Assert.fail(sb.toString());
+			Assertions.fail(sb.toString());
 		}
 
 		/**
@@ -61,17 +61,17 @@ public class StateMachineTest {
 		void checkRecords(final States state, final Class<?> c) {
 			final Record record = this.records.get(0);
 
-			Assert.assertNotNull(String.format("expected record missing: %s on %s.", c.getName(), state), record);
-			Assert.assertSame(record.getMessage(), c, record.getClass());
+			Assertions.assertThat(record).as("expected record missing: %s on %s.", c.getName(), state).isNotNull();
+			Assertions.assertThat(record.getClass()).as(record.getMessage()).isSameAs(c);
 
 			this.records.remove(0);
 		}
 
-		void addEntryRecord(States s) {
+		void addEntryRecord(final States s) {
 			records.add(new EntryRecord(s));
 		}
 
-		void addExitRecord(States s) {
+		void addExitRecord(final States s) {
 			records.add(new ExitRecord(s));
 		}
 
@@ -103,7 +103,7 @@ public class StateMachineTest {
 	 */
 	public static class EntryRecord extends Record {
 
-		public EntryRecord(States state) {
+		public EntryRecord(final States state) {
 			setState(state);
 		}
 
@@ -120,7 +120,7 @@ public class StateMachineTest {
 	 * Record of a state exit.
 	 */
 	public static class ExitRecord extends Record {
-		public ExitRecord(States s) {
+		public ExitRecord(final States s) {
 			setState(s);
 		}
 
@@ -181,7 +181,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.A);
 
-		Assert.assertEquals(States.A, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.A);
 
 		testee.checkRecords(States.E, ExitRecord.class);
 		testee.checkRecords(States.A, EntryRecord.class);
@@ -204,7 +204,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.C1b);
 
-		Assert.assertEquals(States.C1b, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.C1b);
 
 		testee.checkRecords(States.B2, ExitRecord.class);
 		testee.checkRecords(States.B, ExitRecord.class);
@@ -230,7 +230,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.B1);
 
-		Assert.assertEquals(States.B1, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.B1);
 
 		testee.checkRecords(States.D1b, ExitRecord.class);
 		testee.checkRecords(States.D1, ExitRecord.class);
@@ -255,7 +255,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.B2);
 
-		Assert.assertEquals(States.B2, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.B2);
 
 		testee.checkRecords(States.B1, ExitRecord.class);
 		testee.checkRecords(States.B2, EntryRecord.class);
@@ -276,7 +276,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.A);
 
-		Assert.assertEquals(States.A, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.A);
 
 		testee.checkRecords(States.C1b, ExitRecord.class);
 		testee.checkRecords(States.C1, ExitRecord.class);
@@ -301,7 +301,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.D);
 
-		Assert.assertEquals(States.D1b, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.D1b);
 
 		testee.checkRecords(States.A, ExitRecord.class);
 		testee.checkRecords(States.D, EntryRecord.class);
@@ -347,7 +347,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.C);
 
-		Assert.assertEquals(States.C1a, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.C1a);
 
 		testee.checkRecords(States.A, ExitRecord.class);
 		testee.checkRecords(States.C, EntryRecord.class);
@@ -371,7 +371,7 @@ public class StateMachineTest {
 
 		testee.fire(Events.B);
 
-		Assert.assertEquals(States.B1, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.B1);
 
 		testee.checkRecords(States.A, ExitRecord.class);
 		testee.checkRecords(States.B, EntryRecord.class);
@@ -390,7 +390,7 @@ public class StateMachineTest {
 				.createPassiveStateMachine("executeTransitionBetweenStatesOnDifferentLevelsDownwards", States.D);
 		testee.start();
 
-		Assert.assertEquals(States.D1a, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.D1a);
 
 		testee.checkRecords(States.D, EntryRecord.class);
 		testee.checkRecords(States.D1, EntryRecord.class);
@@ -409,7 +409,7 @@ public class StateMachineTest {
 				.createPassiveStateMachine("executeTransitionBetweenStatesOnDifferentLevelsDownwards", States.D1b);
 		testee.start();
 
-		Assert.assertEquals(States.D1b, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.D1b);
 
 		testee.checkRecords(States.D, EntryRecord.class);
 		testee.checkRecords(States.D1, EntryRecord.class);
@@ -427,7 +427,7 @@ public class StateMachineTest {
 				.createPassiveStateMachine("executeTransitionBetweenStatesOnDifferentLevelsDownwards", States.A);
 		testee.start();
 
-		Assert.assertEquals(States.A, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.A);
 
 		testee.checkRecords(States.A, EntryRecord.class);
 		testee.checkNoRemainingRecords();
@@ -446,13 +446,13 @@ public class StateMachineTest {
 
 		testee.fire(Events.A);
 
-		Assert.assertEquals(States.A, testee.getCurrentState());
+		Assertions.assertThat(testee.getCurrentState()).isEqualTo(States.A);
 	}
 
 	/**
 	 * Initializes a test.
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() {
 
 		// this.records = Lists.newArrayList();

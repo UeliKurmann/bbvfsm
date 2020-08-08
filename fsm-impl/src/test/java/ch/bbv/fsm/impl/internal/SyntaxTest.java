@@ -19,9 +19,9 @@
 package ch.bbv.fsm.impl.internal;
 
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
@@ -52,7 +52,7 @@ public class SyntaxTest {
         this.fooExitValue = text;
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.definition = new SimpleStateMachineDefinition<>(States.A);
 
@@ -81,10 +81,10 @@ public class SyntaxTest {
         final String exitA = this.fooExitValue;
         final String enterB = this.fooEntryValue;
 
-        Assert.assertTrue(onlyIf);
-        Assert.assertEquals(ENTRY_A, enterA);
-        Assert.assertEquals(EXIT_A, exitA);
-        Assert.assertEquals(ENTRY_B, enterB);
+        Assertions.assertThat(onlyIf).isTrue();
+        Assertions.assertThat(enterA).isEqualTo(ENTRY_A);
+        Assertions.assertThat(exitA).isEqualTo(EXIT_A);
+        Assertions.assertThat(enterB).isEqualTo(ENTRY_B);
     }
 
     public enum Events {

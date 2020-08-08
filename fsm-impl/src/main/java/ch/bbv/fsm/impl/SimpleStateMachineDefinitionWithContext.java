@@ -5,16 +5,17 @@ import ch.bbv.fsm.StateMachine;
 /**
  * A simple state machine's definition. This is used if no special type should
  * be created.
- * 
+ *
  * @param <S> the type of the states
  * @param <E> the type of the events
+ * @param <C> the context
  */
 public class SimpleStateMachineDefinitionWithContext<S extends Enum<?>, E extends Enum<?>, C>
 		extends AbstractStateMachineDefinition<SimpleStateMachineWithContext<S, E, C>, S, E> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param initialState the default inital state to use
 	 */
 	public SimpleStateMachineDefinitionWithContext(final S initialState) {

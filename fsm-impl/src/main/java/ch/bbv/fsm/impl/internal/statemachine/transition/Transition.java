@@ -31,8 +31,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * The implementation of a transition.
  *
  * @param <SM> the type of state machine
- * @param <S>             the type of the states
- * @param <E>             the type of the events
+ * @param <S>  the type of the states
+ * @param <E>  the type of the events
  */
 public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E extends Enum<?>> {
 
@@ -91,8 +91,8 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 	 * @param eventArguments the event arguments
 	 * @param context        the state context
 	 */
-	private void fire(final InternalState<SM, S, E> source, final InternalState<SM, S, E> target,
-			final Object[] eventArguments, final TransitionContext<SM, S, E> context) {
+	private void fire(final InternalState<SM, S, E> source, final InternalState<SM, S, E> target, final Object[] eventArguments,
+			final TransitionContext<SM, S, E> context) {
 		if (source == this.getTarget()) {
 			// Handles 1.
 			// Handles 3. after traversing from the source to the target.
@@ -133,7 +133,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Fires the transition.
-	 * 
+	 *
 	 * @param context the event context.
 	 * @return The result of the transition.
 	 */
@@ -166,7 +166,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Gets the actions of this transition.
-	 * 
+	 *
 	 * @return the actions of this transition.
 	 */
 	public List<FsmCall<SM, S, E>> getActions() {
@@ -175,7 +175,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Gets or sets the guard of this transition.
-	 * 
+	 *
 	 * @return the guard.
 	 */
 	public Guard<SM, S, E, Object[], Boolean> getGuard() {
@@ -184,7 +184,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Returns the source state of the transition.
-	 * 
+	 *
 	 * @return the source state of the transition.
 	 */
 	public InternalState<SM, S, E> getSource() {
@@ -193,7 +193,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Gets the target state of the transition.
-	 * 
+	 *
 	 * @return the target state of the transition.
 	 */
 	public InternalState<SM, S, E> getTarget() {
@@ -239,7 +239,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Sets the guard function.
-	 * 
+	 *
 	 * @param guard the guard function.
 	 */
 	public void setGuard(final Guard<SM, S, E, Object[], Boolean> guard) {
@@ -248,8 +248,8 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Sets the source state of the transition.
-	 * 
-	 * @param sourceState the source state of the transition.
+	 *
+	 * @param source the source state of the transition.
 	 */
 	public void setSource(final InternalState<SM, S, E> source) {
 		this.source = source;
@@ -257,7 +257,7 @@ public class Transition<SM extends StateMachine<S, E>, S extends Enum<?>, E exte
 
 	/**
 	 * Sets the target state.
-	 * 
+	 *
 	 * @param target the target state.
 	 */
 	public void setTarget(final InternalState<SM, S, E> target) {

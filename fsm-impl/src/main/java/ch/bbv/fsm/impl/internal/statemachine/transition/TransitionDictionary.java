@@ -26,9 +26,9 @@ import ch.bbv.fsm.impl.internal.statemachine.state.InternalState;
 
 /**
  * Mapping between a internalState and its transitions.
- * 
+ *
  * @author Ueli Kurmann
- * 
+ *
  * @param <SM> the type of internalState machine
  * @param <S>  the type of the states
  * @param <E>  the type of the events
@@ -44,7 +44,7 @@ public class TransitionDictionary<SM extends StateMachine<S, E>, S extends Enum<
 
 	/**
 	 * Creates a new instance.
-	 * 
+	 *
 	 * @param state the internalState this transitions belong to.
 	 */
 	public TransitionDictionary(final InternalState<SM, S, E> state) {
@@ -54,18 +54,18 @@ public class TransitionDictionary<SM extends StateMachine<S, E>, S extends Enum<
 
 	/**
 	 * Adds a transition to an event.
-	 * 
+	 *
 	 * @param eventId    the event id
 	 * @param transition the transition
 	 */
 	public void add(final E eventId, final Transition<SM, S, E> transition) {
 		transition.setSource(this.internalState);
-		this.transitions.put(eventId, transition);
+		this.transitions.putOne(eventId, transition);
 	}
 
 	/**
 	 * Returns a list of transitions for the given event.
-	 * 
+	 *
 	 * @param eventId the event id
 	 * @return a list of transitions
 	 */

@@ -23,10 +23,10 @@ package ch.bbv.fsm;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachine.LiveCycle;
 import ch.bbv.fsm.events.ExceptionEvent;
@@ -96,25 +96,28 @@ public abstract class BaseStateMachineTest {
 	 * Checks the begin transition message.
 	 */
 	protected void checkBeginTransitionMessage(final States origin, final Events eventId, final Object[] eventArguments) {
-		Assert.assertEquals("wrong number of begin transition messages.", 1, this.transitionBeginMessages.size());
-		Assert.assertEquals("wrong state in transition begin message.", origin, this.transitionBeginMessages.get(0).getStateId());
-		Assert.assertEquals("wrong event in transition begin message.", eventId, this.transitionBeginMessages.get(0).getEventId());
-		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments,
-				this.transitionBeginMessages.get(0).getEventArguments());
+		Assertions.assertThat(this.transitionBeginMessages)//
+				.as("wrong number of begin transition messages.").hasSize(1);
+		Assertions.assertThat(this.transitionBeginMessages.get(0).getStateId())//
+				.as("wrong state in transition begin message.").isEqualTo(origin);
+		Assertions.assertThat(this.transitionBeginMessages.get(0).getEventId())//
+				.as("wrong event in transition begin message.").isEqualTo(eventId);
+		Assertions.assertThat(this.transitionBeginMessages.get(0).getEventArguments())//
+				.as("wrong event arguments in transition begin message.").isEqualTo(eventArguments);
 	}
 
 	/**
 	 * Checks the no declined transition message occurred.
 	 */
 	protected void checkNoDeclinedTransitionMessage() {
-		Assert.assertEquals(0, this.transitionDeclinedMessages.size());
+		Assertions.assertThat(this.transitionDeclinedMessages).isEmpty();
 	}
 
 	/**
 	 * Checks the no exception message occurred.
 	 */
 	protected void checkNoExceptionMessage() {
-		Assert.assertEquals(0, this.exceptions.size());
+		Assertions.assertThat(this.exceptions).isEmpty();
 	}
 
 	/**
@@ -122,14 +125,16 @@ public abstract class BaseStateMachineTest {
 	 */
 	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId,
 			final States newState) {
-		Assert.assertEquals(1, this.transitionCompletedMessages.size());
-		Assert.assertEquals(origin, this.transitionCompletedMessages.get(0).getStateId());
-		Assert.assertEquals(eventId, this.transitionCompletedMessages.get(0).getEventId());
+		
+		Assertions.assertThat(this.transitionCompletedMessages).hasSize(1);
+		
+		Assertions.assertThat(this.transitionCompletedMessages.get(0).getStateId()).isEqualTo(origin);
+		Assertions.assertThat(this.transitionCompletedMessages.get(0).getEventId()).isEqualTo(eventId);
 		if (eventArguments != null) {
-			Assert.assertArrayEquals(eventArguments, this.transitionCompletedMessages.get(0).getEventArguments());
+			Assertions.assertThat(this.transitionCompletedMessages.get(0).getEventArguments()).isEqualTo(eventArguments);
 		}
 
-		Assert.assertEquals(newState, this.transitionCompletedMessages.get(0).getNewStateId());
+		Assertions.assertThat(this.transitionCompletedMessages.get(0).getNewStateId()).isEqualTo(newState);
 	}
 
 	protected abstract SimpleStateMachine<States, Events> createTestee(SimpleStateMachineDefinition<States, Events> definition,
@@ -195,23 +200,23 @@ public abstract class BaseStateMachineTest {
 
 		waitUntilAllEventsAreProcessed();
 
-		Assert.assertEquals(transitions, this.transitionCompletedMessages.size());
+		Assertions.assertThat(this.transitionCompletedMessages).hasSize(transitions);
 		this.checkNoDeclinedTransitionMessage();
 		this.checkNoExceptionMessage();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void startTwice() {
 		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<>(States.A);
 		initTestee(definition);
-		this.testee.start();
+		Assertions.assertThatIllegalStateException().isThrownBy(()->this.testee.start());
 	}
 
 	/**
 	 * When the state machine is stopped then no events are processed. All events
 	 * enqueued are processed when state machine is started.
 	 */
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void stopAndStart() {
 
 		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<>(States.A);
@@ -224,20 +229,19 @@ public abstract class BaseStateMachineTest {
 
 		this.testee.terminate();
 
-		Assert.assertFalse(LiveCycle.Running.equals(this.testee.getStatus()));
+		Assertions.assertThat(this.testee.getStatus()).isNotEqualTo(LiveCycle.Running);
 
 		this.testee.fire(Events.B);
 		this.testee.fire(Events.C);
 
-		Assert.assertEquals(0, this.transitionBeginMessages.size());
-
-		this.testee.start();
+		Assertions.assertThat(this.transitionBeginMessages).isEmpty();
+		Assertions.assertThatIllegalStateException().isThrownBy(() -> this.testee.start());
 	}
 
 	/**
 	 * Initializes a test.
 	 */
-	@Before
+	@BeforeEach
 	public void setup() {
 		this.exceptions = new ArrayList<>();
 		this.transitionBeginMessages = new ArrayList<>();
@@ -248,7 +252,7 @@ public abstract class BaseStateMachineTest {
 	/**
 	 * Tears down a test.
 	 */
-	@After
+	@AfterEach
 	public void tearDown() {
 		this.testee.terminate();
 	}

@@ -15,15 +15,15 @@
  *******************************************************************************/
 package ch.bbv.fsm.acceptance.tennis;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachineFactory;
 import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEvent;
-import ch.bbv.fsm.impl.StatemachineBuilder;
 import ch.bbv.fsm.impl.SimpleStateMachine;
+import ch.bbv.fsm.impl.StatemachineBuilder;
 
 /**
  * Example: Tennis Scorer.
@@ -35,10 +35,10 @@ public class Tennis {
 
 	private static class Handler extends StateMachineEventHandlerAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
-		States currentState = States._0_0;
+		private States currentState = States._0_0;
 
 		@Override
-		public void onTransitionCompleted(TransitionCompletedEvent<SimpleStateMachine<States, Events>, States, Events> arg) {
+		public void onTransitionCompleted(final TransitionCompletedEvent<SimpleStateMachine<States, Events>, States, Events> arg) {
 			currentState = arg.getNewStateId();
 		}
 
@@ -59,7 +59,7 @@ public class Tennis {
 	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> factory;
 	private Handler handler;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		this.factory = StatemachineBuilder.create(States._0_0, def -> {
 			this.handler = new Handler();
@@ -147,13 +147,13 @@ public class Tennis {
 
 		testee.terminate();
 
-		Assert.assertEquals(States._0_0, initialState);
-		Assert.assertEquals(States._15_0, score1);
-		Assert.assertEquals(States._15_15, score2);
-		Assert.assertEquals(States._30_15, score3);
-		Assert.assertEquals(States._30_30, score4);
-		Assert.assertEquals(States._40_30, score5);
-		Assert.assertEquals(States._DEUCE, score6);
+		Assertions.assertThat(States._0_0).isEqualTo(initialState);
+		Assertions.assertThat(States._15_0).isEqualTo(score1);
+		Assertions.assertThat(States._15_15).isEqualTo(score2);
+		Assertions.assertThat(States._30_15).isEqualTo(score3);
+		Assertions.assertThat(States._30_30).isEqualTo(score4);
+		Assertions.assertThat(States._40_30).isEqualTo(score5);
+		Assertions.assertThat(States._DEUCE).isEqualTo(score6);
 	}
 
 	@Test
@@ -176,12 +176,11 @@ public class Tennis {
 		final States score4 = handler.getCurrentState();
 
 		testee.terminate();
-
-		Assert.assertEquals(States._0_0, initialState);
-		Assert.assertEquals(States._15_0, score1);
-		Assert.assertEquals(States._30_0, score2);
-		Assert.assertEquals(States._40_0, score3);
-		Assert.assertEquals(States._A_GAME, score4);
+		Assertions.assertThat(States._0_0).isEqualTo(initialState);
+		Assertions.assertThat(States._15_0).isEqualTo(score1);
+		Assertions.assertThat(States._30_0).isEqualTo(score2);
+		Assertions.assertThat(States._40_0).isEqualTo(score3);
+		Assertions.assertThat(States._A_GAME).isEqualTo(score4);
 	}
 
 	@Test
@@ -203,11 +202,11 @@ public class Tennis {
 		testee.fire(Events.B_Scores);
 		final States score4 = handler.getCurrentState();
 
-		Assert.assertEquals(States._0_0, initialState);
-		Assert.assertEquals(States._0_15, score1);
-		Assert.assertEquals(States._0_30, score2);
-		Assert.assertEquals(States._0_40, score3);
-		Assert.assertEquals(States._B_GAME, score4);
+		Assertions.assertThat(States._0_0).isEqualTo(initialState);
+		Assertions.assertThat(States._0_15).isEqualTo(score1);
+		Assertions.assertThat(States._0_30).isEqualTo(score2);
+		Assertions.assertThat(States._0_40).isEqualTo(score3);
+		Assertions.assertThat(States._B_GAME).isEqualTo(score4);
 	}
 
 	@Test
@@ -223,8 +222,8 @@ public class Tennis {
 
 		testee.terminate();
 
-		Assert.assertEquals(States._A_ADV, score1);
-		Assert.assertEquals(States._A_GAME, score2);
+		Assertions.assertThat(States._A_ADV).isEqualTo(score1);
+		Assertions.assertThat(States._A_GAME).isEqualTo(score2);
 	}
 
 	@Test
@@ -240,8 +239,8 @@ public class Tennis {
 
 		testee.terminate();
 
-		Assert.assertEquals(States._A_ADV, score1);
-		Assert.assertEquals(States._DEUCE, score2);
+		Assertions.assertThat(States._A_ADV).isEqualTo(score1);
+		Assertions.assertThat(States._DEUCE).isEqualTo(score2);
 	}
 
 	@Test
@@ -257,8 +256,8 @@ public class Tennis {
 
 		testee.terminate();
 
-		Assert.assertEquals(States._B_ADV, score1);
-		Assert.assertEquals(States._B_GAME, score2);
+		Assertions.assertThat(States._B_ADV).isEqualTo(score1);
+		Assertions.assertThat(States._B_GAME).isEqualTo(score2);
 	}
 
 }

@@ -16,8 +16,14 @@ import ch.bbv.fsm.events.annotation.OnTransitionCompleted;
 import ch.bbv.fsm.events.annotation.OnTransitionDeclined;
 import ch.bbv.fsm.events.annotation.OnTransitionThrowsException;
 
-public class Annotations {
-	
+/**
+ * Helper class for event handler annotations.
+ *
+ * @author Ueli Kurmann
+ *
+ */
+public final class Annotations {
+
 	private static Map<Class<? extends Annotation>, Class<?>> typeMapping = new HashMap<>();
 	static {
 		typeMapping.put(OnTransitionBegin.class, TransitionEvent.class);
@@ -27,11 +33,15 @@ public class Annotations {
 		typeMapping.put(OnTransitionThrowsException.class, TransitionExceptionEvent.class);
 	}
 
-	public static <A extends Annotation> Optional<Method> find(Class<A> annotation, Class<?> clazz) {
-		for (Method method : clazz.getDeclaredMethods()) {
-			A annotations = method.getAnnotation(annotation);
+	private Annotations() {
+		// Utility Class
+	}
+
+	public static <A extends Annotation> Optional<Method> find(final Class<A> annotation, final Class<?> clazz) {
+		for (final Method method : clazz.getDeclaredMethods()) {
+			final A annotations = method.getAnnotation(annotation);
 			if (annotations != null) {
-				Class<?>[] types = method.getParameterTypes();
+				final Class<?>[] types = method.getParameterTypes();
 				if (types.length == 1 && types[0].isAssignableFrom(typeMapping.get(annotation))) {
 					return Optional.of(method);
 				}

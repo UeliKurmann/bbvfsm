@@ -18,9 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.events;
 
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import ch.bbv.fsm.impl.SimpleStateMachine;
@@ -32,16 +31,16 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 public class TransitionEventArgsImplTest {
 	@Test
+	@SuppressWarnings("unchecked")
 	public void toStringExpectInformationAboutTheTransitionEvent() {
-		@SuppressWarnings("unchecked")
 		final InternalState<SimpleStateMachine<States, Events>, States, Events> stateMock = Mockito.mock(InternalState.class);
 		Mockito.when(stateMock.getId()).thenReturn(States.A);
-		@SuppressWarnings("unchecked")
 		final TransitionContext<SimpleStateMachine<States, Events>, States, Events> contextMock = Mockito.mock(TransitionContext.class);
 		Mockito.when(contextMock.getEventId()).thenReturn(Events.A);
 		Mockito.when(contextMock.getState()).thenReturn(stateMock);
-		final TransitionEventImpl<SimpleStateMachine<States, Events>, States, Events> testee = new TransitionEventImpl<>(
-				contextMock);
-		Assert.assertEquals("Transition from state A on event A.", testee.toString());
+
+		final TransitionEventImpl<SimpleStateMachine<States, Events>, States, Events> testee = new TransitionEventImpl<>(contextMock);
+
+		Assertions.assertThat(testee.toString()).isEqualTo("Transition from state A on event A.");
 	}
 }
