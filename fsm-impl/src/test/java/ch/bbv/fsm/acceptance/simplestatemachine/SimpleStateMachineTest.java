@@ -43,13 +43,14 @@ public class SimpleStateMachineTest {
 	@Test
 	public void test1() {
 		final StringBuilder sb = new StringBuilder();
-		final SimpleStateMachineWithContext<States, Events, Object> sm = StatemachineBuilder
-				.<States, Events, Object>createWithContext(States.A, def -> {
-					def.in(States.A).executeOnEntry(s -> sb.append("onEntryA."))//
-							.executeOnExit(s -> sb.append("onExitA."))//
-							.on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB."));
-					def.in(States.B).executeOnEntry(s -> sb.append("onEntryB"));
-				}).context(new X()).buildPassive("StateMachine-1");
+		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder.<States, Events, X>createWithContext(States.A, def -> {
+			def.in(States.A)//
+					.executeOnEntry(s -> sb.append("onEntryA."))//
+					.executeOnExit(s -> sb.append("onExitA."))//
+					.on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB."));
+			def.in(States.B).executeOnEntry(s -> sb.append("onEntryB"));
+		}).context(new X()).buildPassive("StateMachine-1");
+
 		sm.start();
 		sm.fire(Events.TO_B, 1);
 
@@ -59,12 +60,11 @@ public class SimpleStateMachineTest {
 	@Test
 	public void test2() {
 		final StringBuilder sb = new StringBuilder();
-		final SimpleStateMachineWithContext<States, Events, Object> sm = StatemachineBuilder
-				.<States, Events, Object>createWithContext(States.A, def -> {
-					def.in(States.A).on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB")).onlyIf((fsm, param) -> true);
-					def.in(States.A).on(Events.TO_B).goTo(States.C).execute(s -> sb.append("inTransitionToC"));
+		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder.<States, Events, X>createWithContext(States.A, def -> {
+			def.in(States.A).on(Events.TO_B).goTo(States.B).execute(s -> sb.append("inTransitionToB")).onlyIf((fsm, param) -> true);
+			def.in(States.A).on(Events.TO_B).goTo(States.C).execute(s -> sb.append("inTransitionToC"));
 
-				}).context(new X()).buildPassive("StateMachine-1");
+		}).context(new X()).buildPassive("StateMachine-1");
 		sm.start();
 		sm.fire(Events.TO_B, 1);
 
@@ -74,11 +74,10 @@ public class SimpleStateMachineTest {
 	@Test
 	public void test3() {
 		final StringBuilder sb = new StringBuilder();
-		final SimpleStateMachineWithContext<States, Events, Object> sm = StatemachineBuilder
-				.<States, Events, Object>createWithContext(States.A, def -> {
-					def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1) -> sb.append(p1));
+		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder.<States, Events, X>createWithContext(States.A, def -> {
+			def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1) -> sb.append(p1));
 
-				}).context(new X()).buildPassive("StateMachine-1");
+		}).context(new X()).buildPassive("StateMachine-1");
 		sm.start();
 		sm.fire(Events.TO_B, 5);
 
@@ -88,11 +87,10 @@ public class SimpleStateMachineTest {
 	@Test
 	public void test4() {
 		final StringBuilder sb = new StringBuilder();
-		final SimpleStateMachineWithContext<States, Events, Object> sm = StatemachineBuilder
-				.<States, Events, Object>createWithContext(States.A, def -> {
-					def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1, p2) -> sb.append(p1 + "," + p2));
+		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder.<States, Events, X>createWithContext(States.A, def -> {
+			def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1, p2) -> sb.append(p1 + "," + p2));
 
-				}).context(new X()).buildPassive("StateMachine-1");
+		}).context(new X()).buildPassive("StateMachine-1");
 		sm.start();
 		sm.fire(Events.TO_B, 4, "lambda");
 
@@ -102,10 +100,10 @@ public class SimpleStateMachineTest {
 	@Test
 	public void test5() {
 		final StringBuilder sb = new StringBuilder();
-		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder
-				.<States, Events, X>createWithContext(States.A, def -> {
-					def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1, p2) -> sb.append(p1 + "," + p2));
-				}).context(new X()).buildPassive("StateMachine-1");
+		final SimpleStateMachineWithContext<States, Events, X> sm = StatemachineBuilder.<States, Events, X>createWithContext(States.A, def -> {
+
+			def.in(States.A).on(Events.TO_B).goTo(States.B).execute((s, p1, p2) -> sb.append(p1 + "," + p2));
+		}).context(new X()).buildPassive("StateMachine-1");
 		sm.start();
 		sm.fire(Events.TO_B, 4, "lambda");
 

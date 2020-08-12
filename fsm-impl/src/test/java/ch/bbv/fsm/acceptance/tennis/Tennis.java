@@ -20,8 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ch.bbv.fsm.StateMachineFactory;
-import ch.bbv.fsm.events.StateMachineEventHandlerAdapter;
-import ch.bbv.fsm.events.TransitionCompletedEvent;
 import ch.bbv.fsm.impl.SimpleStateMachine;
 import ch.bbv.fsm.impl.StatemachineBuilder;
 
@@ -33,37 +31,20 @@ import ch.bbv.fsm.impl.StatemachineBuilder;
  */
 public class Tennis {
 
-	private static class Handler extends StateMachineEventHandlerAdapter<SimpleStateMachine<States, Events>, States, Events> {
-
-		private States currentState = States._0_0;
-
-		@Override
-		public void onTransitionCompleted(final TransitionCompletedEvent<SimpleStateMachine<States, Events>, States, Events> arg) {
-			currentState = arg.getNewStateId();
-		}
-
-		public States getCurrentState() {
-			return currentState;
-		}
-	}
-
 	public enum Events {
 		A_Scores, B_Scores
 	}
 
 	public enum States {
-		_0_0, _0_15, _0_30, _0_40, _15_15, _15_30, _15_40, _30_30, _30_40, _15_0, _30_0, _30_15, _40_0, _40_15, _40_30, _A_GAME, _B_GAME,
-		_DEUCE, _A_ADV, _B_ADV;
+		_0_0, _0_15, _0_30, _0_40, _15_15, _15_30, _15_40, _30_30, _30_40, _15_0, _30_0, _30_15, _40_0, _40_15, _40_30, _A_GAME, _B_GAME, _DEUCE, _A_ADV,
+		_B_ADV;
 	}
 
 	private StateMachineFactory<SimpleStateMachine<States, Events>, States, Events> factory;
-	private Handler handler;
 
 	@BeforeEach
 	public void setup() {
 		this.factory = StatemachineBuilder.create(States._0_0, def -> {
-			this.handler = new Handler();
-			def.addEventHandler(handler);
 			def.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
 			def.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
 
@@ -125,25 +106,25 @@ public class Tennis {
 		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-0");
 		testee.start();
 
-		final States initialState = handler.getCurrentState();
+		final States initialState = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = handler.getCurrentState();
+		final States score2 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score3 = handler.getCurrentState();
+		final States score3 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score4 = handler.getCurrentState();
+		final States score4 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score5 = handler.getCurrentState();
+		final States score5 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score6 = handler.getCurrentState();
+		final States score6 = testee.getCurrentState();
 
 		testee.terminate();
 
@@ -161,19 +142,19 @@ public class Tennis {
 		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1");
 		testee.start();
 
-		final States initialState = handler.getCurrentState();
+		final States initialState = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score2 = handler.getCurrentState();
+		final States score2 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score3 = handler.getCurrentState();
+		final States score3 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
-		final States score4 = handler.getCurrentState();
+		final States score4 = testee.getCurrentState();
 
 		testee.terminate();
 		Assertions.assertThat(States._0_0).isEqualTo(initialState);
@@ -188,19 +169,19 @@ public class Tennis {
 		final SimpleStateMachine<States, Events> testee = factory.createPassiveStateMachine("Tennis-1", States._0_0);
 		testee.start();
 
-		final States initialState = handler.getCurrentState();
+		final States initialState = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = handler.getCurrentState();
+		final States score2 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score3 = handler.getCurrentState();
+		final States score3 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score4 = handler.getCurrentState();
+		final States score4 = testee.getCurrentState();
 
 		Assertions.assertThat(States._0_0).isEqualTo(initialState);
 		Assertions.assertThat(States._0_15).isEqualTo(score1);
@@ -215,7 +196,7 @@ public class Tennis {
 		testee.start();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.A_Scores);
 		final States score2 = testee.getCurrentState();
@@ -232,10 +213,10 @@ public class Tennis {
 		testee.start();
 
 		testee.fire(Events.A_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = handler.getCurrentState();
+		final States score2 = testee.getCurrentState();
 
 		testee.terminate();
 
@@ -249,10 +230,10 @@ public class Tennis {
 		testee.start();
 
 		testee.fire(Events.B_Scores);
-		final States score1 = handler.getCurrentState();
+		final States score1 = testee.getCurrentState();
 
 		testee.fire(Events.B_Scores);
-		final States score2 = handler.getCurrentState();
+		final States score2 = testee.getCurrentState();
 
 		testee.terminate();
 
